@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>THRENOX Timetable – Reset Edition</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0f1220;
+      --card: #171b2e;
+      --text: #e8eaf6;
+      --muted: #aab0c9;
+      --accent: #5c6aff;
+      --accent-2: #00e5ff;
+      --success: #2ecc71;
+      --danger: #ff5252;
+      --warning: #ffb142;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 16px;
+    }
+
+    header {
+      max-width: 900px;
+      margin: 0 auto 24px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.7rem;
+      margin-bottom: 6px;
+      color: var(--accent-2);
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .day-label {
+      text-align: center;
+      font-size: 1.2rem;
+      margin: 16px 0 10px;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    }
+
+    .rules {
+      font-size: 0.95rem;
+    }
+
+    .rules ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .rules li {
+      margin: 6px 0;
+      padding-left: 18px;
+      position: relative;
+    }
+
+    .rules li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--accent-2);
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: var(--accent-2);
+    }
+
+    .task-list {
+      list-style: none;
+    }
+
+    .task-item {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .task-item:last-child {
+      border-bottom: none;
+    }
+
+    .task-time {
+      min-width: 120px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .task-text {
+      flex: 1;
+      font-size: 0.95rem;
+      min-width: 180px;
+    }
+
+    .task-controls {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+    }
+
+    button.danger {
+      background: var(--danger);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .status-badge {
+      font-size: 0.8rem;
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.06);
+      color: var(--muted);
+    }
+
+    .report-section {
+      margin-top: 20px;
+    }
+
+    .report-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .report-day {
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .report-day h3 {
+      font-size: 1rem;
+      margin-bottom: 6px;
+      color: var(--accent-2);
+    }
+
+    .stat {
+      font-size: 0.9rem;
+      margin: 4px 0;
+    }
+
+    .stat strong {
+      color: var(--text);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .date-display {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+
+    .category-report {
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .category-report h3 {
+      font-size: 1rem;
+      margin-bottom: 6px;
+      color: var(--accent-2);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>THRENOX TIMETABLE – RESET EDITION</h1>
+    <div class="subtitle">Sleep: 9:00 PM – 4:00 AM | Travel: ~1 hour daily</div>
+    <div class="date-display" id="dateDisplay"></div>
+  </header>
+
+  <div class="container">
+    <!-- Today's Tasks -->
+    <div class="card">
+      <div class="section-title">Today’s Plan (with Timers)</div>
+      <div class="day-label" id="todayLabel"></div>
+      <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 10px;">
+        For each task: press <strong>Start</strong> when you begin, <strong>Stop</strong> when you finish.
+        This logs your time to Firebase for the weekly report.
+      </p>
+      <ul class="task-list" id="todayTasks"></ul>
+      <div class="controls" style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
+        <button id="resetAllBtn" class="danger">Clear all local UI state</button>
+      </div>
+    </div>
+
+    <!-- Hard Rules -->
+    <div class="card rules">
+      <div class="section-title">HARD RULES (NO EXCEPTIONS)</div>
+      <ul>
+        <li>4:00 AM block is sacred. Phone off, straight to code.</li>
+        <li>AL revision EVERY day, no cramming.</li>
+        <li>Sunday mock contest is mandatory once you know basics.</li>
+        <li>Zero gaming / sad songs / checking her messages.</li>
+        <li>Social time is a reward, not a right. Earn it.</li>
+        <li>Sleep at 9 PM sharp. No debate.</li>
+      </ul>
+    </div>
+
+    <!-- Weekly Time Report (shown on Sunday) -->
+    <div class="card report-section hidden" id="reportSection">
+      <div class="section-title">Weekly Time Report (This Week)</div>
+      <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 8px;">
+        This shows how much time you actually spent vs planned, and how much you missed per category.
+      </p>
+      <div class="report-grid" id="categoryReportGrid"></div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    // ===================== FIREBASE CONFIG =====================
+    // REPLACE THIS WITH YOUR OWN CONFIG FROM FIREBASE CONSOLE
+    const firebaseConfig = {
+    apiKey: "AIzaSyBb3IIg51MeZEeJ5rk-X4vXQitH-ywew0s",
+    authDomain: "timetable-threnox.firebaseapp.com",
+    projectId: "timetable-threnox",
+    storageBucket: "timetable-threnox.firebasestorage.app",
+    messagingSenderId: "327689062744",
+    appId: "1:327689062744:web:65f2f0cf72f4c984f17d2d",
+    measurementId: "G-JSDKVYBPQS"
+  };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ========================= DATA =========================
+
+    // Map each task to a category for reporting
+    // Categories: IOI, AL, Class, Travel, Sleep, Break, Other
+    function getCategoryForTask(day, index) {
+      const text = timetable[day][index].text.toLowerCase();
+      if (text.includes("ioi")) return "IOI";
+      if (text.includes("al ")) return "AL";
+      if (text.includes("class")) return "Class";
+      if (text.includes("travel")) return "Travel";
+      if (text.includes("sleep")) return "Sleep";
+      if (text.includes("break") || text.includes("nap") || text.includes("rest")) return "Break";
+      if (text.includes("dinner") || text.includes("lunch") || text.includes("eat") || text.includes("breakfast")) return "Break";
+      if (text.includes("wind down") || text.includes("get ready") || text.includes("discord") || text.includes("social")) return "Other";
+      // Fallback:
+      if (day === "Monday" && index >= 2 && index <= 3) return "Class"; // school
+      return "Other";
+    }
+
+    const timetable = {
+      Monday: [
+        { time: "4:00 AM – 5:30 AM", text: "IOI Deep Work (C++/Algo)" },
+        { time: "5:30 AM – 6:00 AM", text: "Get ready & travel" },
+        { time: "6:00 AM – 1:30 PM", text: "School" },
+        { time: "1:30 PM – 2:00 PM", text: "Travel home" },
+        { time: "2:00 PM – 2:30 PM", text: "Eat + power nap" },
+        { time: "2:30 PM – 3:00 PM", text: "AL Light Revision (review notes)" },
+        { time: "3:00 PM – 7:00 PM", text: "Class" },
+        { time: "7:00 PM – 7:30 PM", text: "Dinner" },
+        { time: "7:30 PM – 8:30 PM", text: "AL Revision (heavy/past papers)" },
+        { time: "8:30 PM – 9:00 PM", text: "Wind down (no screens)" },
+        { time: "9:00 PM", text: "SLEEP" }
+      ],
+      Tuesday: [
+        { time: "4:00 AM – 5:30 AM", text: "IOI Deep Work" },
+        { time: "5:30 AM – 6:00 AM", text: "Get ready & travel" },
+        { time: "6:00 AM – 1:30 PM", text: "School" },
+        { time: "1:30 PM – 2:00 PM", text: "Travel home" },
+        { time: "2:00 PM – 2:30 PM", text: "Eat + power nap" },
+        { time: "2:30 PM – 4:30 PM", text: "AL Intensive Block (hardest subject)" },
+        { time: "4:30 PM – 5:00 PM", text: "Break (walk/stretch)" },
+        { time: "5:00 PM – 6:30 PM", text: "Mixed Block (2nd AL or light IOI)" },
+        { time: "6:30 PM – 7:30 PM", text: "Dinner + quick Discord (optional, 15 min)" },
+        { time: "7:30 PM – 8:30 PM", text: "AL Recap & plan tomorrow" },
+        { time: "8:30 PM – 9:00 PM", text: "Wind down" },
+        { time: "9:00 PM", text: "SLEEP" }
+      ],
+      Wednesday: [
+        { time: "4:00 AM – 5:30 AM", text: "IOI Deep Work" },
+        { time: "5:30 AM – 6:00 AM", text: "Get ready & travel" },
+        { time: "6:00 AM – 1:30 PM", text: "School" },
+        { time: "1:30 PM – 2:00 PM", text: "Travel home" },
+        { time: "2:00 PM – 2:30 PM", text: "Eat + power nap" },
+        { time: "2:30 PM – 4:30 PM", text: "AL Intensive Block (hardest subject)" },
+        { time: "4:30 PM – 5:00 PM", text: "Break (walk/stretch)" },
+        { time: "5:00 PM – 6:30 PM", text: "Mixed Block (2nd AL or light IOI)" },
+        { time: "6:30 PM – 7:30 PM", text: "Dinner + quick Discord (optional, 15 min)" },
+        { time: "7:30 PM – 8:30 PM", text: "AL Recap & plan tomorrow" },
+        { time: "8:30 PM – 9:00 PM", text: "Wind down" },
+        { time: "9:00 PM", text: "SLEEP" }
+      ],
+      Thursday: [
+        { time: "4:00 AM – 5:30 AM", text: "IOI Deep Work" },
+        { time: "5:30 AM – 6:00 AM", text: "Get ready & travel" },
+        { time: "6:00 AM – 1:30 PM", text: "School" },
+        { time: "1:30 PM – 2:00 PM", text: "Travel home" },
+        { time: "2:00 PM – 2:30 PM", text: "Eat + power nap" },
+        { time: "2:30 PM – 4:30 PM", text: "AL Intensive Block (hardest subject)" },
+        { time: "4:30 PM – 5:00 PM", text: "Break (walk/stretch)" },
+        { time: "5:00 PM – 6:30 PM", text: "Mixed Block (2nd AL or light IOI)" },
+        { time: "6:30 PM – 7:30 PM", text: "Dinner + quick Discord (optional, 15 min)" },
+        { time: "7:30 PM – 8:30 PM", text: "AL Recap & plan tomorrow" },
+        { time: "8:30 PM – 9:00 PM", text: "Wind down" },
+        { time: "9:00 PM", text: "SLEEP" }
+      ],
+      Friday: [
+        { time: "4:00 AM – 5:30 AM", text: "IOI Deep Work" },
+        { time: "5:30 AM – 6:00 AM", text: "Get ready & travel" },
+        { time: "6:00 AM – 1:30 PM", text: "School" },
+        { time: "1:30 PM – 2:00 PM", text: "Travel home" },
+        { time: "2:00 PM – 2:30 PM", text: "Eat + power nap" },
+        { time: "2:30 PM – 4:30 PM", text: "AL Intensive Block (hardest subject)" },
+        { time: "4:30 PM – 5:00 PM", text: "Break (walk/stretch)" },
+        { time: "5:00 PM – 6:30 PM", text: "Mixed Block (2nd AL or light IOI)" },
+        { time: "6:30 PM – 7:30 PM", text: "Dinner + quick Discord (optional, 15 min)" },
+        { time: "7:30 PM – 8:30 PM", text: "AL Recap & plan tomorrow" },
+        { time: "8:30 PM – 9:00 PM", text: "Wind down" },
+        { time: "9:00 PM", text: "SLEEP" }
+      ],
+      Saturday: [
+        { time: "6:00 AM – 7:30 AM", text: "IOI Heavy Block (problems/mini-contest)" },
+        { time: "7:30 AM – 8:00 AM", text: "Get ready & travel (if needed)" },
+        { time: "8:00 AM – 11:00 AM", text: "Class" },
+        { time: "11:00 AM – 11:30 AM", text: "Travel home" },
+        { time: "11:30 AM – 12:30 PM", text: "AL Revision (targeted weak area)" },
+        { time: "12:30 PM – 1:30 PM", text: "Lunch/break" },
+        { time: "1:30 PM – 4:00 PM", text: "IOI Extended Practice (big coding session)" },
+        { time: "4:00 PM – 4:30 PM", text: "Break" },
+        { time: "4:30 PM – 6:00 PM", text: "AL Hard Subject (disliked subject)" },
+        { time: "6:00 PM – 7:00 PM", text: "Dinner/rest" },
+        { time: "7:00 PM – 8:00 PM", text: "Light AL Recap or Social reward (Discord, no games)" },
+        { time: "8:00 PM – 8:30 PM", text: "Wind down" },
+        { time: "9:00 PM", text: "SLEEP" }
+      ],
+      Sunday: [
+        { time: "6:00 AM – 8:00 AM", text: "IOI Mock Contest / Long Problem (timed)" },
+        { time: "8:00 AM – 8:30 AM", text: "Breakfast/rest" },
+        { time: "8:30 AM – 11:00 AM", text: "AL Blitz (all subjects, past papers, summaries)" },
+        { time: "11:00 AM – 11:30 AM", text: "Break" },
+        { time: "11:30 AM – 12:30 PM", text: "IOI Theory Deep Dive (no coding, just study)" },
+        { time: "12:30 PM – 1:30 PM", text: "Lunch/relax" },
+        { time: "1:30 PM – 2:00 PM", text: "Travel to class (if needed)" },
+        { time: "2:00 PM – 7:00 PM", text: "Class" },
+        { time: "7:00 PM – 7:30 PM", text: "Travel home" },
+        { time: "7:30 PM – 8:30 PM", text: "Wind-down AL review (light)" },
+        { time: "8:30 PM – 9:00 PM", text: "Wind down" },
+        { time: "9:00 PM", text: "SLEEP" }
+      ]
+    };
+
+    const dayOrder = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+
+    // ==================== HELPERS ====================
+
+    function getWeekKey(date) {
+      const d = new Date(date);
+      d.setHours(0,0,0,0);
+      d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+      const yearStart = new Date(d.getFullYear(), 0, 1);
+      const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+      return `${d.getFullYear()}-W${weekNo}`;
+    }
+
+    function formatDuration(ms) {
+      const totalMinutes = Math.round(ms / 60000);
+      const h = Math.floor(totalMinutes / 60);
+      const m = totalMinutes % 60;
+      if (h <= 0 && m <= 0) return "0m";
+      if (h === 0) return `${m}m`;
+      if (m === 0) return `${h}h`;
+      return `${h}h ${m}m`;
+    }
+
+    function getTodayInfo() {
+      const now = new Date();
+      const jsDay = now.getDay(); // 0=Sun,1=Mon...
+      const dayName = dayOrder[jsDay === 0 ? 6 : jsDay - 1];
+      return { dayName, date: now };
+    }
+
+    // ==================== RENDER DATE & LABEL ====================
+
+    function renderDate() {
+      const { date } = getTodayInfo();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById("dateDisplay").textContent = date.toLocaleDateString(undefined, options);
+    }
+
+    // ==================== TIME LOGS (FIRESTORE) ====================
+
+    const TIME_LOGS_COLLECTION = "timeLogs";
+
+    async function saveTimeLog(log) {
+      await db.collection(TIME_LOGS_COLLECTION).add(log);
+    }
+
+    async function getWeekLogs(weekKey) {
+      const snap = await db.collection(TIME_LOGS_COLLECTION)
+        .where("weekKey", "==", weekKey)
+        .get();
+      const logs = [];
+      snap.forEach(doc => logs.push(doc.data()));
+      return logs;
+    }
+
+    // ==================== RENDER TODAY TASKS WITH TIMERS ====================
+
+    function renderTodayTasks() {
+      const { dayName } = getTodayInfo();
+      document.getElementById("todayLabel").textContent = dayName;
+
+      const tasks = timetable[dayName];
+      const listEl = document.getElementById("todayTasks");
+      listEl.innerHTML = "";
+
+      tasks.forEach((t, idx) => {
+        const li = document.createElement("li");
+        li.className = "task-item";
+
+        const timeDiv = document.createElement("div");
+        timeDiv.className = "task-time";
+        timeDiv.textContent = t.time;
+
+        const textDiv = document.createElement("div");
+        textDiv.className = "task-text";
+        textDiv.textContent = t.text;
+
+        const controlsDiv = document.createElement("div");
+        controlsDiv.className = "task-controls";
+
+        const startBtn = document.createElement("button");
+        startBtn.textContent = "Start";
+
+        const stopBtn = document.createElement("button");
+        stopBtn.textContent = "Stop";
+        stopBtn.disabled = true;
+
+        const statusSpan = document.createElement("span");
+        statusSpan.className = "status-badge";
+        statusSpan.textContent = "Not started";
+
+        let startTime = null;
+
+        startBtn.addEventListener("click", async () => {
+          startTime = Date.now();
+          startBtn.disabled = true;
+          stopBtn.disabled = false;
+          statusSpan.textContent = "In progress...";
+        });
+
+        stopBtn.addEventListener("click", async () => {
+          const endTime = Date.now();
+          if (!startTime) {
+            alert("You must start the task before stopping it.");
+            return;
+          }
+
+          const weekKey = getWeekKey(new Date());
+          const category = getCategoryForTask(dayName, idx);
+
+          const log = {
+            day: dayName,
+            date: new Date().toISOString().slice(0,10),
+            weekKey,
+            category,
+            taskId: idx,
+            start: startTime,
+            end: endTime
+          };
+
+          try {
+            await saveTimeLog(log);
+            statusSpan.textContent = `Logged: ${formatDuration(endTime - startTime)}`;
+          } catch (e) {
+            console.error(e);
+            statusSpan.textContent = "Error saving to Firebase";
+          }
+
+          startBtn.disabled = true;
+          stopBtn.disabled = true;
+        });
+
+        controlsDiv.appendChild(startBtn);
+        controlsDiv.appendChild(stopBtn);
+        controlsDiv.appendChild(statusSpan);
+
+        li.appendChild(timeDiv);
+        li.appendChild(textDiv);
+        li.appendChild(controlsDiv);
+
+        listEl.appendChild(li);
+      });
+    }
+
+    // ==================== WEEKLY TIME REPORT (SUNDAY) ====================
+
+    async function renderWeeklyTimeReport() {
+      const { dayName } = getTodayInfo();
+      const reportSection = document.getElementById("reportSection");
+      const grid = document.getElementById("categoryReportGrid");
+
+      if (dayName !== "Sunday") {
+        reportSection.classList.add("hidden");
+        return;
+      }
+
+      reportSection.classList.remove("hidden");
+      grid.innerHTML = "<p style='color:var(--muted);'>Loading weekly data from Firebase...</p>";
+
+      const weekKey = getWeekKey(new Date());
+
+      // Planned time per category per day (approx from timetable)
+      // We'll compute planned minutes per category for this week.
+      const plannedMinutes = {}; // category -> minutes
+      const categories = ["IOI","AL","Class","Travel","Sleep","Break","Other"];
+      categories.forEach(c => plannedMinutes[c] = 0);
+
+      dayOrder.forEach(day => {
+        const tasks = timetable[day];
+        tasks.forEach((t, idx) => {
+          const cat = getCategoryForTask(day, idx);
+          const mins = estimateTaskMinutes(t.time);
+          plannedMinutes[cat] += mins;
+        });
+      });
+
+      // Fetch logs
+      let logs = [];
+      try {
+        logs = await getWeekLogs(weekKey);
+      } catch (e) {
+        console.error(e);
+        grid.innerHTML = "<p style='color:var(--danger);'>Failed to load data from Firebase. Check your config and console.</p>";
+        return;
+      }
+
+      // Actual minutes per category
+      const actualMinutes = {};
+      categories.forEach(c => actualMinutes[c] = 0);
+
+      logs.forEach(log => {
+        const dur = log.end - log.start; // ms
+        const mins = Math.round(dur / 60000);
+        if (actualMinutes[log.category] !== undefined) {
+          actualMinutes[log.category] += mins;
+        }
+      });
+
+      // Build report cards
+      grid.innerHTML = "";
+
+      categories.forEach(cat => {
+        const planned = plannedMinutes[cat];
+        const actual = actualMinutes[cat] || 0;
+        const missed = Math.max(0, planned - actual);
+
+        const card = document.createElement("div");
+        card.className = "category-report";
+
+        const title = document.createElement("h3");
+        title.textContent = cat;
+
+        const s1 = document.createElement("div");
+        s1.className = "stat";
+        s1.innerHTML = `Planned: <strong>${formatDuration(planned * 60000)}</strong>`;
+
+        const s2 = document.createElement("div");
+        s2.className = "stat";
+        s2.innerHTML = `Actual: <strong>${formatDuration(actual * 60000)}</strong>`;
+
+        const s3 = document.createElement("div");
+        s3.className = "stat";
+        s3.innerHTML = `Missed: <strong>${formatDuration(missed * 60000)}</strong>`;
+
+        card.appendChild(title);
+        card.appendChild(s1);
+        card.appendChild(s2);
+        card.appendChild(s3);
+
+        grid.appendChild(card);
+      });
+    }
+
+    // Estimate minutes from a time string like "4:00 AM – 5:30 AM" or "9:00 PM"
+    function estimateTaskMinutes(timeStr) {
+      // If no range (e.g. "9:00 PM"), assume 0 for planning purposes
+      if (!timeStr.includes("–") && !timeStr.includes("-")) {
+        return 0;
+      }
+      const parts = timeStr.split(/[–-]/);
+      if (parts.length < 2) return 0;
+      const start = parseTime(parts[0].trim());
+      const end = parseTime(parts[1].trim());
+      if (!start || !end) return 0;
+      let diff = end - start;
+      if (diff < 0) diff += 24 * 60; // cross midnight
+      return diff;
+    }
+
+    function parseTime(t) {
+      // t like "4:00 AM", "1:30 PM"
+      const m = t.match(/(\d+):(\d+)\s*(AM|PM)/i);
+      if (!m) return null;
+      let h = parseInt(m[1], 10);
+      const min = parseInt(m[2], 10);
+      const ampm = m[3].toUpperCase();
+      if (ampm === "PM" && h !== 12) h += 12;
+      if (ampm === "AM" && h === 12) h = 0;
+      return h * 60 + min;
+    }
+
+    // ==================== INIT ==========================
+
+    function init() {
+      renderDate();
+      renderTodayTasks();
+      renderWeeklyTimeReport();
+
+      document.getElementById("resetAllBtn").addEventListener("click", () => {
+        if (!confirm("This will NOT delete Firebase data, only reload the page UI. Continue?")) return;
+        location.reload();
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>
