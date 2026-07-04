@@ -2,19 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>THRENOX Timetable – Reset Edition</title>
+  <title>THRENOX – Reset Edition</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f1220;
-      --card: #171b2e;
-      --text: #e8eaf6;
-      --muted: #aab0c9;
-      --accent: #5c6aff;
+      --bg-1: #070914;
+      --bg-2: #0e1226;
+      --card-bg: rgba(20, 24, 48, 0.55);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: #e9ecff;
+      --muted: #9aa3c7;
+      --accent: #7c5cff;
       --accent-2: #00e5ff;
       --success: #2ecc71;
       --danger: #ff5252;
       --warning: #ffb142;
+      --glow: 0 0 40px rgba(124, 92, 255, 0.25), 0 0 80px rgba(0, 229, 255, 0.15);
     }
 
     * {
@@ -24,23 +30,82 @@
     }
 
     body {
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      background: var(--bg);
+      font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: radial-gradient(1200px 800px at 10% -10%, #1a1f44, transparent 60%),
+                  radial-gradient(1000px 700px at 110% 10%, #10213a, transparent 60%),
+                  linear-gradient(180deg, var(--bg-1), var(--bg-2));
       color: var(--text);
-      line-height: 1.5;
-      padding: 16px;
+      line-height: 1.55;
+      min-height: 100vh;
+      padding: 24px 16px 60px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Animated gradient orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: 0;
+      animation: float 18s ease-in-out infinite;
+    }
+
+    .orb-1 {
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, #7c5cff, transparent 70%);
+      top: -120px;
+      left: -120px;
+    }
+
+    .orb-2 {
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, #00e5ff, transparent 70%);
+      bottom: -100px;
+      right: -80px;
+      animation-delay: -6s;
+    }
+
+    .orb-3 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, #00ff9a, transparent 70%);
+      top: 40%;
+      right: 10%;
+      animation-delay: -12s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(30px, -40px) scale(1.05); }
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
 
     header {
-      max-width: 900px;
-      margin: 0 auto 24px;
       text-align: center;
+      margin-bottom: 28px;
     }
 
     h1 {
-      font-size: 1.7rem;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
       margin-bottom: 6px;
-      color: var(--accent-2);
+      background: linear-gradient(90deg, var(--accent-2), #a78bfa, var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 30px rgba(0, 229, 255, 0.25);
     }
 
     .subtitle {
@@ -48,29 +113,54 @@
       font-size: 0.95rem;
     }
 
-    .day-label {
+    .date-display {
       text-align: center;
-      font-size: 1.2rem;
-      margin: 16px 0 10px;
-      color: var(--accent);
-      font-weight: 700;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin: 10px 0 18px;
     }
 
     .card {
-      background: var(--card);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 18px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: var(--glow);
+      position: relative;
+      overflow: hidden;
     }
 
-    .rules {
-      font-size: 0.95rem;
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: 18px;
+      padding: 2px;
+      background: linear-gradient(120deg, rgba(124,92,255,0.35), rgba(0,229,255,0.25), rgba(124,92,255,0.35));
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: var(--accent-2);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .day-label {
+      text-align: center;
+      font-size: 1.25rem;
+      margin: 14px 0 10px;
+      color: #c7b8ff;
+      font-weight: 700;
+      letter-spacing: 0.03em;
     }
 
     .rules ul {
@@ -82,6 +172,8 @@
       margin: 6px 0;
       padding-left: 18px;
       position: relative;
+      color: #d8dcff;
+      font-size: 0.95rem;
     }
 
     .rules li::before {
@@ -91,22 +183,16 @@
       color: var(--accent-2);
     }
 
-    .section-title {
-      font-size: 1.1rem;
-      margin-bottom: 10px;
-      color: var(--accent-2);
-    }
-
     .task-list {
       list-style: none;
     }
 
     .task-item {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+      display: grid;
+      grid-template-columns: 130px 1fr auto;
+      gap: 10px;
       align-items: center;
-      padding: 10px 0;
+      padding: 12px 0;
       border-bottom: 1px solid rgba(255,255,255,0.06);
     }
 
@@ -115,54 +201,71 @@
     }
 
     .task-time {
-      min-width: 120px;
-      font-size: 0.9rem;
-      color: var(--muted);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.85rem;
+      color: #b9c1f5;
+      opacity: 0.9;
     }
 
     .task-text {
-      flex: 1;
-      font-size: 0.95rem;
-      min-width: 180px;
+      font-size: 0.97rem;
+      color: #e6e9ff;
     }
 
     .task-controls {
       display: flex;
-      gap: 6px;
+      align-items: center;
+      gap: 8px;
       flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     button {
-      background: var(--accent);
+      background: linear-gradient(90deg, var(--accent), #9d7bff);
       color: white;
       border: none;
-      padding: 6px 10px;
-      border-radius: 6px;
+      padding: 8px 12px;
+      border-radius: 10px;
       font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
       cursor: pointer;
+      transition: transform 0.12s ease, filter 0.12s ease, box-shadow 0.12s ease;
+      box-shadow: 0 6px 18px rgba(124, 92, 255, 0.35);
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+      filter: brightness(1.08);
+      box-shadow: 0 10px 26px rgba(124, 92, 255, 0.45);
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      filter: grayscale(0.3);
     }
 
     button.secondary {
       background: transparent;
-      border: 1px solid var(--accent);
-      color: var(--accent);
+      border: 1px solid rgba(124, 92, 255, 0.6);
+      color: #c7b8ff;
+      box-shadow: none;
     }
 
     button.danger {
-      background: var(--danger);
-    }
-
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+      background: linear-gradient(90deg, #ff5252, #ff8a80);
+      box-shadow: 0 6px 18px rgba(255, 82, 82, 0.35);
     }
 
     .status-badge {
-      font-size: 0.8rem;
-      padding: 2px 6px;
-      border-radius: 6px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 8px;
       background: rgba(255,255,255,0.06);
-      color: var(--muted);
+      color: #cfd6ff;
+      border: 1px solid rgba(255,255,255,0.08);
     }
 
     .report-section {
@@ -176,70 +279,76 @@
       margin-top: 10px;
     }
 
-    .report-day {
-      background: rgba(255,255,255,0.04);
-      border-radius: 10px;
-      padding: 10px;
-    }
-
-    .report-day h3 {
-      font-size: 1rem;
-      margin-bottom: 6px;
-      color: var(--accent-2);
-    }
-
-    .stat {
-      font-size: 0.9rem;
-      margin: 4px 0;
-    }
-
-    .stat strong {
-      color: var(--text);
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .date-display {
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.9rem;
-      margin-bottom: 10px;
-    }
-
     .category-report {
       background: rgba(255,255,255,0.04);
-      border-radius: 10px;
-      padding: 10px;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 12px;
     }
 
     .category-report h3 {
       font-size: 1rem;
       margin-bottom: 6px;
       color: var(--accent-2);
+      font-weight: 700;
+    }
+
+    .stat {
+      font-size: 0.9rem;
+      margin: 4px 0;
+      color: #d9ddff;
+    }
+
+    .stat strong {
+      color: #ffffff;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 700px) {
+      .task-item {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .task-controls {
+        justify-content: flex-start;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>THRENOX TIMETABLE – RESET EDITION</h1>
-    <div class="subtitle">Sleep: 9:00 PM – 4:00 AM | Travel: ~1 hour daily</div>
-    <div class="date-display" id="dateDisplay"></div>
-  </header>
+  <!-- Background orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
 
   <div class="container">
+    <header>
+      <h1>THRENOX – RESET EDITION</h1>
+      <div class="subtitle">Sleep: 9:00 PM – 4:00 AM • Travel: ~1 hour daily</div>
+      <div class="date-display" id="dateDisplay"></div>
+    </header>
+
     <!-- Today's Tasks -->
     <div class="card">
-      <div class="section-title">Today’s Plan (with Timers)</div>
+      <div class="section-title">Today’s Plan</div>
       <div class="day-label" id="todayLabel"></div>
       <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 10px;">
         For each task: press <strong>Start</strong> when you begin, <strong>Stop</strong> when you finish.
         This logs your time to Firebase for the weekly report.
       </p>
       <ul class="task-list" id="todayTasks"></ul>
-      <div class="controls" style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
-        <button id="resetAllBtn" class="danger">Clear all local UI state</button>
+      <div class="controls">
+        <button id="resetAllBtn" class="danger">Reload UI (keeps Firebase data)</button>
       </div>
     </div>
 
@@ -258,9 +367,9 @@
 
     <!-- Weekly Time Report (shown on Sunday) -->
     <div class="card report-section hidden" id="reportSection">
-      <div class="section-title">Weekly Time Report (This Week)</div>
+      <div class="section-title">Weekly Time Report</div>
       <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 8px;">
-        This shows how much time you actually spent vs planned, and how much you missed per category.
+        Planned vs actual time per category, and how much you missed this week.
       </p>
       <div class="report-grid" id="categoryReportGrid"></div>
     </div>
@@ -272,25 +381,21 @@
 
   <script>
     // ===================== FIREBASE CONFIG =====================
-    // REPLACE THIS WITH YOUR OWN CONFIG FROM FIREBASE CONSOLE
     const firebaseConfig = {
-    apiKey: "AIzaSyBb3IIg51MeZEeJ5rk-X4vXQitH-ywew0s",
-    authDomain: "timetable-threnox.firebaseapp.com",
-    projectId: "timetable-threnox",
-    storageBucket: "timetable-threnox.firebasestorage.app",
-    messagingSenderId: "327689062744",
-    appId: "1:327689062744:web:65f2f0cf72f4c984f17d2d",
-    measurementId: "G-JSDKVYBPQS"
-  };
+      apiKey: "AIzaSyBb3IIg51MeZEeJ5rk-X4vXQitH-ywew0s",
+      authDomain: "timetable-threnox.firebaseapp.com",
+      projectId: "timetable-threnox",
+      storageBucket: "timetable-threnox.firebasestorage.app",
+      messagingSenderId: "327689062744",
+      appId: "1:327689062744:web:65f2f0cf72f4c984f17d2d",
+      measurementId: "G-JSDKVYBPQS"
+    };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
     // ========================= DATA =========================
 
-    // Map each task to a category for reporting
-    // Categories: IOI, AL, Class, Travel, Sleep, Break, Other
     function getCategoryForTask(day, index) {
       const text = timetable[day][index].text.toLowerCase();
       if (text.includes("ioi")) return "IOI";
@@ -301,8 +406,7 @@
       if (text.includes("break") || text.includes("nap") || text.includes("rest")) return "Break";
       if (text.includes("dinner") || text.includes("lunch") || text.includes("eat") || text.includes("breakfast")) return "Break";
       if (text.includes("wind down") || text.includes("get ready") || text.includes("discord") || text.includes("social")) return "Other";
-      // Fallback:
-      if (day === "Monday" && index >= 2 && index <= 3) return "Class"; // school
+      if (day === "Monday" && index >= 2 && index <= 3) return "Class";
       return "Other";
     }
 
@@ -432,7 +536,7 @@
 
     function getTodayInfo() {
       const now = new Date();
-      const jsDay = now.getDay(); // 0=Sun,1=Mon...
+      const jsDay = now.getDay();
       const dayName = dayOrder[jsDay === 0 ? 6 : jsDay - 1];
       return { dayName, date: now };
     }
@@ -568,9 +672,7 @@
 
       const weekKey = getWeekKey(new Date());
 
-      // Planned time per category per day (approx from timetable)
-      // We'll compute planned minutes per category for this week.
-      const plannedMinutes = {}; // category -> minutes
+      const plannedMinutes = {};
       const categories = ["IOI","AL","Class","Travel","Sleep","Break","Other"];
       categories.forEach(c => plannedMinutes[c] = 0);
 
@@ -583,7 +685,6 @@
         });
       });
 
-      // Fetch logs
       let logs = [];
       try {
         logs = await getWeekLogs(weekKey);
@@ -593,19 +694,17 @@
         return;
       }
 
-      // Actual minutes per category
       const actualMinutes = {};
       categories.forEach(c => actualMinutes[c] = 0);
 
       logs.forEach(log => {
-        const dur = log.end - log.start; // ms
+        const dur = log.end - log.start;
         const mins = Math.round(dur / 60000);
         if (actualMinutes[log.category] !== undefined) {
           actualMinutes[log.category] += mins;
         }
       });
 
-      // Build report cards
       grid.innerHTML = "";
 
       categories.forEach(cat => {
@@ -640,9 +739,7 @@
       });
     }
 
-    // Estimate minutes from a time string like "4:00 AM – 5:30 AM" or "9:00 PM"
     function estimateTaskMinutes(timeStr) {
-      // If no range (e.g. "9:00 PM"), assume 0 for planning purposes
       if (!timeStr.includes("–") && !timeStr.includes("-")) {
         return 0;
       }
@@ -652,12 +749,11 @@
       const end = parseTime(parts[1].trim());
       if (!start || !end) return 0;
       let diff = end - start;
-      if (diff < 0) diff += 24 * 60; // cross midnight
+      if (diff < 0) diff += 24 * 60;
       return diff;
     }
 
     function parseTime(t) {
-      // t like "4:00 AM", "1:30 PM"
       const m = t.match(/(\d+):(\d+)\s*(AM|PM)/i);
       if (!m) return null;
       let h = parseInt(m[1], 10);
