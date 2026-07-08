@@ -2,122 +2,222 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>THRENOX – Focus Panels</title>
+  <title>THRENOX – Daily Flow</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: #0b0f1c;
-      color: #e0e4ff;
-      padding: 1rem;
-      min-height: 100vh;
-    }
-    .header {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    h1 {
-      color: #a78bfa;
-      font-size: 2rem;
-    }
-    .date {
-      color: #9aa3c7;
-      margin: 0.25rem 0;
-    }
-    .live-clock {
-      color: #00e5ff;
-      font-family: monospace;
-      font-size: 1.2rem;
-    }
-    .controls {
-      text-align: center;
-      margin: 0.5rem 0 1rem;
-    }
-    .controls button {
-      background: #7c5cff;
-      color: white;
-      border: none;
-      padding: 0.5rem 1.2rem;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(124,92,255,0.4);
+    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    /* Panel container */
-    .panels {
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #f7f3ee;  /* warm off-white */
+      color: #2d2a26;
+      height: 100vh;
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
-      max-width: 700px;
-      margin: 0 auto;
     }
 
-    /* Each task panel */
-    .panel {
-      background: rgba(20,24,48,0.7);
-      border: 1px solid rgba(124,92,255,0.25);
-      border-radius: 12px;
-      overflow: hidden;
-      backdrop-filter: blur(8px);
-      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-      cursor: grab;
-    }
-    .panel:active {
-      cursor: grabbing;
-    }
-    .panel.dragging {
-      opacity: 0.7;
-      box-shadow: 0 0 30px rgba(124,92,255,0.7);
-    }
-
-    /* The focused (big) panel */
-    .panel.focused {
-      transform: scale(1.04);
-      border-color: #00e5ff;
-      box-shadow: 0 0 30px rgba(0,229,255,0.3);
-      background: rgba(20,24,48,0.9);
-      z-index: 2;
-    }
-
-    .panel-header {
-      background: rgba(124,92,255,0.15);
-      padding: 0.5rem 1rem;
+    /* Header */
+    .header {
+      padding: 1.5rem 1rem 1rem;
+      background: #f7f3ee;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      position: relative;
+      z-index: 10;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-      user-select: none;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      pointer-events: none; /* so drag only works on whole panel */
-    }
-    .panel-body {
-      padding: 0.5rem 1rem;
-      display: flex;
-      gap: 1rem;
-      align-items: baseline;
-    }
-    .task-time {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.9rem;
-      color: #9aa3c7;
-      min-width: 110px;
-    }
-    .task-text {
-      font-size: 1rem;
-    }
-    .panel.focused .task-text {
-      font-weight: 700;
-      color: #fff;
     }
 
-    /* Drag placeholder */
-    .drag-placeholder {
-      border: 2px dashed rgba(124,92,255,0.6);
-      border-radius: 12px;
-      height: 70px;
-      margin: 0.75rem 0;
-      display: none;
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      letter-spacing: 0.03em;
+      color: #2d2a26;
+      margin-bottom: 0.25rem;
+    }
+
+    .date {
+      font-size: 0.9rem;
+      color: #6b625a;
+      margin-bottom: 0.3rem;
+    }
+
+    .live-clock {
+      font-family: 'Inter', monospace;
+      font-size: 1rem;
+      color: #8c7b6b;
+      background: #eae3db;
+      padding: 0.2rem 0.8rem;
+      border-radius: 20px;
+      display: inline-block;
+    }
+
+    /* Progress bar */
+    .progress-wrap {
+      margin-top: 0.8rem;
+      width: 80%;
+      max-width: 400px;
+      background: #e0d6cc;
+      border-radius: 10px;
+      height: 6px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #b08968;
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    .progress-text {
+      font-size: 0.7rem;
+      color: #6b625a;
+      margin-top: 0.2rem;
+      text-align: center;
+    }
+
+    /* Scroll container */
+    .panels-wrapper {
+      flex: 1;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      padding: 25vh 0;
+      scrollbar-width: thin;
+      scrollbar-color: #c4b7a6 transparent;
+    }
+
+    .panels-wrapper::-webkit-scrollbar {
+      width: 6px;
+    }
+    .panels-wrapper::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .panels-wrapper::-webkit-scrollbar-thumb {
+      background: #c4b7a6;
+      border-radius: 10px;
+    }
+
+    .panels-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* Panel card */
+    .panel {
+      width: 100%;
+      background: white;
+      border-radius: 24px;
+      padding: 1.8rem 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.02);
+      scroll-snap-align: center;
+      transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+      opacity: 0.6;
+      transform: scale(0.92);
+      position: relative;
+      border: 1px solid rgba(0,0,0,0.04);
+      user-select: none;
+    }
+
+    /* Focused panel */
+    .panel.focused {
+      opacity: 1;
+      transform: scale(1.02);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.08), 0 5px 15px rgba(0,0,0,0.04);
+      border-color: #d9c9b6;
+      background: #ffffff;
+    }
+
+    .panel-time {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #b08968;
+      display: block;
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .task-text {
+      font-size: 1.3rem;
+      font-weight: 600;
+      line-height: 1.4;
+      color: #2d2a26;
+    }
+
+    .panel.focused .task-text {
+      color: #1a1815;
+    }
+
+    /* Status tag */
+    .status-tag {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.5rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.25rem 0.7rem;
+      border-radius: 30px;
+      background: #f1ede8;
+      color: #8c7b6b;
+    }
+
+    .panel.focused .status-tag {
+      background: #e6d9cc;
+      color: #6b5241;
+    }
+
+    /* Reset button */
+    .controls {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 100;
+    }
+
+    .reset-btn {
+      background: #ffffff;
+      border: 1px solid #d9c9b6;
+      color: #2d2a26;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .reset-btn:hover {
+      background: #f5efe8;
+      transform: scale(1.05);
+    }
+
+    /* Responsive */
+    @media (max-width: 500px) {
+      .panel {
+        padding: 1.5rem 1.2rem;
+      }
+      .task-text {
+        font-size: 1.1rem;
+      }
     }
   </style>
 </head>
@@ -126,17 +226,23 @@
     <h1>THRENOX</h1>
     <div class="date" id="dateDisplay"></div>
     <div class="live-clock" id="liveClock"></div>
-  </div>
-  <div class="controls">
-    <button id="resetFocusBtn">⚡ Reset to Now</button>
+    <div class="progress-wrap">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="progress-text" id="progressText">0 / 0 tasks completed</div>
   </div>
 
-  <div class="panels" id="panelsContainer">
-    <!-- Task panels inserted here -->
+  <div class="panels-wrapper" id="scrollWrapper">
+    <div class="panels-container" id="panelsContainer">
+      <!-- Panels injected here -->
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="reset-btn" id="resetBtn" title="Back to current task">📍</button>
   </div>
 
   <script>
-    // ---------- TIMETABLE (same as before) ----------
     const timetable = {
       Monday: [
         ["04:00","05:30","IOI Deep Work (C++/Algo)"],
@@ -144,370 +250,218 @@
         ["06:00","13:30","School"],
         ["13:30","14:00","Travel home"],
         ["14:00","14:30","Eat + power nap"],
-        ["14:30","15:00","AL Light Revision (review notes)"],
+        ["14:30","15:00","AL Light Revision"],
         ["15:00","19:00","Class"],
         ["19:00","19:30","Dinner"],
-        ["19:30","20:30","AL Revision (heavy/past papers)"],
-        ["20:30","21:00","Wind down (no screens)"],
+        ["19:30","20:30","AL Revision (Past Papers)"],
+        ["20:30","21:00","Wind down"],
         ["21:00","23:59","SLEEP"]
       ],
       Tuesday: [
         ["04:00","05:30","IOI Deep Work"],
-        ["05:30","06:00","Get ready & travel"],
+        ["05:30","06:00","Travel"],
         ["06:00","13:30","School"],
-        ["13:30","14:00","Travel home"],
-        ["14:00","14:30","Eat + power nap"],
-        ["14:30","16:30","AL Intensive Block (hardest subject)"],
-        ["16:30","17:00","Break (walk/stretch)"],
-        ["17:00","18:30","Mixed Block (2nd AL or light IOI)"],
-        ["18:30","19:30","Dinner + quick Discord (optional, 15 min)"],
-        ["19:30","20:30","AL Recap & plan tomorrow"],
+        ["13:30","14:00","Home"],
+        ["14:00","14:30","Nap"],
+        ["14:30","16:30","AL Intensive"],
+        ["16:30","17:00","Break"],
+        ["17:00","18:30","Mixed Block"],
+        ["18:30","19:30","Dinner"],
+        ["19:30","20:30","Recap"],
         ["20:30","21:00","Wind down"],
         ["21:00","23:59","SLEEP"]
       ],
       Wednesday: [
         ["04:00","05:30","IOI Deep Work"],
-        ["05:30","06:00","Get ready & travel"],
+        ["05:30","06:00","Travel"],
         ["06:00","13:30","School"],
-        ["13:30","14:00","Travel home"],
-        ["14:00","14:30","Eat + power nap"],
-        ["14:30","16:30","AL Intensive Block (hardest subject)"],
-        ["16:30","17:00","Break (walk/stretch)"],
-        ["17:00","18:30","Mixed Block (2nd AL or light IOI)"],
-        ["18:30","19:30","Dinner + quick Discord (optional, 15 min)"],
-        ["19:30","20:30","AL Recap & plan tomorrow"],
+        ["13:30","14:00","Home"],
+        ["14:00","14:30","Nap"],
+        ["14:30","16:30","AL Intensive"],
+        ["16:30","17:00","Break"],
+        ["17:00","18:30","Mixed Block"],
+        ["18:30","19:30","Dinner"],
+        ["19:30","20:30","Recap"],
         ["20:30","21:00","Wind down"],
         ["21:00","23:59","SLEEP"]
       ],
       Thursday: [
         ["04:00","05:30","IOI Deep Work"],
-        ["05:30","06:00","Get ready & travel"],
+        ["05:30","06:00","Travel"],
         ["06:00","13:30","School"],
-        ["13:30","14:00","Travel home"],
-        ["14:00","14:30","Eat + power nap"],
-        ["14:30","16:30","AL Intensive Block (hardest subject)"],
-        ["16:30","17:00","Break (walk/stretch)"],
-        ["17:00","18:30","Mixed Block (2nd AL or light IOI)"],
-        ["18:30","19:30","Dinner + quick Discord (optional, 15 min)"],
-        ["19:30","20:30","AL Recap & plan tomorrow"],
+        ["13:30","14:00","Home"],
+        ["14:00","14:30","Nap"],
+        ["14:30","16:30","AL Intensive"],
+        ["16:30","17:00","Break"],
+        ["17:00","18:30","Mixed Block"],
+        ["18:30","19:30","Dinner"],
+        ["19:30","20:30","Recap"],
         ["20:30","21:00","Wind down"],
         ["21:00","23:59","SLEEP"]
       ],
       Friday: [
         ["04:00","05:30","IOI Deep Work"],
-        ["05:30","06:00","Get ready & travel"],
+        ["05:30","06:00","Travel"],
         ["06:00","13:30","School"],
-        ["13:30","14:00","Travel home"],
-        ["14:00","14:30","Eat + power nap"],
-        ["14:30","16:30","AL Intensive Block (hardest subject)"],
-        ["16:30","17:00","Break (walk/stretch)"],
-        ["17:00","18:30","Mixed Block (2nd AL or light IOI)"],
-        ["18:30","19:30","Dinner + quick Discord (optional, 15 min)"],
-        ["19:30","20:30","AL Recap & plan tomorrow"],
+        ["13:30","14:00","Home"],
+        ["14:00","14:30","Nap"],
+        ["14:30","16:30","AL Intensive"],
+        ["16:30","17:00","Break"],
+        ["17:00","18:30","Mixed Block"],
+        ["18:30","19:30","Dinner"],
+        ["19:30","20:30","Recap"],
         ["20:30","21:00","Wind down"],
         ["21:00","23:59","SLEEP"]
       ],
       Saturday: [
-        ["06:00","07:30","IOI Heavy Block (problems/mini-contest)"],
-        ["07:30","08:00","Get ready & travel (if needed)"],
+        ["06:00","07:30","IOI Heavy Block"],
+        ["07:30","08:00","Travel"],
         ["08:00","11:00","Class"],
-        ["11:00","11:30","Travel home"],
-        ["11:30","12:30","AL Revision (targeted weak area)"],
-        ["12:30","13:30","Lunch/break"],
-        ["13:30","16:00","IOI Extended Practice (big coding session)"],
+        ["11:00","11:30","Home"],
+        ["11:30","12:30","AL Revision"],
+        ["12:30","13:30","Lunch"],
+        ["13:30","16:00","IOI Practice"],
         ["16:00","16:30","Break"],
-        ["16:30","18:00","AL Hard Subject (disliked subject)"],
-        ["18:00","19:00","Dinner/rest"],
-        ["19:00","20:00","Light AL Recap or Social reward (Discord, no games)"],
+        ["16:30","18:00","AL Hard Subject"],
+        ["18:00","19:00","Dinner"],
+        ["19:00","20:00","Social/Recap"],
         ["20:00","20:30","Wind down"],
         ["20:30","23:59","SLEEP"]
       ],
       Sunday: [
-        ["06:00","08:00","IOI Mock Contest / Long Problem (timed)"],
-        ["08:00","08:30","Breakfast/rest"],
-        ["08:30","11:00","AL Blitz (all subjects, past papers, summaries)"],
+        ["06:00","08:00","IOI Mock"],
+        ["08:00","08:30","Breakfast"],
+        ["08:30","11:00","AL Blitz"],
         ["11:00","11:30","Break"],
-        ["11:30","12:30","IOI Theory Deep Dive (no coding, just study)"],
-        ["12:30","13:30","Lunch/relax"],
-        ["13:30","14:00","Travel to class (if needed)"],
+        ["11:30","12:30","IOI Theory"],
+        ["12:30","13:30","Lunch"],
+        ["13:30","14:00","Travel"],
         ["14:00","19:00","Class"],
-        ["19:00","19:30","Travel home"],
-        ["19:30","20:30","Wind-down AL review (light)"],
+        ["19:00","19:30","Home"],
+        ["19:30","20:30","AL Review"],
         ["20:30","21:00","Wind down"],
         ["21:00","23:59","SLEEP"]
       ]
     };
 
     const dayOrder = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    let currentDay = "";
+    let tasks = [];
 
     function timeToMinutes(str) {
       const [h,m] = str.split(':').map(Number);
       return h*60 + m;
     }
 
-    // ---------- STATE ----------
-    let manualFocusId = null;   // if set, this task index is the focus (overrides time)
-    let tasksData = [];         // array of { id, startMin, endMin, timeRange, text }
-
-    // ---------- BUILD TASK DATA FOR TODAY ----------
-    function buildTasksData() {
+    function updateDateTime() {
       const now = new Date();
       const dayName = dayOrder[now.getDay()];
-      const raw = timetable[dayName];
-      tasksData = raw.map(([start, end, text], idx) => ({
+      document.getElementById('dateDisplay').textContent = now.toLocaleDateString(undefined, { 
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+      });
+      document.getElementById('liveClock').textContent = now.toLocaleTimeString(undefined, { 
+        hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' 
+      });
+
+      if (dayName !== currentDay) {
+        currentDay = dayName;
+        buildPanels();
+      }
+      updateProgress();
+    }
+
+    function buildPanels() {
+      const container = document.getElementById('panelsContainer');
+      container.innerHTML = '';
+      const raw = timetable[currentDay] || [];
+      tasks = raw.map(([start, end, text], idx) => ({
         id: idx,
         startMin: timeToMinutes(start),
         endMin: timeToMinutes(end),
         timeRange: `${start} – ${end}`,
         text
       }));
+
+      tasks.forEach(task => {
+        const panel = document.createElement('div');
+        panel.className = 'panel';
+        panel.id = `task-${task.id}`;
+        panel.dataset.id = task.id;
+        panel.innerHTML = `
+          <span class="status-tag">Upcoming</span>
+          <span class="panel-time">${task.timeRange}</span>
+          <div class="task-text">${task.text}</div>
+        `;
+        panel.addEventListener('click', () => {
+          panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+        container.appendChild(panel);
+      });
+      setTimeout(focusCurrentTask, 100);
     }
 
-    // ---------- FIND CURRENT TASK INDEX BY TIME ----------
     function getCurrentTaskIndex() {
       const now = new Date();
       const currentMin = now.getHours()*60 + now.getMinutes();
-      for (let i=0; i<tasksData.length; i++) {
-        if (currentMin >= tasksData[i].startMin && currentMin < tasksData[i].endMin) {
-          return i;
-        }
-      }
-      return -1;
+      return tasks.findIndex(t => currentMin >= t.startMin && currentMin < t.endMin);
     }
 
-    // ---------- RENDER ALL PANELS ----------
-    function renderPanels() {
-      const container = document.getElementById('panelsContainer');
-
-      // Save current order of panel IDs if any exist
-      const existingOrder = [];
-      container.querySelectorAll('.panel').forEach(p => existingOrder.push(Number(p.dataset.taskId)));
-
-      buildTasksData(); // refresh tasksData for today
-
-      // Determine order: if we have an existing order, try to preserve it; else chronological
-      let orderedIds;
-      if (existingOrder.length === tasksData.length) {
-        orderedIds = existingOrder;
+    function focusCurrentTask() {
+      const idx = getCurrentTaskIndex();
+      if (idx !== -1) {
+        const el = document.getElementById(`task-${idx}`);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       } else {
-        orderedIds = tasksData.map(t => t.id); // chronological
+        const first = document.querySelector('.panel');
+        if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
-
-      container.innerHTML = '';
-
-      orderedIds.forEach(id => {
-        const task = tasksData.find(t => t.id === id);
-        if (!task) return;
-
-        const panelDiv = document.createElement('div');
-        panelDiv.className = 'panel';
-        panelDiv.draggable = true;
-        panelDiv.dataset.taskId = task.id;
-        panelDiv.innerHTML = `
-          <div class="panel-header">
-            <span style="color:#9aa3c7; font-size:0.75rem;">${task.timeRange}</span>
-            <span style="color:#9aa3c7; font-size:0.75rem;">☰</span>
-          </div>
-          <div class="panel-body">
-            <span class="task-text">${task.text}</span>
-          </div>
-        `;
-
-        container.appendChild(panelDiv);
-      });
-
-      // Apply focus
-      applyFocus();
-
-      // Attach drag listeners
-      attachDragListeners();
     }
 
-    // ---------- FOCUS LOGIC ----------
-    function applyFocus() {
-      const panels = document.querySelectorAll('.panel');
-      // Determine which panel should be focused
-      let focusId = manualFocusId;
-      if (focusId === null) {
-        focusId = getCurrentTaskIndex();
-      }
-      panels.forEach(panel => {
-        const taskId = Number(panel.dataset.taskId);
-        if (taskId === focusId) {
-          panel.classList.add('focused');
-        } else {
-          panel.classList.remove('focused');
+    // Intersection Observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          document.querySelectorAll('.panel').forEach(p => p.classList.remove('focused'));
+          entry.target.classList.add('focused');
+          const taskId = parseInt(entry.target.dataset.id);
+          const currentIdx = getCurrentTaskIndex();
+          const tag = entry.target.querySelector('.status-tag');
+          if (taskId === currentIdx) {
+            tag.textContent = "Current";
+            tag.style.color = "#6b5241";
+          } else if (taskId < currentIdx) {
+            tag.textContent = "Done";
+            tag.style.color = "#8c7b6b";
+          } else {
+            tag.textContent = "Upcoming";
+            tag.style.color = "#8c7b6b";
+          }
         }
       });
+    }, { root: document.getElementById('scrollWrapper'), threshold: 0.6 });
+
+    function observePanels() {
+      document.querySelectorAll('.panel').forEach(p => observer.observe(p));
     }
 
-    // ---------- DRAG AND DROP ----------
-    let draggedPanel = null;
-    let placeholder = null;
-
-    function attachDragListeners() {
-      const panels = document.querySelectorAll('.panel');
-      panels.forEach(panel => {
-        panel.addEventListener('dragstart', handleDragStart);
-        panel.addEventListener('dragend', handleDragEnd);
-        panel.addEventListener('dragover', handleDragOver);
-        panel.addEventListener('dragenter', handleDragEnter);
-        panel.addEventListener('dragleave', handleDragLeave);
-        panel.addEventListener('drop', handleDrop);
-      });
-    }
-
-    function handleDragStart(e) {
-      draggedPanel = this;
-      this.classList.add('dragging');
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/plain', this.dataset.taskId);
-      // Create placeholder
-      placeholder = document.createElement('div');
-      placeholder.className = 'drag-placeholder';
-      placeholder.style.display = 'block';
-      this.parentNode.insertBefore(placeholder, this.nextSibling);
-      setTimeout(() => { if (draggedPanel) draggedPanel.style.display = 'none'; }, 0);
-    }
-
-    function handleDragEnd(e) {
-      this.classList.remove('dragging');
-      if (placeholder) placeholder.remove();
-      if (draggedPanel) draggedPanel.style.display = '';
-      // Check if the dragged panel is now at the top (first child)
-      const container = document.getElementById('panelsContainer');
-      const firstPanel = container.querySelector('.panel');
-      if (firstPanel && firstPanel === draggedPanel) {
-        // It's at the top → make it the focus
-        manualFocusId = Number(draggedPanel.dataset.taskId);
-      } else {
-        // If the dragged panel is not top, maybe the user reordered but didn't put it first,
-        // we'll keep manual focus if it was already set and the focused panel is still somewhere?
-        // Simpler: only changing order to top triggers manual focus; otherwise auto remains.
-        // If manualFocusId is set and that panel is no longer top? We'll let it stay focused until next manual move or reset.
-        // Actually, if they drag a panel not to the top, we shouldn't change focus.
-      }
-      applyFocus();
-      draggedPanel = null;
-      placeholder = null;
-    }
-
-    function handleDragOver(e) {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-    }
-
-    function handleDragEnter(e) {
-      e.preventDefault();
-      this.classList.add('drag-over');
-    }
-
-    function handleDragLeave(e) {
-      this.classList.remove('drag-over');
-    }
-
-    function handleDrop(e) {
-      e.stopPropagation();
-      this.classList.remove('drag-over');
-      if (draggedPanel !== this && draggedPanel) {
-        const container = document.getElementById('panelsContainer');
-        const rect = this.getBoundingClientRect();
-        const offset = e.clientY - rect.top;
-        if (offset < rect.height / 2) {
-          container.insertBefore(draggedPanel, this);
-        } else {
-          container.insertBefore(draggedPanel, this.nextSibling);
-        }
-        // After drop, check if dragged panel is now first (top)
-        const firstPanel = container.querySelector('.panel');
-        if (firstPanel === draggedPanel) {
-          manualFocusId = Number(draggedPanel.dataset.taskId);
-        } else {
-          // if we dropped below another panel, the focus might not change,
-          // but we could optionally clear manual focus? I'll keep it as is.
-        }
-        applyFocus();
-      }
-      return false;
-    }
-
-    // ---------- RESET BUTTON ----------
-    document.getElementById('resetFocusBtn').addEventListener('click', () => {
-      manualFocusId = null;
-      // Also re-order to chronological? The user may have reordered panels.
-      // For simplicity, we'll re-sort to chronological order.
-      renderPanels(); // will rebuild in original order and auto-focus
-    });
-
-    // ---------- LIVE CLOCK & UPDATE ----------
-    function updateDateTime() {
+    // Progress bar
+    function updateProgress() {
       const now = new Date();
-      document.getElementById('dateDisplay').textContent =
-        now.toLocaleDateString(undefined, { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-      document.getElementById('liveClock').textContent =
-        now.toLocaleTimeString(undefined, { hour:'2-digit', minute:'2-digit', second:'2-digit' });
-
-      // Refresh panels only if minute changed and there's no manual focus? Or always?
-      // We'll always rebuild to keep times in sync, but preserve manual focus and order.
       const currentMin = now.getHours()*60 + now.getMinutes();
-      if (updateDateTime.lastMin !== currentMin) {
-        updateDateTime.lastMin = currentMin;
-        // Re-render but preserve manual focus and current order
-        const container = document.getElementById('panelsContainer');
-        const currentOrder = [];
-        container.querySelectorAll('.panel').forEach(p => currentOrder.push(Number(p.dataset.taskId)));
-        renderPanelsWithOrder(currentOrder);
-      }
-    }
-    updateDateTime.lastMin = -1;
-
-    // Special render that uses a given order array (to preserve user's manual arrangement)
-    function renderPanelsWithOrder(order) {
-      const container = document.getElementById('panelsContainer');
-      container.innerHTML = '';
-
-      order.forEach(id => {
-        const task = tasksData.find(t => t.id === id);
-        if (!task) return;
-        const panelDiv = document.createElement('div');
-        panelDiv.className = 'panel';
-        panelDiv.draggable = true;
-        panelDiv.dataset.taskId = task.id;
-        panelDiv.innerHTML = `
-          <div class="panel-header">
-            <span style="color:#9aa3c7; font-size:0.75rem;">${task.timeRange}</span>
-            <span style="color:#9aa3c7; font-size:0.75rem;">☰</span>
-          </div>
-          <div class="panel-body">
-            <span class="task-text">${task.text}</span>
-          </div>
-        `;
-        container.appendChild(panelDiv);
-      });
-      applyFocus();
-      attachDragListeners();
+      const totalTasks = tasks.length;
+      const completedCount = tasks.filter(t => t.endMin <= currentMin).length;
+      const percent = totalTasks ? Math.round((completedCount / totalTasks) * 100) : 0;
+      document.getElementById('progressBar').style.width = percent + '%';
+      document.getElementById('progressText').textContent = `${completedCount} / ${totalTasks} tasks done`;
     }
 
-    // Override renderPanels to use existing order if possible
-    const originalRenderPanels = renderPanels;
-    renderPanels = function() {
-      const container = document.getElementById('panelsContainer');
-      const existingOrder = [];
-      container.querySelectorAll('.panel').forEach(p => existingOrder.push(Number(p.dataset.taskId)));
-      if (existingOrder.length === tasksData.length) {
-        renderPanelsWithOrder(existingOrder);
-      } else {
-        // fallback chronological
-        buildTasksData();
-        renderPanelsWithOrder(tasksData.map(t => t.id));
-      }
-    };
+    document.getElementById('resetBtn').addEventListener('click', focusCurrentTask);
 
-    // Initial render
-    buildTasksData();
-    renderPanels();
+    // Start
     updateDateTime();
     setInterval(updateDateTime, 1000);
+    // observe panels after first build
+    setTimeout(observePanels, 200);
   </script>
 </body>
 </html>
