@@ -2,210 +2,238 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>THRENOX – Daily Log</title>
+  <title>THRENOX – Now</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
       font-family: 'Segoe UI', system-ui, sans-serif;
       background: #0b0f1c;
       color: #e0e4ff;
-      max-width: 600px;
-      margin: 2rem auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
       padding: 1rem;
-      line-height: 1.5;
+      text-align: center;
     }
     h1 {
-      text-align: center;
+      font-size: 2rem;
       color: #a78bfa;
+      margin-bottom: 0.5rem;
     }
-    .day-header {
-      text-align: center;
-      font-size: 1.2rem;
-      margin-bottom: 1.5rem;
+    .date {
       color: #9aa3c7;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
     }
-    .task {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      padding: 0.6rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+    .now-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(124,92,255,0.4);
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 400px;
+      width: 100%;
     }
-    .task input[type="checkbox"] {
-      margin-top: 0.15rem;
-      width: 1rem;
-      height: 1rem;
-      accent-color: #7c5cff;
-      flex-shrink: 0;
+    .now-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #7c5cff;
+      margin-bottom: 0.5rem;
     }
-    .task-time {
+    .now-task {
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+    .now-time {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
+      color: #00e5ff;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+    .next {
+      margin-top: 2rem;
+      color: #5a6182;
+      font-size: 0.9rem;
+    }
+    .next span {
       color: #9aa3c7;
-      min-width: 130px;
-    }
-    .task-text {
-      flex: 1;
-      font-size: 0.95rem;
-    }
-    .completed .task-text {
-      text-decoration: line-through;
-      opacity: 0.6;
     }
   </style>
 </head>
 <body>
   <h1>THRENOX</h1>
-  <div class="day-header" id="dayHeader"></div>
-  <div id="taskList"></div>
+  <div class="date" id="dateDisplay"></div>
+  <div class="now-box">
+    <div class="now-label">NOW</div>
+    <div class="now-task" id="currentTask">Loading…</div>
+    <div class="now-time" id="currentTimeSlot"></div>
+  </div>
+  <div class="next" id="nextTask"></div>
 
   <script>
     const timetable = {
       Monday: [
-        ["4:00 – 5:30 AM","IOI Deep Work (C++/Algo)"],
-        ["5:30 – 6:00 AM","Get ready & travel"],
-        ["6:00 – 1:30 PM","School"],
-        ["1:30 – 2:00 PM","Travel home"],
-        ["2:00 – 2:30 PM","Eat + power nap"],
-        ["2:30 – 3:00 PM","AL Light Revision (review notes)"],
-        ["3:00 – 7:00 PM","Class"],
-        ["7:00 – 7:30 PM","Dinner"],
-        ["7:30 – 8:30 PM","AL Revision (heavy/past papers)"],
-        ["8:30 – 9:00 PM","Wind down (no screens)"],
-        ["9:00 PM","SLEEP"]
+        { start:"04:00", end:"05:30", text:"IOI Deep Work (C++/Algo)" },
+        { start:"05:30", end:"06:00", text:"Get ready & travel" },
+        { start:"06:00", end:"13:30", text:"School" },
+        { start:"13:30", end:"14:00", text:"Travel home" },
+        { start:"14:00", end:"14:30", text:"Eat + power nap" },
+        { start:"14:30", end:"15:00", text:"AL Light Revision (review notes)" },
+        { start:"15:00", end:"19:00", text:"Class" },
+        { start:"19:00", end:"19:30", text:"Dinner" },
+        { start:"19:30", end:"20:30", text:"AL Revision (heavy/past papers)" },
+        { start:"20:30", end:"21:00", text:"Wind down (no screens)" },
+        { start:"21:00", end:"24:00", text:"SLEEP" }
       ],
       Tuesday: [
-        ["4:00 – 5:30 AM","IOI Deep Work"],
-        ["5:30 – 6:00 AM","Get ready & travel"],
-        ["6:00 – 1:30 PM","School"],
-        ["1:30 – 2:00 PM","Travel home"],
-        ["2:00 – 2:30 PM","Eat + power nap"],
-        ["2:30 – 4:30 PM","AL Intensive Block (hardest subject)"],
-        ["4:30 – 5:00 PM","Break (walk/stretch)"],
-        ["5:00 – 6:30 PM","Mixed Block (2nd AL or light IOI)"],
-        ["6:30 – 7:30 PM","Dinner + quick Discord (optional, 15 min)"],
-        ["7:30 – 8:30 PM","AL Recap & plan tomorrow"],
-        ["8:30 – 9:00 PM","Wind down"],
-        ["9:00 PM","SLEEP"]
+        { start:"04:00", end:"05:30", text:"IOI Deep Work" },
+        { start:"05:30", end:"06:00", text:"Get ready & travel" },
+        { start:"06:00", end:"13:30", text:"School" },
+        { start:"13:30", end:"14:00", text:"Travel home" },
+        { start:"14:00", end:"14:30", text:"Eat + power nap" },
+        { start:"14:30", end:"16:30", text:"AL Intensive Block (hardest subject)" },
+        { start:"16:30", end:"17:00", text:"Break (walk/stretch)" },
+        { start:"17:00", end:"18:30", text:"Mixed Block (2nd AL or light IOI)" },
+        { start:"18:30", end:"19:30", text:"Dinner + quick Discord (optional, 15 min)" },
+        { start:"19:30", end:"20:30", text:"AL Recap & plan tomorrow" },
+        { start:"20:30", end:"21:00", text:"Wind down" },
+        { start:"21:00", end:"24:00", text:"SLEEP" }
       ],
       Wednesday: [
-        ["4:00 – 5:30 AM","IOI Deep Work"],
-        ["5:30 – 6:00 AM","Get ready & travel"],
-        ["6:00 – 1:30 PM","School"],
-        ["1:30 – 2:00 PM","Travel home"],
-        ["2:00 – 2:30 PM","Eat + power nap"],
-        ["2:30 – 4:30 PM","AL Intensive Block (hardest subject)"],
-        ["4:30 – 5:00 PM","Break (walk/stretch)"],
-        ["5:00 – 6:30 PM","Mixed Block (2nd AL or light IOI)"],
-        ["6:30 – 7:30 PM","Dinner + quick Discord (optional, 15 min)"],
-        ["7:30 – 8:30 PM","AL Recap & plan tomorrow"],
-        ["8:30 – 9:00 PM","Wind down"],
-        ["9:00 PM","SLEEP"]
+        { start:"04:00", end:"05:30", text:"IOI Deep Work" },
+        { start:"05:30", end:"06:00", text:"Get ready & travel" },
+        { start:"06:00", end:"13:30", text:"School" },
+        { start:"13:30", end:"14:00", text:"Travel home" },
+        { start:"14:00", end:"14:30", text:"Eat + power nap" },
+        { start:"14:30", end:"16:30", text:"AL Intensive Block (hardest subject)" },
+        { start:"16:30", end:"17:00", text:"Break (walk/stretch)" },
+        { start:"17:00", end:"18:30", text:"Mixed Block (2nd AL or light IOI)" },
+        { start:"18:30", end:"19:30", text:"Dinner + quick Discord (optional, 15 min)" },
+        { start:"19:30", end:"20:30", text:"AL Recap & plan tomorrow" },
+        { start:"20:30", end:"21:00", text:"Wind down" },
+        { start:"21:00", end:"24:00", text:"SLEEP" }
       ],
       Thursday: [
-        ["4:00 – 5:30 AM","IOI Deep Work"],
-        ["5:30 – 6:00 AM","Get ready & travel"],
-        ["6:00 – 1:30 PM","School"],
-        ["1:30 – 2:00 PM","Travel home"],
-        ["2:00 – 2:30 PM","Eat + power nap"],
-        ["2:30 – 4:30 PM","AL Intensive Block (hardest subject)"],
-        ["4:30 – 5:00 PM","Break (walk/stretch)"],
-        ["5:00 – 6:30 PM","Mixed Block (2nd AL or light IOI)"],
-        ["6:30 – 7:30 PM","Dinner + quick Discord (optional, 15 min)"],
-        ["7:30 – 8:30 PM","AL Recap & plan tomorrow"],
-        ["8:30 – 9:00 PM","Wind down"],
-        ["9:00 PM","SLEEP"]
+        { start:"04:00", end:"05:30", text:"IOI Deep Work" },
+        { start:"05:30", end:"06:00", text:"Get ready & travel" },
+        { start:"06:00", end:"13:30", text:"School" },
+        { start:"13:30", end:"14:00", text:"Travel home" },
+        { start:"14:00", end:"14:30", text:"Eat + power nap" },
+        { start:"14:30", end:"16:30", text:"AL Intensive Block (hardest subject)" },
+        { start:"16:30", end:"17:00", text:"Break (walk/stretch)" },
+        { start:"17:00", end:"18:30", text:"Mixed Block (2nd AL or light IOI)" },
+        { start:"18:30", end:"19:30", text:"Dinner + quick Discord (optional, 15 min)" },
+        { start:"19:30", end:"20:30", text:"AL Recap & plan tomorrow" },
+        { start:"20:30", end:"21:00", text:"Wind down" },
+        { start:"21:00", end:"24:00", text:"SLEEP" }
       ],
       Friday: [
-        ["4:00 – 5:30 AM","IOI Deep Work"],
-        ["5:30 – 6:00 AM","Get ready & travel"],
-        ["6:00 – 1:30 PM","School"],
-        ["1:30 – 2:00 PM","Travel home"],
-        ["2:00 – 2:30 PM","Eat + power nap"],
-        ["2:30 – 4:30 PM","AL Intensive Block (hardest subject)"],
-        ["4:30 – 5:00 PM","Break (walk/stretch)"],
-        ["5:00 – 6:30 PM","Mixed Block (2nd AL or light IOI)"],
-        ["6:30 – 7:30 PM","Dinner + quick Discord (optional, 15 min)"],
-        ["7:30 – 8:30 PM","AL Recap & plan tomorrow"],
-        ["8:30 – 9:00 PM","Wind down"],
-        ["9:00 PM","SLEEP"]
+        { start:"04:00", end:"05:30", text:"IOI Deep Work" },
+        { start:"05:30", end:"06:00", text:"Get ready & travel" },
+        { start:"06:00", end:"13:30", text:"School" },
+        { start:"13:30", end:"14:00", text:"Travel home" },
+        { start:"14:00", end:"14:30", text:"Eat + power nap" },
+        { start:"14:30", end:"16:30", text:"AL Intensive Block (hardest subject)" },
+        { start:"16:30", end:"17:00", text:"Break (walk/stretch)" },
+        { start:"17:00", end:"18:30", text:"Mixed Block (2nd AL or light IOI)" },
+        { start:"18:30", end:"19:30", text:"Dinner + quick Discord (optional, 15 min)" },
+        { start:"19:30", end:"20:30", text:"AL Recap & plan tomorrow" },
+        { start:"20:30", end:"21:00", text:"Wind down" },
+        { start:"21:00", end:"24:00", text:"SLEEP" }
       ],
       Saturday: [
-        ["6:00 – 7:30 AM","IOI Heavy Block (problems/mini-contest)"],
-        ["7:30 – 8:00 AM","Get ready & travel (if needed)"],
-        ["8:00 – 11:00 AM","Class"],
-        ["11:00 – 11:30 AM","Travel home"],
-        ["11:30 – 12:30 PM","AL Revision (targeted weak area)"],
-        ["12:30 – 1:30 PM","Lunch/break"],
-        ["1:30 – 4:00 PM","IOI Extended Practice (big coding session)"],
-        ["4:00 – 4:30 PM","Break"],
-        ["4:30 – 6:00 PM","AL Hard Subject (disliked subject)"],
-        ["6:00 – 7:00 PM","Dinner/rest"],
-        ["7:00 – 8:00 PM","Light AL Recap or Social reward (Discord, no games)"],
-        ["8:00 – 8:30 PM","Wind down"],
-        ["9:00 PM","SLEEP"]
+        { start:"06:00", end:"07:30", text:"IOI Heavy Block (problems/mini-contest)" },
+        { start:"07:30", end:"08:00", text:"Get ready & travel (if needed)" },
+        { start:"08:00", end:"11:00", text:"Class" },
+        { start:"11:00", end:"11:30", text:"Travel home" },
+        { start:"11:30", end:"12:30", text:"AL Revision (targeted weak area)" },
+        { start:"12:30", end:"13:30", text:"Lunch/break" },
+        { start:"13:30", end:"16:00", text:"IOI Extended Practice (big coding session)" },
+        { start:"16:00", end:"16:30", text:"Break" },
+        { start:"16:30", end:"18:00", text:"AL Hard Subject (disliked subject)" },
+        { start:"18:00", end:"19:00", text:"Dinner/rest" },
+        { start:"19:00", end:"20:00", text:"Light AL Recap or Social reward (Discord, no games)" },
+        { start:"20:00", end:"20:30", text:"Wind down" },
+        { start:"20:30", end:"24:00", text:"SLEEP" } // adjusted to 20:30 for Saturday
       ],
       Sunday: [
-        ["6:00 – 8:00 AM","IOI Mock Contest / Long Problem (timed)"],
-        ["8:00 – 8:30 AM","Breakfast/rest"],
-        ["8:30 – 11:00 AM","AL Blitz (all subjects, past papers, summaries)"],
-        ["11:00 – 11:30 AM","Break"],
-        ["11:30 – 12:30 PM","IOI Theory Deep Dive (no coding, just study)"],
-        ["12:30 – 1:30 PM","Lunch/relax"],
-        ["1:30 – 2:00 PM","Travel to class (if needed)"],
-        ["2:00 – 7:00 PM","Class"],
-        ["7:00 – 7:30 PM","Travel home"],
-        ["7:30 – 8:30 PM","Wind-down AL review (light)"],
-        ["8:30 – 9:00 PM","Wind down"],
-        ["9:00 PM","SLEEP"]
+        { start:"06:00", end:"08:00", text:"IOI Mock Contest / Long Problem (timed)" },
+        { start:"08:00", end:"08:30", text:"Breakfast/rest" },
+        { start:"08:30", end:"11:00", text:"AL Blitz (all subjects, past papers, summaries)" },
+        { start:"11:00", end:"11:30", text:"Break" },
+        { start:"11:30", end:"12:30", text:"IOI Theory Deep Dive (no coding, just study)" },
+        { start:"12:30", end:"13:30", text:"Lunch/relax" },
+        { start:"13:30", end:"14:00", text:"Travel to class (if needed)" },
+        { start:"14:00", end:"19:00", text:"Class" },
+        { start:"19:00", end:"19:30", text:"Travel home" },
+        { start:"19:30", end:"20:30", text:"Wind-down AL review (light)" },
+        { start:"20:30", end:"21:00", text:"Wind down" },
+        { start:"21:00", end:"24:00", text:"SLEEP" }
       ]
     };
 
     const dayOrder = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    const now = new Date();
-    const todayName = dayOrder[now.getDay()];
-    const dateString = now.toLocaleDateString(undefined, { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+    function getCurrentTask() {
+      const now = new Date();
+      const dayName = dayOrder[now.getDay()];
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const currentMinutes = hours * 60 + minutes;
 
-    document.getElementById("dayHeader").textContent = `${todayName} — ${dateString}`;
+      const tasks = timetable[dayName];
+      for (let task of tasks) {
+        const [startH, startM] = task.start.split(":").map(Number);
+        const [endH, endM] = task.end.split(":").map(Number);
+        const startMin = startH * 60 + startM;
+        const endMin = endH * 60 + endM;
+        if (currentMinutes >= startMin && currentMinutes < endMin) {
+          return {
+            text: task.text,
+            time: `${task.start} – ${task.end}`,
+            next: null // we can find the next task after loop
+          };
+        }
+      }
+      // If no current task, find next task later today or first tomorrow
+      let nextTask = null;
+      for (let task of tasks) {
+        const [startH, startM] = task.start.split(":").map(Number);
+        const startMin = startH * 60 + startM;
+        if (startMin > currentMinutes) {
+          nextTask = { text: task.text, time: task.start };
+          break;
+        }
+      }
+      return {
+        text: "No scheduled task right now",
+        time: "",
+        next: nextTask
+      };
+    }
 
-    const tasks = timetable[todayName];
-    const listEl = document.getElementById("taskList");
-    const storageKey = `threnox_${now.toISOString().slice(0,10)}`;
+    function updateDisplay() {
+      const now = new Date();
+      document.getElementById("dateDisplay").textContent =
+        now.toLocaleDateString(undefined, { weekday:'long', year:'numeric', month:'long', day:'numeric' });
 
-    // Load saved check states from localStorage
-    let checkedState = {};
-    try {
-      checkedState = JSON.parse(localStorage.getItem(storageKey)) || {};
-    } catch (e) {}
+      const task = getCurrentTask();
+      document.getElementById("currentTask").textContent = task.text;
+      document.getElementById("currentTimeSlot").textContent = task.time;
 
-    tasks.forEach(([time, text], idx) => {
-      const div = document.createElement("div");
-      div.className = "task";
-      if (checkedState[idx]) div.classList.add("completed");
+      const nextEl = document.getElementById("nextTask");
+      if (task.next) {
+        nextEl.innerHTML = `Next: <span>${task.next.text}</span> at ${task.next.time}`;
+      } else {
+        nextEl.textContent = "";
+      }
+    }
 
-      const cb = document.createElement("input");
-      cb.type = "checkbox";
-      cb.checked = !!checkedState[idx];
-      cb.addEventListener("change", () => {
-        checkedState[idx] = cb.checked;
-        localStorage.setItem(storageKey, JSON.stringify(checkedState));
-        if (cb.checked) div.classList.add("completed");
-        else div.classList.remove("completed");
-      });
-
-      const timeSpan = document.createElement("span");
-      timeSpan.className = "task-time";
-      timeSpan.textContent = time;
-
-      const textSpan = document.createElement("span");
-      textSpan.className = "task-text";
-      textSpan.textContent = text;
-
-      div.appendChild(cb);
-      div.appendChild(timeSpan);
-      div.appendChild(textSpan);
-      listEl.appendChild(div);
-    });
+    updateDisplay();
+    setInterval(updateDisplay, 60000); // refresh every minute
   </script>
 </body>
 </html>
