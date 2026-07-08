@@ -101,6 +101,7 @@
       font-family: 'DM Serif Display', serif;
       font-size: 2.2rem;
       color: #2d2a26;
+      display: none; /* hidden because logo is in sidebar */
     }
 
     .date { font-size: 0.85rem; color: #6b625a; margin: 0.2rem 0; }
@@ -410,7 +411,25 @@
 
   <button class="reset-btn" id="resetBtn" title="Back to current task">📍</button>
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+
   <script>
+    // ========== FIREBASE CONFIG (replace if needed) ==========
+    const firebaseConfig = {
+      apiKey: "AIzaSyBb3IIg51MeZEeJ5rk-X4vXQitH-ywew0s",
+      authDomain: "timetable-threnox.firebaseapp.com",
+      projectId: "timetable-threnox",
+      storageBucket: "timetable-threnox.appspot.com",
+      messagingSenderId: "327689062744",
+      appId: "1:327689062744:web:65f2f0cf72f4c984f17d2d",
+      measurementId: "G-JSDKVYBPQS"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
     // ========== TIMETABLE DATA ==========
     const timetable = {
       Monday: [ ["04:00","05:30","IOI Deep Work (C++/Algo)"],["05:30","06:00","Get ready & travel"],["06:00","13:30","School"],["13:30","14:00","Travel home"],["14:00","14:30","Eat + power nap"],["14:30","15:00","AL Light Revision"],["15:00","19:00","Class"],["19:00","19:30","Dinner"],["19:30","20:30","AL Revision (Past Papers)"],["20:30","21:00","Wind down"],["21:00","23:59","SLEEP"] ],
@@ -492,18 +511,15 @@
         const rect = card.getBoundingClientRect();
         const cardCenter = rect.top + rect.height / 2;
         const distance = Math.abs(cardCenter - centerY);
-
         if (distance < closestDistance) {
           closestDistance = distance;
           closestCard = card;
         }
       });
 
-      // Update focused class
       cards.forEach(c => c.classList.remove('focused'));
       if (closestCard) {
         closestCard.classList.add('focused');
-        // Update status badge
         const taskId = parseInt(closestCard.dataset.taskId);
         const currentIdx = getCurrentTaskIndex();
         const badge = closestCard.querySelector('.status-badge');
@@ -532,98 +548,64 @@
 
     sidebarBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        // Update active button
         sidebarBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-
-        // Show corresponding view
         const viewName = btn.dataset.view;
         Object.values(views).forEach(v => v.classList.remove('active'));
         views[viewName].classList.add('active');
-
-        // Hide reset button on non-timetable views
         document.getElementById('resetBtn').style.display = viewName === 'timetable' ? 'flex' : 'none';
-
-        // If switching to timetable, recalculate focus
         if (viewName === 'timetable') {
           setTimeout(updateFocusFromScroll, 100);
         }
       });
     });
 
-    // ========== TO DO LOGIC ==========
-    const TODO_KEY = 'threnox_todos';
+    // ========== TO DO LOGIC (FIRESTORE) ==========
+    const todosRef = db.collection("todos");
 
-    function loadTodos() {
-      try {
-        return JSON.parse(localStorage.getItem(TODO_KEY)) || [];
-      } catch (e) {
-        return [];
-      }
-    }
-
-    function saveTodos(todos) {
-      localStorage.setItem(TODO_KEY, JSON.stringify(todos));
-    }
-
-    function renderTodos() {
-      const list = document.getElementById('todoList');
-      const todos = loadTodos();
-      list.innerHTML = '';
-
-      todos.forEach((todo, idx) => {
-        const li = document.createElement('li');
-        li.className = 'todo-item';
-        if (todo.done) li.classList.add('done');
-
+    function renderTodos(snapshot) {
+      const list = document.getElementById("todoList");
+      list.innerHTML = "";
+      if (!snapshot) return;
+      snapshot.forEach(doc => {
+        const todo = doc.data();
+        const li = document.createElement("li");
+        li.className = "todo-item";
+        if (todo.done) li.classList.add("done");
         li.innerHTML = `
-          <input type="checkbox" class="todo-checkbox" ${todo.done ? 'checked' : ''}>
+          <input type="checkbox" class="todo-checkbox" ${todo.done ? "checked" : ""}>
           <span class="todo-text">${escapeHtml(todo.text)}</span>
           <button class="todo-delete">✕</button>
         `;
-
-        // Checkbox toggle
-        li.querySelector('.todo-checkbox').addEventListener('change', (e) => {
-          const todos = loadTodos();
-          todos[idx].done = e.target.checked;
-          saveTodos(todos);
-          renderTodos();
+        li.querySelector(".todo-checkbox").addEventListener("change", (e) => {
+          todosRef.doc(doc.id).update({ done: e.target.checked });
         });
-
-        // Delete
-        li.querySelector('.todo-delete').addEventListener('click', () => {
-          const todos = loadTodos();
-          todos.splice(idx, 1);
-          saveTodos(todos);
-          renderTodos();
+        li.querySelector(".todo-delete").addEventListener("click", () => {
+          todosRef.doc(doc.id).delete();
         });
-
         list.appendChild(li);
       });
     }
 
     function escapeHtml(str) {
-      const div = document.createElement('div');
+      const div = document.createElement("div");
       div.textContent = str;
       return div.innerHTML;
     }
 
-    document.getElementById('todoAddBtn').addEventListener('click', () => {
-      const input = document.getElementById('todoInput');
+    document.getElementById("todoAddBtn").addEventListener("click", async () => {
+      const input = document.getElementById("todoInput");
       const text = input.value.trim();
       if (!text) return;
-      const todos = loadTodos();
-      todos.push({ text, done: false });
-      saveTodos(todos);
-      input.value = '';
-      renderTodos();
+      await todosRef.add({ text, done: false, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+      input.value = "";
     });
 
-    document.getElementById('todoInput').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        document.getElementById('todoAddBtn').click();
-      }
+    document.getElementById("todoInput").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") document.getElementById("todoAddBtn").click();
     });
+
+    todosRef.orderBy("createdAt", "asc").onSnapshot(renderTodos);
 
     // ========== CLOCK & DATE ==========
     function updateDateTime() {
@@ -635,14 +617,13 @@
       document.getElementById('liveClock').textContent = now.toLocaleTimeString(undefined, {
         hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit'
       });
-
       if (dayName !== currentDay) {
         currentDay = dayName;
         buildPanels();
       }
     }
 
-    // ========== SCROLL LISTENER FOR FOCUS ==========
+    // ========== SCROLL LISTENER ==========
     const scrollView = document.getElementById('scrollView');
     let scrollTimeout;
     scrollView.addEventListener('scroll', () => {
@@ -652,7 +633,6 @@
 
     // ========== RESET BUTTON ==========
     document.getElementById('resetBtn').addEventListener('click', () => {
-      // Switch to timetable view if not already
       if (!views.timetable.classList.contains('active')) {
         sidebarBtns.forEach(b => b.classList.remove('active'));
         document.querySelector('[data-view="timetable"]').classList.add('active');
@@ -669,7 +649,6 @@
       currentDay = dayOrder[now.getDay()];
       buildPanels();
       updateDateTime();
-      renderTodos();
       setInterval(updateDateTime, 1000);
     }
 
