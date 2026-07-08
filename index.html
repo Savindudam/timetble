@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>THRENOX – Movable Panels</title>
+  <title>THRENOX – Focus Panels</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -15,7 +15,7 @@
     }
     .header {
       text-align: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
     h1 {
       color: #a78bfa;
@@ -23,12 +23,26 @@
     }
     .date {
       color: #9aa3c7;
-      margin: 0.25rem 0 0.5rem;
+      margin: 0.25rem 0;
     }
     .live-clock {
       color: #00e5ff;
       font-family: monospace;
       font-size: 1.2rem;
+    }
+    .controls {
+      text-align: center;
+      margin: 0.5rem 0 1rem;
+    }
+    .controls button {
+      background: #7c5cff;
+      color: white;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(124,92,255,0.4);
     }
 
     /* Panel container */
@@ -40,75 +54,68 @@
       margin: 0 auto;
     }
 
-    /* Each movable panel */
+    /* Each task panel */
     .panel {
       background: rgba(20,24,48,0.7);
-      border: 1px solid rgba(124,92,255,0.35);
+      border: 1px solid rgba(124,92,255,0.25);
       border-radius: 12px;
       overflow: hidden;
       backdrop-filter: blur(8px);
-      transition: box-shadow 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      cursor: grab;
+    }
+    .panel:active {
+      cursor: grabbing;
     }
     .panel.dragging {
       opacity: 0.7;
-      box-shadow: 0 0 30px rgba(124,92,255,0.6);
+      box-shadow: 0 0 30px rgba(124,92,255,0.7);
     }
+
+    /* The focused (big) panel */
+    .panel.focused {
+      transform: scale(1.04);
+      border-color: #00e5ff;
+      box-shadow: 0 0 30px rgba(0,229,255,0.3);
+      background: rgba(20,24,48,0.9);
+      z-index: 2;
+    }
+
     .panel-header {
-      background: rgba(124,92,255,0.2);
-      padding: 0.6rem 1rem;
-      cursor: grab;
+      background: rgba(124,92,255,0.15);
+      padding: 0.5rem 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       user-select: none;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-    .panel-header:active {
-      cursor: grabbing;
-    }
-    .panel-title {
-      font-weight: 700;
-      color: #c7b8ff;
-      letter-spacing: 0.02em;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      pointer-events: none; /* so drag only works on whole panel */
     }
     .panel-body {
       padding: 0.5rem 1rem;
-    }
-    .task-item {
-      padding: 0.4rem 0;
       display: flex;
+      gap: 1rem;
       align-items: baseline;
-      gap: 0.8rem;
-      border-bottom: 1px solid rgba(255,255,255,0.03);
-    }
-    .task-item:last-child {
-      border-bottom: none;
     }
     .task-time {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       color: #9aa3c7;
       min-width: 110px;
     }
     .task-text {
-      font-size: 0.95rem;
+      font-size: 1rem;
     }
-    .past .task-text {
-      opacity: 0.6;
-    }
-    .current .task-text {
+    .panel.focused .task-text {
+      font-weight: 700;
       color: #fff;
-      font-weight: 600;
-    }
-    .future .task-text {
-      color: #cfd6ff;
     }
 
     /* Drag placeholder */
     .drag-placeholder {
-      border: 2px dashed rgba(124,92,255,0.5);
+      border: 2px dashed rgba(124,92,255,0.6);
       border-radius: 12px;
-      height: 60px;
+      height: 70px;
       margin: 0.75rem 0;
       display: none;
     }
@@ -120,13 +127,16 @@
     <div class="date" id="dateDisplay"></div>
     <div class="live-clock" id="liveClock"></div>
   </div>
+  <div class="controls">
+    <button id="resetFocusBtn">⚡ Reset to Now</button>
+  </div>
 
   <div class="panels" id="panelsContainer">
-    <!-- Panels will be inserted here via JS -->
+    <!-- Task panels inserted here -->
   </div>
 
   <script>
-    // ---------- TIMETABLE DATA ----------
+    // ---------- TIMETABLE (same as before) ----------
     const timetable = {
       Monday: [
         ["04:00","05:30","IOI Deep Work (C++/Algo)"],
@@ -230,93 +240,108 @@
 
     const dayOrder = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
-    // ---------- HELPER ----------
     function timeToMinutes(str) {
       const [h,m] = str.split(':').map(Number);
       return h*60 + m;
     }
 
-    function getDaySchedule() {
+    // ---------- STATE ----------
+    let manualFocusId = null;   // if set, this task index is the focus (overrides time)
+    let tasksData = [];         // array of { id, startMin, endMin, timeRange, text }
+
+    // ---------- BUILD TASK DATA FOR TODAY ----------
+    function buildTasksData() {
       const now = new Date();
       const dayName = dayOrder[now.getDay()];
-      const currentMin = now.getHours()*60 + now.getMinutes();
-      const tasks = timetable[dayName].map(([start,end,text]) => ({
+      const raw = timetable[dayName];
+      tasksData = raw.map(([start, end, text], idx) => ({
+        id: idx,
         startMin: timeToMinutes(start),
         endMin: timeToMinutes(end),
         timeRange: `${start} – ${end}`,
         text
       }));
+    }
 
-      let currentIdx = -1;
-      for (let i=0; i<tasks.length; i++) {
-        if (currentMin >= tasks[i].startMin && currentMin < tasks[i].endMin) {
-          currentIdx = i;
-          break;
+    // ---------- FIND CURRENT TASK INDEX BY TIME ----------
+    function getCurrentTaskIndex() {
+      const now = new Date();
+      const currentMin = now.getHours()*60 + now.getMinutes();
+      for (let i=0; i<tasksData.length; i++) {
+        if (currentMin >= tasksData[i].startMin && currentMin < tasksData[i].endMin) {
+          return i;
         }
       }
-
-      const past = tasks.filter((_, idx) => idx < (currentIdx >=0 ? currentIdx : tasks.length));
-      const current = currentIdx >=0 ? [tasks[currentIdx]] : [];
-      const upcoming = tasks.filter((_, idx) => idx > (currentIdx >=0 ? currentIdx : -1));
-
-      return { dayName, past, current, upcoming };
+      return -1;
     }
 
-    // ---------- RENDER PANELS ----------
-    function createTaskItem(task, typeClass) {
-      const div = document.createElement('div');
-      div.className = `task-item ${typeClass}`;
-      div.innerHTML = `<span class="task-time">${task.timeRange}</span><span class="task-text">${task.text}</span>`;
-      return div;
-    }
-
+    // ---------- RENDER ALL PANELS ----------
     function renderPanels() {
-      const { dayName, past, current, upcoming } = getDaySchedule();
       const container = document.getElementById('panelsContainer');
 
-      // Save current panel order if any (by panel id)
-      const currentOrder = [];
-      container.querySelectorAll('.panel').forEach(p => currentOrder.push(p.id));
+      // Save current order of panel IDs if any exist
+      const existingOrder = [];
+      container.querySelectorAll('.panel').forEach(p => existingOrder.push(Number(p.dataset.taskId)));
+
+      buildTasksData(); // refresh tasksData for today
+
+      // Determine order: if we have an existing order, try to preserve it; else chronological
+      let orderedIds;
+      if (existingOrder.length === tasksData.length) {
+        orderedIds = existingOrder;
+      } else {
+        orderedIds = tasksData.map(t => t.id); // chronological
+      }
 
       container.innerHTML = '';
 
-      // Define panels data
-      const panels = [
-        { id: 'past', title: '✅ Should have completed by now', tasks: past, typeClass: 'past' },
-        { id: 'current', title: '⚡ Doing now', tasks: current, typeClass: 'current' },
-        { id: 'upcoming', title: '📋 Upcoming', tasks: upcoming, typeClass: 'future' }
-      ];
+      orderedIds.forEach(id => {
+        const task = tasksData.find(t => t.id === id);
+        if (!task) return;
 
-      // If we had a previous order, sort panels accordingly
-      if (currentOrder.length) {
-        panels.sort((a,b) => currentOrder.indexOf(a.id) - currentOrder.indexOf(b.id));
-      }
-
-      panels.forEach(panel => {
         const panelDiv = document.createElement('div');
         panelDiv.className = 'panel';
-        panelDiv.id = panel.id;
         panelDiv.draggable = true;
+        panelDiv.dataset.taskId = task.id;
         panelDiv.innerHTML = `
           <div class="panel-header">
-            <span class="panel-title">${panel.title}</span>
-            <span style="color:#9aa3c7; font-size:0.8rem;">☰ drag</span>
+            <span style="color:#9aa3c7; font-size:0.75rem;">${task.timeRange}</span>
+            <span style="color:#9aa3c7; font-size:0.75rem;">☰</span>
           </div>
-          <div class="panel-body"></div>
+          <div class="panel-body">
+            <span class="task-text">${task.text}</span>
+          </div>
         `;
-        const body = panelDiv.querySelector('.panel-body');
-        panel.tasks.forEach(task => body.appendChild(createTaskItem(task, panel.typeClass)));
-        if (panel.tasks.length === 0) {
-          body.innerHTML = '<p style="color:#5a6182; padding:0.4rem 0;">Nothing here</p>';
-        }
+
         container.appendChild(panelDiv);
       });
 
-      // Re-attach drag listeners
+      // Apply focus
+      applyFocus();
+
+      // Attach drag listeners
       attachDragListeners();
     }
 
-    // ---------- DRAG AND DROP (reorder panels) ----------
+    // ---------- FOCUS LOGIC ----------
+    function applyFocus() {
+      const panels = document.querySelectorAll('.panel');
+      // Determine which panel should be focused
+      let focusId = manualFocusId;
+      if (focusId === null) {
+        focusId = getCurrentTaskIndex();
+      }
+      panels.forEach(panel => {
+        const taskId = Number(panel.dataset.taskId);
+        if (taskId === focusId) {
+          panel.classList.add('focused');
+        } else {
+          panel.classList.remove('focused');
+        }
+      });
+    }
+
+    // ---------- DRAG AND DROP ----------
     let draggedPanel = null;
     let placeholder = null;
 
@@ -336,8 +361,8 @@
       draggedPanel = this;
       this.classList.add('dragging');
       e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/plain', this.id);
-      // Create a visual placeholder
+      e.dataTransfer.setData('text/plain', this.dataset.taskId);
+      // Create placeholder
       placeholder = document.createElement('div');
       placeholder.className = 'drag-placeholder';
       placeholder.style.display = 'block';
@@ -349,6 +374,20 @@
       this.classList.remove('dragging');
       if (placeholder) placeholder.remove();
       if (draggedPanel) draggedPanel.style.display = '';
+      // Check if the dragged panel is now at the top (first child)
+      const container = document.getElementById('panelsContainer');
+      const firstPanel = container.querySelector('.panel');
+      if (firstPanel && firstPanel === draggedPanel) {
+        // It's at the top → make it the focus
+        manualFocusId = Number(draggedPanel.dataset.taskId);
+      } else {
+        // If the dragged panel is not top, maybe the user reordered but didn't put it first,
+        // we'll keep manual focus if it was already set and the focused panel is still somewhere?
+        // Simpler: only changing order to top triggers manual focus; otherwise auto remains.
+        // If manualFocusId is set and that panel is no longer top? We'll let it stay focused until next manual move or reset.
+        // Actually, if they drag a panel not to the top, we shouldn't change focus.
+      }
+      applyFocus();
       draggedPanel = null;
       placeholder = null;
     }
@@ -372,7 +411,6 @@
       this.classList.remove('drag-over');
       if (draggedPanel !== this && draggedPanel) {
         const container = document.getElementById('panelsContainer');
-        // Insert dragged panel before or after this panel depending on mouse position
         const rect = this.getBoundingClientRect();
         const offset = e.clientY - rect.top;
         if (offset < rect.height / 2) {
@@ -380,28 +418,93 @@
         } else {
           container.insertBefore(draggedPanel, this.nextSibling);
         }
+        // After drop, check if dragged panel is now first (top)
+        const firstPanel = container.querySelector('.panel');
+        if (firstPanel === draggedPanel) {
+          manualFocusId = Number(draggedPanel.dataset.taskId);
+        } else {
+          // if we dropped below another panel, the focus might not change,
+          // but we could optionally clear manual focus? I'll keep it as is.
+        }
+        applyFocus();
       }
       return false;
     }
 
+    // ---------- RESET BUTTON ----------
+    document.getElementById('resetFocusBtn').addEventListener('click', () => {
+      manualFocusId = null;
+      // Also re-order to chronological? The user may have reordered panels.
+      // For simplicity, we'll re-sort to chronological order.
+      renderPanels(); // will rebuild in original order and auto-focus
+    });
+
     // ---------- LIVE CLOCK & UPDATE ----------
     function updateDateTime() {
       const now = new Date();
-      document.getElementById('dateDisplay').textContent = 
+      document.getElementById('dateDisplay').textContent =
         now.toLocaleDateString(undefined, { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-      document.getElementById('liveClock').textContent = 
+      document.getElementById('liveClock').textContent =
         now.toLocaleTimeString(undefined, { hour:'2-digit', minute:'2-digit', second:'2-digit' });
 
-      // Refresh panels only if the minute changed (to avoid flicker)
+      // Refresh panels only if minute changed and there's no manual focus? Or always?
+      // We'll always rebuild to keep times in sync, but preserve manual focus and order.
       const currentMin = now.getHours()*60 + now.getMinutes();
       if (updateDateTime.lastMin !== currentMin) {
         updateDateTime.lastMin = currentMin;
-        renderPanels();
+        // Re-render but preserve manual focus and current order
+        const container = document.getElementById('panelsContainer');
+        const currentOrder = [];
+        container.querySelectorAll('.panel').forEach(p => currentOrder.push(Number(p.dataset.taskId)));
+        renderPanelsWithOrder(currentOrder);
       }
     }
     updateDateTime.lastMin = -1;
 
+    // Special render that uses a given order array (to preserve user's manual arrangement)
+    function renderPanelsWithOrder(order) {
+      const container = document.getElementById('panelsContainer');
+      container.innerHTML = '';
+
+      order.forEach(id => {
+        const task = tasksData.find(t => t.id === id);
+        if (!task) return;
+        const panelDiv = document.createElement('div');
+        panelDiv.className = 'panel';
+        panelDiv.draggable = true;
+        panelDiv.dataset.taskId = task.id;
+        panelDiv.innerHTML = `
+          <div class="panel-header">
+            <span style="color:#9aa3c7; font-size:0.75rem;">${task.timeRange}</span>
+            <span style="color:#9aa3c7; font-size:0.75rem;">☰</span>
+          </div>
+          <div class="panel-body">
+            <span class="task-text">${task.text}</span>
+          </div>
+        `;
+        container.appendChild(panelDiv);
+      });
+      applyFocus();
+      attachDragListeners();
+    }
+
+    // Override renderPanels to use existing order if possible
+    const originalRenderPanels = renderPanels;
+    renderPanels = function() {
+      const container = document.getElementById('panelsContainer');
+      const existingOrder = [];
+      container.querySelectorAll('.panel').forEach(p => existingOrder.push(Number(p.dataset.taskId)));
+      if (existingOrder.length === tasksData.length) {
+        renderPanelsWithOrder(existingOrder);
+      } else {
+        // fallback chronological
+        buildTasksData();
+        renderPanelsWithOrder(tasksData.map(t => t.id));
+      }
+    };
+
     // Initial render
+    buildTasksData();
     renderPanels();
     updateDateTime();
     setInterval(updateDateTime, 1000);
