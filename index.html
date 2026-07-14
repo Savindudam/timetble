@@ -6,9 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;600;700&display=swap');
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
       font-family: 'Inter', system-ui, sans-serif;
       background: #f7f3ee;
@@ -17,7 +15,6 @@
       display: flex;
       overflow: hidden;
     }
-
     /* ========== SIDEBAR ========== */
     .sidebar {
       width: 200px;
@@ -29,7 +26,6 @@
       flex-shrink: 0;
       z-index: 20;
     }
-
     .sidebar-logo {
       font-family: 'DM Serif Display', serif;
       font-size: 1.4rem;
@@ -38,14 +34,12 @@
       margin-bottom: 2rem;
       letter-spacing: 0.03em;
     }
-
     .sidebar-nav {
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
       padding: 0 1rem;
     }
-
     .sidebar-btn {
       display: flex;
       align-items: center;
@@ -63,24 +57,20 @@
       text-align: left;
       width: 100%;
     }
-
     .sidebar-btn:hover {
       background: rgba(176,137,104,0.1);
       color: #2d2a26;
     }
-
     .sidebar-btn.active {
       background: #e6d9cc;
       color: #2d2a26;
       font-weight: 600;
     }
-
     .sidebar-icon {
       font-size: 1.2rem;
       width: 24px;
       text-align: center;
     }
-
     /* ========== MAIN AREA ========== */
     .main {
       flex: 1;
@@ -88,7 +78,6 @@
       flex-direction: column;
       overflow: hidden;
     }
-
     .header {
       text-align: center;
       padding: 1.5rem 1rem 0.5rem;
@@ -96,14 +85,12 @@
       z-index: 10;
       flex-shrink: 0;
     }
-
     h1 {
       font-family: 'DM Serif Display', serif;
       font-size: 2.2rem;
       color: #2d2a26;
       display: none; /* hidden because logo is in sidebar */
     }
-
     .date { font-size: 0.85rem; color: #6b625a; margin: 0.2rem 0; }
     .live-clock {
       font-size: 0.9rem;
@@ -114,7 +101,6 @@
       margin-top: 0.3rem;
       display: inline-block;
     }
-
     /* ========== VIEWS CONTAINER ========== */
     .view {
       flex: 1;
@@ -125,7 +111,6 @@
       display: flex;
       flex-direction: column;
     }
-
     /* ========== TIMETABLE VIEW ========== */
     .scroll-view {
       flex: 1;
@@ -138,7 +123,6 @@
     .scroll-view::-webkit-scrollbar { width: 5px; }
     .scroll-view::-webkit-scrollbar-track { background: transparent; }
     .scroll-view::-webkit-scrollbar-thumb { background: #c4b7a6; border-radius: 10px; }
-
     .cards-container {
       display: flex;
       flex-direction: column;
@@ -148,7 +132,6 @@
       margin: 0 auto;
       padding: 0 1rem;
     }
-
     .card {
       width: 100%;
       min-height: 130px;
@@ -164,14 +147,12 @@
       cursor: pointer;
       position: relative;
     }
-
     .card.focused {
       opacity: 1;
       transform: scale(1.08);
       box-shadow: 0 20px 40px rgba(0,0,0,0.08);
       border-color: #d9c9b6;
     }
-
     .card-time {
       font-weight: 700;
       font-size: 0.85rem;
@@ -181,19 +162,16 @@
       margin-bottom: 0.5rem;
       display: block;
     }
-
     .task-text {
       font-size: 1.25rem;
       font-weight: 600;
       line-height: 1.4;
       color: #2d2a26;
     }
-
     .card.focused .task-text {
       font-size: 1.45rem;
       font-weight: 700;
     }
-
     .status-badge {
       position: absolute;
       top: 1rem;
@@ -211,7 +189,6 @@
       background: #e6d9cc;
       color: #6b5241;
     }
-
     /* ========== TO-DO VIEW ========== */
     .todo-view {
       flex: 1;
@@ -221,20 +198,17 @@
       margin: 0 auto;
       width: 100%;
     }
-
     .todo-view h2 {
       font-family: 'DM Serif Display', serif;
       font-size: 1.6rem;
       margin-bottom: 1rem;
       color: #2d2a26;
     }
-
     .todo-input-row {
       display: flex;
       gap: 0.5rem;
       margin-bottom: 1.5rem;
     }
-
     .todo-input {
       flex: 1;
       padding: 0.75rem 1rem;
@@ -246,11 +220,9 @@
       color: #2d2a26;
       outline: none;
     }
-
     .todo-input:focus {
       border-color: #b08968;
     }
-
     .todo-add-btn {
       padding: 0.75rem 1.2rem;
       background: #b08968;
@@ -261,18 +233,15 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-
     .todo-add-btn:hover {
       background: #9a7559;
     }
-
     .todo-list {
       list-style: none;
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
     }
-
     .todo-item {
       display: flex;
       align-items: center;
@@ -283,7 +252,6 @@
       border: 1px solid rgba(0,0,0,0.04);
       box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
-
     .todo-checkbox {
       width: 20px;
       height: 20px;
@@ -291,18 +259,15 @@
       cursor: pointer;
       flex-shrink: 0;
     }
-
     .todo-text {
       flex: 1;
       font-size: 0.95rem;
       color: #2d2a26;
     }
-
     .todo-item.done .todo-text {
       text-decoration: line-through;
       opacity: 0.5;
     }
-
     .todo-delete {
       background: none;
       border: none;
@@ -312,11 +277,9 @@
       padding: 0.2rem;
       transition: color 0.2s;
     }
-
     .todo-delete:hover {
       color: #8c7b6b;
     }
-
     /* ========== RESET BUTTON ========== */
     .reset-btn {
       position: fixed;
@@ -337,11 +300,9 @@
       justify-content: center;
       transition: transform 0.2s;
     }
-
     .reset-btn:hover {
       transform: scale(1.08);
     }
-
     /* ========== RESPONSIVE ========== */
     @media (max-width: 600px) {
       .sidebar {
@@ -379,14 +340,12 @@
       </button>
     </nav>
   </aside>
-
   <!-- MAIN CONTENT -->
   <div class="main">
     <div class="header">
       <div class="date" id="dateDisplay"></div>
       <div class="live-clock" id="liveClock"></div>
     </div>
-
     <!-- TIMETABLE VIEW -->
     <div class="view active" id="timetableView">
       <div class="scroll-view" id="scrollView">
@@ -395,7 +354,6 @@
         </div>
       </div>
     </div>
-
     <!-- TO DO VIEW -->
     <div class="view" id="todoView">
       <div class="todo-view">
@@ -408,13 +366,10 @@
       </div>
     </div>
   </div>
-
   <button class="reset-btn" id="resetBtn" title="Back to current task">📍</button>
-
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
-
   <script>
     // ========== FIREBASE CONFIG (replace if needed) ==========
     const firebaseConfig = {
@@ -426,30 +381,105 @@
       appId: "1:327689062744:web:65f2f0cf72f4c984f17d2d",
       measurementId: "G-JSDKVYBPQS"
     };
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-
-    // ========== TIMETABLE DATA ==========
+    // ========== TIMETABLE DATA (UPDATED) ==========
     const timetable = {
-      Monday: [ ["04:00","05:30","IOI Deep Work (C++/Algo)"],["05:30","06:00","Get ready & travel"],["06:00","13:30","School"],["13:30","14:00","Travel home"],["14:00","14:30","Eat + power nap"],["14:30","15:00","AL Light Revision"],["15:00","19:00","Class"],["19:00","19:30","Dinner"],["19:30","20:30","AL Revision (Past Papers)"],["20:30","21:00","Wind down"],["21:00","23:59","SLEEP"] ],
-      Tuesday: [ ["04:00","05:30","IOI Deep Work"],["05:30","06:00","Travel"],["06:00","13:30","School"],["13:30","14:00","Home"],["14:00","14:30","Nap"],["14:30","16:30","AL Intensive"],["16:30","17:00","Break"],["17:00","18:30","Mixed Block"],["18:30","19:30","Dinner"],["19:30","20:30","Recap"],["20:30","21:00","Wind down"],["21:00","23:59","SLEEP"] ],
-      Wednesday: [ ["04:00","05:30","IOI Deep Work"],["05:30","06:00","Travel"],["06:00","13:30","School"],["13:30","14:00","Home"],["14:00","14:30","Nap"],["14:30","16:30","AL Intensive"],["16:30","17:00","Break"],["17:00","18:30","Mixed Block"],["18:30","19:30","Dinner"],["19:30","20:30","Recap"],["20:30","21:00","Wind down"],["21:00","23:59","SLEEP"] ],
-      Thursday: [ ["04:00","05:30","IOI Deep Work"],["05:30","06:00","Travel"],["06:00","13:30","School"],["13:30","14:00","Home"],["14:00","14:30","Nap"],["14:30","16:30","AL Intensive"],["16:30","17:00","Break"],["17:00","18:30","Mixed Block"],["18:30","19:30","Dinner"],["19:30","20:30","Recap"],["20:30","21:00","Wind down"],["21:00","23:59","SLEEP"] ],
-      Friday: [ ["04:00","05:30","IOI Deep Work"],["05:30","06:00","Travel"],["06:00","13:30","School"],["13:30","14:00","Home"],["14:00","14:30","Nap"],["14:30","16:30","AL Intensive"],["16:30","17:00","Break"],["17:00","18:30","Mixed Block"],["18:30","19:30","Dinner"],["19:30","20:30","Recap"],["20:30","21:00","Wind down"],["21:00","23:59","SLEEP"] ],
-      Saturday: [ ["06:00","07:30","IOI Heavy Block"],["07:30","08:00","Travel"],["08:00","11:00","Class"],["11:00","11:30","Home"],["11:30","12:30","AL Revision"],["12:30","13:30","Lunch"],["13:30","16:00","IOI Practice"],["16:00","16:30","Break"],["16:30","18:00","AL Hard Subject"],["18:00","19:00","Dinner"],["19:00","20:00","Social/Recap"],["20:00","20:30","Wind down"],["20:30","23:59","SLEEP"] ],
-      Sunday: [ ["06:00","08:00","IOI Mock"],["08:00","08:30","Breakfast"],["08:30","11:00","AL Blitz"],["11:00","11:30","Break"],["11:30","12:30","IOI Theory"],["12:30","13:30","Lunch"],["13:30","14:00","Travel"],["14:00","19:00","Class"],["19:00","19:30","Home"],["19:30","20:30","AL Review"],["20:30","21:00","Wind down"],["21:00","23:59","SLEEP"] ]
+      Monday: [
+        ["03:30","04:00","Exercise"],
+        ["04:00","05:30","IOI Deep Work (C++/Algo)"],
+        ["05:30","20:00","School"],
+        ["20:00","21:00","AL Revision (Past Papers)"],
+        ["21:00","21:30","Wind down"],
+        ["21:30","23:59","SLEEP"]
+      ],
+      Tuesday: [
+        ["03:30","04:00","Exercise"],
+        ["04:00","05:30","IOI Deep Work"],
+        ["05:30","15:00","School"],
+        ["15:00","17:00","AL Intensive"],
+        ["17:00","17:30","Break"],
+        ["17:30","19:00","Mixed Block"],
+        ["19:00","20:00","Dinner"],
+        ["20:00","21:00","Recap"],
+        ["21:00","21:30","Wind down"],
+        ["21:30","23:59","SLEEP"]
+      ],
+      Wednesday: [
+        ["03:30","04:00","Exercise"],
+        ["04:00","05:30","IOI Deep Work"],
+        ["05:30","15:00","School"],
+        ["15:00","17:00","AL Intensive"],
+        ["17:00","17:30","Break"],
+        ["17:30","19:00","Mixed Block"],
+        ["19:00","20:00","Dinner"],
+        ["20:00","21:00","Recap"],
+        ["21:00","21:30","Wind down"],
+        ["21:30","23:59","SLEEP"]
+      ],
+      Thursday: [
+        ["03:30","04:00","Exercise"],
+        ["04:00","05:30","IOI Deep Work"],
+        ["05:30","15:00","School"],
+        ["15:00","17:00","AL Intensive"],
+        ["17:00","17:30","Break"],
+        ["17:30","19:00","Mixed Block"],
+        ["19:00","20:00","Dinner"],
+        ["20:00","21:00","Recap"],
+        ["21:00","21:30","Wind down"],
+        ["21:30","23:59","SLEEP"]
+      ],
+      Friday: [
+        ["03:30","04:00","Exercise"],
+        ["04:00","05:30","IOI Deep Work"],
+        ["05:30","15:00","School"],
+        ["15:00","17:00","AL Intensive"],
+        ["17:00","17:30","Break"],
+        ["17:30","19:00","Mixed Block"],
+        ["19:00","20:00","Dinner"],
+        ["20:00","21:00","Recap"],
+        ["21:00","21:30","Wind down"],
+        ["21:30","23:59","SLEEP"]
+      ],
+      Saturday: [
+        ["03:30","04:00","Exercise"],
+        ["06:00","07:30","IOI Heavy Block"],
+        ["07:30","08:00","Travel"],
+        ["08:00","11:00","Class"],
+        ["11:00","11:30","Home"],
+        ["11:30","12:30","AL Revision"],
+        ["12:30","13:30","Lunch"],
+        ["13:30","16:00","IOI Practice"],
+        ["16:00","16:30","Break"],
+        ["16:30","18:00","AL Hard Subject"],
+        ["18:00","19:00","Dinner"],
+        ["19:00","20:00","Social/Recap"],
+        ["20:00","20:30","Wind down"],
+        ["20:30","23:59","SLEEP"]
+      ],
+      Sunday: [
+        ["03:30","04:00","Exercise"],
+        ["06:00","08:00","IOI Mock"],
+        ["08:00","08:30","Breakfast"],
+        ["08:30","11:00","AL Blitz"],
+        ["11:00","11:30","Break"],
+        ["11:30","12:30","IOI Theory"],
+        ["12:30","13:30","Lunch"],
+        ["13:30","14:00","Travel"],
+        ["14:00","19:00","Class"],
+        ["19:00","19:30","Home"],
+        ["19:30","20:30","AL Review"],
+        ["20:30","21:00","Wind down"],
+        ["21:00","23:59","SLEEP"]
+      ]
     };
-
     const dayOrder = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
     let tasks = [];
     let currentDay = "";
-
     function timeToMinutes(str) {
       const [h,m] = str.split(':').map(Number);
       return h*60 + m;
     }
-
     // ========== TIMETABLE BUILD ==========
     function buildPanels() {
       const container = document.getElementById('cardsContainer');
@@ -462,7 +492,6 @@
         timeRange: `${start} – ${end}`,
         text
       }));
-
       tasks.forEach(task => {
         const card = document.createElement('div');
         card.className = 'card';
@@ -476,37 +505,30 @@
         card.onclick = () => card.scrollIntoView({ behavior: 'smooth', block: 'center' });
         container.appendChild(card);
       });
-
       setTimeout(() => {
         updateFocusFromScroll();
         setTimeout(focusCurrentTask, 200);
       }, 100);
     }
-
     function getCurrentTaskIndex() {
       const now = new Date();
       const currentMin = now.getHours()*60 + now.getMinutes();
       const idx = tasks.findIndex(t => currentMin >= t.startMin && currentMin < t.endMin);
       return idx === -1 ? 0 : idx;
     }
-
     function focusCurrentTask() {
       const idx = getCurrentTaskIndex();
       const target = document.getElementById(`task-${idx}`) || document.querySelector('.card');
       if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-
     function updateFocusFromScroll() {
       const scrollView = document.getElementById('scrollView');
       const cards = document.querySelectorAll('.card');
       if (cards.length === 0) return;
-
       const containerRect = scrollView.getBoundingClientRect();
       const centerY = containerRect.top + containerRect.height / 2;
-
       let closestCard = null;
       let closestDistance = Infinity;
-
       cards.forEach(card => {
         const rect = card.getBoundingClientRect();
         const cardCenter = rect.top + rect.height / 2;
@@ -516,7 +538,6 @@
           closestCard = card;
         }
       });
-
       cards.forEach(c => c.classList.remove('focused'));
       if (closestCard) {
         closestCard.classList.add('focused');
@@ -538,14 +559,12 @@
         }
       }
     }
-
     // ========== SIDEBAR NAVIGATION ==========
     const sidebarBtns = document.querySelectorAll('.sidebar-btn');
     const views = {
       timetable: document.getElementById('timetableView'),
       todo: document.getElementById('todoView')
     };
-
     sidebarBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         sidebarBtns.forEach(b => b.classList.remove('active'));
@@ -559,10 +578,8 @@
         }
       });
     });
-
     // ========== TO DO LOGIC (FIRESTORE) ==========
     const todosRef = db.collection("todos");
-
     function renderTodos(snapshot) {
       const list = document.getElementById("todoList");
       list.innerHTML = "";
@@ -586,13 +603,11 @@
         list.appendChild(li);
       });
     }
-
     function escapeHtml(str) {
       const div = document.createElement("div");
       div.textContent = str;
       return div.innerHTML;
     }
-
     document.getElementById("todoAddBtn").addEventListener("click", async () => {
       const input = document.getElementById("todoInput");
       const text = input.value.trim();
@@ -600,13 +615,10 @@
       await todosRef.add({ text, done: false, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
       input.value = "";
     });
-
     document.getElementById("todoInput").addEventListener("keydown", (e) => {
       if (e.key === "Enter") document.getElementById("todoAddBtn").click();
     });
-
     todosRef.orderBy("createdAt", "asc").onSnapshot(renderTodos);
-
     // ========== CLOCK & DATE ==========
     function updateDateTime() {
       const now = new Date();
@@ -622,7 +634,6 @@
         buildPanels();
       }
     }
-
     // ========== SCROLL LISTENER ==========
     const scrollView = document.getElementById('scrollView');
     let scrollTimeout;
@@ -630,7 +641,6 @@
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(updateFocusFromScroll, 50);
     });
-
     // ========== RESET BUTTON ==========
     document.getElementById('resetBtn').addEventListener('click', () => {
       if (!views.timetable.classList.contains('active')) {
@@ -642,7 +652,6 @@
       }
       focusCurrentTask();
     });
-
     // ========== INIT ==========
     function init() {
       const now = new Date();
@@ -651,7 +660,6 @@
       updateDateTime();
       setInterval(updateDateTime, 1000);
     }
-
     init();
   </script>
 </body>
