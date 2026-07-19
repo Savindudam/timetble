@@ -10,23 +10,24 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    :root {
-      --bg: #F8FAFC;
-      --surface: #FFFFFF;
-      --border: #E2E8F0;
-      --text: #1E293B;
-      --text-secondary: #64748B;
-      --accent: #2563EB;
-      --accent-light: #DBEAFE;
+        :root {
+      --bg: #0F172A; /* Deeper navy blue */
+      --surface: #1E293B; /* Slate 800 */
+      --border: #334155; /* Slate 700 */
+      --text: #F8FAFC; /* Slate 50 */
+      --text-secondary: #94A3B8; /* Slate 400 */
+      --accent: #3B82F6; /* Bright blue */
+      --accent-light: rgba(59, 130, 246, 0.15);
       --success: #22C55E;
       --warning: #F59E0B;
-      --glass-bg: rgba(255,255,255,0.7);
-      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.04);
+      --glass-bg: rgba(15, 23, 42, 0.8);
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.4), 0 2px 4px -1px rgba(0,0,0,0.2);
       --radius: 24px;
       --radius-sm: 16px;
       --transition: 0.2s cubic-bezier(0.25, 1, 0.3, 1);
     }
+    html, body { background: var(--bg); color: var(--text); }
 
     body {
       font-family: 'Inter', system-ui, sans-serif;
@@ -253,40 +254,6 @@
       font-size: 0.95rem;
     }
 
-    /* IOI Macro Progress Widget */
-    .ioi-progress-widget {
-      grid-column: span 2;
-      background: linear-gradient(135deg, #1E293B, #0F172A);
-      color: white;
-      border: none;
-    }
-    .ioi-progress-widget h3 {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: #F8FAFC;
-    }
-    .ioi-progress-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.9rem;
-      color: #94A3B8;
-      margin-bottom: 0.75rem;
-    }
-    .ioi-bar-bg {
-      height: 8px;
-      background: #334155;
-      border-radius: 4px;
-      overflow: hidden;
-      margin-bottom: 0.5rem;
-    }
-    .ioi-bar-fill {
-      height: 100%;
-      background: var(--success);
-      width: 0%;
-      transition: width 0.4s ease;
-    }
-
     .stats-widget {
       display: flex;
       flex-direction: column;
@@ -447,7 +414,7 @@
       font-weight: 600;
       padding: 0.15rem 0.6rem;
       border-radius: 12px;
-      background: #F1F5F9;
+      background: var(--border);
       color: #64748B;
       margin-left: 0.5rem;
     }
@@ -458,8 +425,8 @@
     }
 
     .completed .status-badge {
-      background: #DCFCE7;
-      color: #166534;
+      background: rgba(34,197,94,0.15);
+      color: #4ADE80;
     }
 
     /* ===== TODO VIEW ===== */
@@ -502,7 +469,7 @@
     }
 
     .todo-add-btn:hover {
-      background: #1D4ED8;
+      background: #3B82F6;
     }
 
     .todo-list {
@@ -552,67 +519,9 @@
       color: #EF4444;
     }
 
-    /* ===== IOI PLAN VIEW SYSTEM ===== */
-    .ioi-container {
-      max-width: 750px;
-      margin: 0 auto;
-    }
-    .ioi-week-section {
-      margin-bottom: 2rem;
-    }
-    .ioi-week-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.4rem;
-      color: var(--text);
-      margin-bottom: 1rem;
-      border-bottom: 2px solid var(--border);
-      padding-bottom: 0.25rem;
-    }
-    .ioi-day-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 1rem 1.2rem;
-      margin-bottom: 0.75rem;
-      box-shadow: var(--shadow-sm);
-    }
-    .ioi-day-header {
-      font-weight: 600;
-      color: var(--accent);
-      margin-bottom: 0.5rem;
-      font-size: 0.95rem;
-    }
-    .ioi-subtask-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      padding-left: 0.25rem;
-    }
-    .ioi-subtask-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.6rem;
-      font-size: 0.9rem;
-      color: var(--text);
-      line-height: 1.4;
-    }
-    .ioi-subtask-item input {
-      margin-top: 0.2rem;
-      width: 16px;
-      height: 16px;
-      accent-color: var(--success);
-      cursor: pointer;
-    }
-    .ioi-subtask-item.checked span {
-      text-decoration: line-through;
-      color: var(--text-secondary);
-      opacity: 0.7;
-    }
-
     /* ===== PROGRESS (STATS) VIEW ===== */
     .stats-container {
-      max-width: 600px;
+      max-width: 720px;
       margin: 0 auto;
     }
 
@@ -623,6 +532,161 @@
       padding: 1.5rem;
       margin-bottom: 1rem;
       box-shadow: var(--shadow-sm);
+    }
+
+    /* ===== IOI PLAN ===== */
+    .plan-header {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .plan-header h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      font-weight: 500;
+      margin-bottom: 0.35rem;
+    }
+    .plan-header p { color: var(--text-secondary); font-size: 0.85rem; }
+    .plan-progress-track {
+      margin-top: 0.9rem;
+      height: 8px;
+      background: var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .plan-progress-fill {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+    .plan-progress-label {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .plan-progress-label strong { color: var(--accent); font-weight: 700; }
+
+    .plan-week {
+      margin-bottom: 1.2rem;
+    }
+    .plan-week-title {
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      padding: 0.5rem 0.25rem;
+    }
+    .plan-day {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 0.6rem;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .plan-day-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .plan-day-header:hover { background: rgba(37,99,235,0.04); }
+    .plan-day-title {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+      flex: 1;
+      min-width: 0;
+    }
+    .plan-day-label { font-weight: 600; font-size: 0.95rem; }
+    .plan-day-date { font-size: 0.75rem; color: var(--text-secondary); }
+    .plan-day-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+    .plan-day-mini {
+      width: 60px;
+      height: 6px;
+      background: var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .plan-day-mini > div {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .plan-day.today {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(37,99,235,0.15);
+    }
+    .plan-day.today .plan-day-label::after {
+      content: 'TODAY';
+      background: var(--accent);
+      color: white;
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+      letter-spacing: 0.05em;
+    }
+    .plan-day.all-done .plan-day-header { background: rgba(34,197,94,0.06); }
+    .plan-day.all-done .plan-day-mini > div { background: var(--success); }
+
+    .plan-tasks {
+      list-style: none;
+      padding: 0 1rem 0.6rem 1rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .plan-day.open .plan-tasks { display: flex; }
+    .plan-chev { transition: transform 0.2s; }
+    .plan-day.open .plan-chev { transform: rotate(90deg); }
+
+    .plan-task {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      padding: 0.5rem 0.5rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .plan-task:hover { background: rgba(37,99,235,0.05); }
+    .plan-task input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 0.15rem;
+      accent-color: var(--accent);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .plan-task-text {
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: var(--text);
+    }
+    .plan-task.done .plan-task-text {
+      text-decoration: line-through;
+      color: var(--text-secondary);
     }
 
     /* ===== RESET BUTTON (FAB) ===== */
@@ -709,6 +773,60 @@
       .main { padding-bottom: 70px; }
       .fab { bottom: 5rem; right: 1.5rem; }
     }
+  
+    /* Dark Mode Refinements */
+    .sidebar-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--accent);
+    }
+    
+    .timeline-dot {
+      border: 2px solid var(--surface);
+      box-shadow: 0 0 0 2px var(--border);
+    }
+    
+    .timeline-item.current .timeline-dot {
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
+    }
+    
+    .status-badge {
+      background: var(--border);
+      color: var(--text-secondary);
+    }
+    
+    .plan-day-header:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    
+    .plan-task:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    
+    .todo-item {
+      background: var(--surface);
+      border-color: var(--border);
+    }
+    
+    input::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.6;
+    }
+    
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-secondary);
+    }
+
   </style>
 </head>
 <body>
@@ -717,22 +835,22 @@
     <div class="sidebar-logo">THRENOX</div>
     <nav class="sidebar-nav">
       <button class="sidebar-btn active" data-view="dashboard">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <!-- Home SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         <span class="icon-only">Dashboard</span>
       </button>
-      <button class="sidebar-btn" data-view="ioiplan">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-        <span class="icon-only">IOI Plan</span>
-      </button>
       <button class="sidebar-btn" data-view="timetable">
+        <!-- Calendar SVG -->
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         <span class="icon-only">Timetable</span>
       </button>
       <button class="sidebar-btn" data-view="todo">
+        <!-- Check Square SVG -->
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         <span class="icon-only">To Do</span>
       </button>
       <button class="sidebar-btn" data-view="progress">
+        <!-- Bar Chart SVG -->
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
         <span class="icon-only">Progress</span>
       </button>
@@ -769,18 +887,6 @@
           </div>
         </div>
 
-        <!-- IOI Plan Macro Card -->
-        <div class="card-widget ioi-progress-widget">
-          <h3>IOI 2027 Foundation Progress (Month 1)</h3>
-          <div class="ioi-progress-header">
-            <span id="ioiWidgetProgressText">0 / 0 Tasks Completed</span>
-            <span id="ioiWidgetPercentText">0%</span>
-          </div>
-          <div class="ioi-bar-bg">
-            <div class="ioi-bar-fill" id="ioiWidgetBarFill"></div>
-          </div>
-        </div>
-
         <!-- AL Countdown Widget -->
         <div class="card-widget countdown-widget">
           <div class="countdown-title">AL 2028 Countdown</div>
@@ -808,12 +914,22 @@
           <div style="margin-top: 0.5rem;"><span class="stat-label">Focus Time</span></div>
           <div class="focus-time" id="focusTime">0h 0m</div>
         </div>
-      </div>
-    </div>
 
-    <!-- IOI Plan View -->
-    <div class="view" id="ioiplanView">
-      <div class="ioi-container" id="ioiPlanContainer"></div>
+        <!-- IOI Plan Progress Widget -->
+        <div class="card-widget current-task-widget" id="planProgressWidget" style="cursor:pointer;">
+          <div class="progress-ring-container">
+            <svg class="progress-ring" viewBox="0 0 100 100">
+              <circle class="progress-ring-circle" cx="50" cy="50" r="42"/>
+              <circle class="progress-ring-fill" id="planRingFill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="263.89" style="stroke: var(--success);"/>
+              <text x="50" y="50" text-anchor="middle" dy="7" class="progress-ring-text" id="planPercent">0%</text>
+            </svg>
+            <div class="current-task-details">
+              <h3>IOI 2027 – Month 1 Plan</h3>
+              <p><span id="planDoneCount">0</span> / <span id="planTotalCount">0</span> tasks done · Tap to open</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Timetable Timeline View -->
@@ -834,11 +950,22 @@
 
     <!-- Progress (Stats) View -->
     <div class="view" id="progressView">
-      <div class="stats-container" id="statsContainer"></div>
+      <div class="stats-container">
+        <div class="plan-header">
+          <h2>IOI 2027 – Month 1 Foundation</h2>
+          <p>20 July – 19 Aug 2026 · C++ fluency, basic problem solving, 120+ problems solved.</p>
+          <div class="plan-progress-track"><div class="plan-progress-fill" id="planProgressFill"></div></div>
+          <div class="plan-progress-label">
+            <span><strong id="planProgressPct">0%</strong> complete</span>
+            <span><span id="planProgressDone">0</span> / <span id="planProgressTotal">0</span> tasks</span>
+          </div>
+        </div>
+        <div id="planContainer"></div>
+      </div>
     </div>
   </div>
 
-  <!-- Floating Action Button -->
+  <!-- Floating Action Button (Reset to current task) -->
   <button class="fab" id="resetBtn" title="Go to current task">📍</button>
 
   <!-- Firebase SDK -->
@@ -859,7 +986,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // ===== Timetable Source =====
+    // ===== Updated Timetable =====
     const timetable = {
       Monday: [
         ["03:30","04:00","Exercise"],
@@ -950,68 +1077,8 @@
       ]
     };
 
-    // ===== IOI Month 1 Foundation Dataset =====
-    const ioiPlanData = [
-      {
-        week: "WEEK 1: C++ Fundamentals & First Problems",
-        days: [
-          { date: "Day 1 (20 July Sun)", tasks: ["Install Code::Blocks or VS Code + g++.", "Hello World program.", "Data types: int, long long, float, double, char, string.", "Input/output: cin, cout.", "Practice: Read two integers and print their sum, difference, product."] },
-          { date: "Day 2 (21 July Mon)", tasks: ["Conditionals: if, else if, else, switch.", "Loops: for, while, do-while.", "Nested loops.", "Practice: Print a right-angled triangle of '*', multiplication table."] },
-          { date: "Day 3 (22 July Tue)", tasks: ["1D and 2D arrays, indexing, traversal.", "Strings: length, indexing, basic manipulation.", "Practice: Find max element in array, reverse array, check if string is palindrome."] },
-          { date: "Day 4 (23 July Wed)", tasks: ["Functions: declaration, parameters, return types, void.", "Recursion concept: factorial, nth Fibonacci number.", "Practice: Write function for nCr (combinations), Euclidean GCD."] },
-          { date: "Day 5 (24 July Thu)", tasks: ["STL vector: declaration, push_back, pop_back, size, clear.", "sort(v.begin(), v.end()).", "Practice: 5-8 Codeforces problems (difficulty 800, tag 'implementation').", "Examples: CF 4A, 71A, 231A, 158A, 50A."] },
-          { date: "Day 6 (25 July Fri)", tasks: ["STL pair, tuple.", "String: substr, find, getline, to_string, stoi.", "Practice: 5 Codeforces 800 problems on strings (like 112A, 339A, 96A, 118A, 266A)."] },
-          { date: "Day 7 (26 July Sat)", tasks: ["Review day. Revisit any shaky concept.", "Timed mini-contest: 2 hours, 5 easy problems from CSES Introductory (Weird Algorithm, Missing Number, Repetitions, Increasing Array, Permutations).", "Rest after contest."] }
-        ]
-      },
-      {
-        week: "WEEK 2: STL & Time Complexity",
-        days: [
-          { date: "Day 8 (27 July Sun)", tasks: ["STL set (ordered): insert, erase, find, count, iteration.", "Practice: Find unique elements in array, print frequencies using set."] },
-          { date: "Day 9 (28 July Mon)", tasks: ["STL map (ordered): key-value, insert, access, iteration.", "Practice: Count word frequencies, check anagrams."] },
-          { date: "Day 10 (29 July Tue)", tasks: ["STL unordered_set, unordered_map (hash based).", "Differences from ordered versions.", "Practice: Solve 2 problems where O(1) lookup matters (e.g., two-sum)."] },
-          { date: "Day 11 (30 July Wed)", tasks: ["STL stack: push, pop, top, empty.", "STL queue: push, pop, front.", "Practice: Balanced brackets problem, simulate a queue using two stacks."] },
-          { date: "Day 12 (31 July Thu)", tasks: ["Priority queue (max-heap by default, min-heap with greater<int>).", "Practice: Find K largest elements, K smallest."] },
-          { date: "Day 13 (1 Aug Fri)", tasks: ["Time complexity: Big O notation.", "Analyze loops: O(1), O(n), O(n^2), O(log n).", "Practice: Without coding, compute time complexity of given code snippets."] },
-          { date: "Day 14 (2 Aug Sat)", tasks: ["Timed mini-contest: 2.5 hours, 6 problems from CF 900-1000 (choose ones using various STL).", "Review all errors, understand editorial."] }
-        ]
-      },
-      {
-        week: "WEEK 3: Basic Algorithmic Thinking",
-        days: [
-          { date: "Day 15 (3 Aug Sun)", tasks: ["Brute force / complete search.", "Generate subsets using recursion or bitmask (for small n).", "Practice: 5 problems from CSES Introductory (e.g., Apple Division, Chessboard and Queens)."] },
-          { date: "Day 16 (4 Aug Mon)", tasks: ["Basic greedy: coin change (canonical systems), activity selection (end-time sorting).", "Practice: 5 greedy tagged problems (CF 900, like 489B, 545B, 1399A)."] },
-          { date: "Day 17 (5 Aug Tue)", tasks: ["Binary search on sorted array.", "Implement lower_bound, upper_bound manually.", "Practice: Find first and last occurrence of X in sorted array, floor and ceil."] },
-          { date: "Day 18 (6 Aug Wed)", tasks: ["Binary search on answer (simple monotonic functions).", "Practice: 'Aggressive cows' (spoj), 'Book Allocation' (easy version), square root using BS."] },
-          { date: "Day 19 (7 Aug Thu)", tasks: ["Two pointers technique.", "Practice: Pair sum (sorted array), container with most water, subarray sum equals K (positive numbers)."] },
-          { date: "Day 20 (8 Aug Fri)", tasks: ["Intro DP: memoization, tabulation.", "Fibonacci, min steps to 1 (with 3 operations), coin change (min coins).", "Practice: CSES DP section first 2-3 problems (Dice Combinations, Minimizing Coins)."] },
-          { date: "Day 21 (9 Aug Sat)", tasks: ["Weekly contest: 3 hours, 6 problems (2 brute force, 2 greedy, 1 binary search, 1 easy DP).", "Time strictly, then self-grade."] }
-        ]
-      },
-      {
-        week: "WEEK 4: Speed, Debugging & Review",
-        days: [
-          { date: "Day 22 (10 Aug Sun)", tasks: ["Solve 10 mixed easy problems (CF 800-900) as fast as possible.", "Aim: 5-10 min per problem. Focus on accuracy."] },
-          { date: "Day 23 (11 Aug Mon)", tasks: ["Deep review: list every problem you got wrong so far.", "Re-solve them from scratch, note the mistake type (syntax, logic, corner case)."] },
-          { date: "Day 24 (12 Aug Tue)", tasks: ["10 Codeforces 1000 difficulty problems, timed.", "No hints. If stuck >30 min, read editorial, code it yourself."] },
-          { date: "Day 25 (13 Aug Wed)", tasks: ["Learn stress testing: write a random test generator, a brute force solution, compare against your optimized solution.", "Apply to 2-3 problems you previously solved."] },
-          { date: "Day 26 (14 Aug Thu)", tasks: ["Full 4-hour mock contest: CSES Introductory problems 1-20 (or mix of CF 900-1000), simulate real rules.", "No distractions, score afterwards."] },
-          { date: "Day 27 (15 Aug Fri)", tasks: ["Active rest: watch solutions on YouTube for problems you struggled with (look up 'Errichto', 'SecondThread').", "No coding, just absorb."] },
-          { date: "Day 28 (16 Aug Sat)", tasks: ["Month recap: write down all topics you've mastered, list any weak spots.", "Plan focus areas for Month 2."] }
-        ]
-      },
-      {
-        week: "FINAL BUFFER (17-19 Aug)",
-        days: [
-          { date: "Day 29 (17 Aug Sun)", tasks: ["Solve 15 random problems (CF 800-1000) without filtering by topic. Build intuition."] },
-          { date: "Day 30 (18 Aug Mon)", tasks: ["Re-solve 5 hard (for you) problems from past days, from scratch, no peeking."] },
-          { date: "Day 31 (19 Aug Tue)", tasks: ["Month-end evaluation contest (4 hours, 8 problems): 2 brute force, 2 greedy, 2 binary search, 1 DP, 1 heavy STL.", "Grade yourself.", "Send configuration items to mentor to tailor Month 2."] }
-        ]
-      }
-    ];
-
     const dayOrder = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    let dailyTasks = [];
+    let tasks = [];
     let currentDay = "";
 
     function timeToMinutes(str) {
@@ -1022,105 +1089,8 @@
     function getCurrentTaskIndex() {
       const now = new Date();
       const currentMin = now.getHours()*60 + now.getMinutes();
-      const idx = dailyTasks.findIndex(t => currentMin >= t.startMin && currentMin < t.endMin);
+      const idx = tasks.findIndex(t => currentMin >= t.startMin && currentMin < t.endMin);
       return idx === -1 ? 0 : idx;
-    }
-
-    // ===== Render IOI Plan Tracker =====
-    function initAndRenderIOIPlan() {
-      const container = document.getElementById("ioiPlanContainer");
-      container.innerHTML = "";
-      
-      let totalTasks = 0;
-      let completedTasks = 0;
-
-      ioiPlanData.forEach((weekObj, wIdx) => {
-        const weekSec = document.createElement("div");
-        weekSec.className = "ioi-week-section";
-        
-        const wTitle = document.createElement("div");
-        wTitle.className = "ioi-week-title";
-        wTitle.textContent = weekObj.week;
-        weekSec.appendChild(wTitle);
-
-        weekObj.days.forEach((dayObj, dIdx) => {
-          const dayCard = document.createElement("div");
-          dayCard.className = "ioi-day-card";
-          
-          const dHeader = document.createElement("div");
-          dHeader.className = "ioi-day-header";
-          dHeader.textContent = dayObj.date;
-          dayCard.appendChild(dHeader);
-
-          const taskList = document.createElement("ul");
-          taskList.className = "ioi-subtask-list";
-
-          dayObj.tasks.forEach((taskText, tIdx) => {
-            totalTasks++;
-            const taskId = `ioi-t-${wIdx}-${dIdx}-${tIdx}`;
-            const isChecked = localStorage.getItem(taskId) === "true";
-            if (isChecked) completedTasks++;
-
-            const li = document.createElement("li");
-            li.className = `ioi-subtask-item ${isChecked ? 'checked' : ''}`;
-            
-            const check = document.createElement("input");
-            check.type = "checkbox";
-            check.checked = isChecked;
-            
-            check.addEventListener("change", (e) => {
-              localStorage.setItem(taskId, e.target.checked);
-              if (e.target.checked) {
-                li.classList.add("checked");
-              } else {
-                li.classList.remove("checked");
-              }
-              calculateIOIProgress();
-            });
-
-            const span = document.createElement("span");
-            span.textContent = taskText;
-
-            li.appendChild(check);
-            li.appendChild(span);
-            taskList.appendChild(li);
-          });
-
-          dayCard.appendChild(taskList);
-          weekSec.appendChild(dayCard);
-        });
-
-        container.appendChild(weekSec);
-      });
-
-      // Update macro metrics values
-      updateIOIMetricsUI(completedTasks, totalTasks);
-    }
-
-    function calculateIOIProgress() {
-      let totalTasks = 0;
-      let completedTasks = 0;
-
-      ioiPlanData.forEach((weekObj, wIdx) => {
-        weekObj.days.forEach((dayObj, dIdx) => {
-          dayObj.tasks.forEach((_, tIdx) => {
-            totalTasks++;
-            const taskId = `ioi-t-${wIdx}-${dIdx}-${tIdx}`;
-            if (localStorage.getItem(taskId) === "true") {
-              completedTasks++;
-            }
-          });
-        });
-      });
-
-      updateIOIMetricsUI(completedTasks, totalTasks);
-    }
-
-    function updateIOIMetricsUI(completed, total) {
-      const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
-      document.getElementById("ioiWidgetProgressText").textContent = `${completed} / ${total} Tasks Completed`;
-      document.getElementById("ioiWidgetPercentText").textContent = `${percent}%`;
-      document.getElementById("ioiWidgetBarFill").style.width = `${percent}%`;
     }
 
     // ===== Build Timeline =====
@@ -1128,7 +1098,7 @@
       const container = document.getElementById('timelineContainer');
       container.innerHTML = '';
       const raw = timetable[currentDay] || [];
-      dailyTasks = raw.map(([start, end, text], idx) => ({
+      tasks = raw.map(([start, end, text], idx) => ({
         id: idx,
         startMin: timeToMinutes(start),
         endMin: timeToMinutes(end),
@@ -1138,7 +1108,7 @@
 
       const currentIdx = getCurrentTaskIndex();
 
-      dailyTasks.forEach((task, idx) => {
+      tasks.forEach((task, idx) => {
         const item = document.createElement('div');
         item.className = 'timeline-item';
         if (idx === currentIdx) item.classList.add('current');
@@ -1161,6 +1131,7 @@
         container.appendChild(item);
       });
 
+      // Scroll to current task
       setTimeout(() => {
         const currentEl = document.querySelector('.timeline-item.current');
         if (currentEl) {
@@ -1171,59 +1142,72 @@
 
     // ===== Dashboard Updates =====
     function updateDashboard() {
-      if (dailyTasks.length === 0) return;
+      if (tasks.length === 0) return;
       const now = new Date();
       const currentMin = now.getHours()*60 + now.getMinutes();
       const currentIdx = getCurrentTaskIndex();
-      const currentTask = dailyTasks[currentIdx];
+      const currentTask = tasks[currentIdx];
 
+      // Current task display
       document.getElementById('currentTaskName').textContent = currentTask.text;
       document.getElementById('currentTaskTime').textContent = currentTask.timeRange;
 
+      // Progress ring
       const totalTaskMin = currentTask.endMin - currentTask.startMin;
       const elapsedMin = Math.max(0, currentMin - currentTask.startMin);
       const percent = totalTaskMin > 0 ? Math.min(100, Math.round((elapsedMin / totalTaskMin)*100)) : 0;
       const circle = document.getElementById('progressRingFill');
-      const circumference = 2 * Math.PI * 42; 
+      const circumference = 2 * Math.PI * 42; // ~263.89
       circle.style.strokeDashoffset = circumference - (percent / 100) * circumference;
       document.getElementById('progressPercent').textContent = percent + '%';
 
-      const completed = dailyTasks.filter((_,i) => i < currentIdx).length;
-      const remaining = dailyTasks.length - completed - 1;
-      document.getElementById('statTasks').textContent = dailyTasks.length;
+      // Stats
+      const completed = tasks.filter((_,i) => i < currentIdx).length;
+      const remaining = tasks.length - completed - 1;
+      document.getElementById('statTasks').textContent = tasks.length;
       document.getElementById('statCompleted').textContent = completed;
       document.getElementById('statRemaining').textContent = remaining;
 
-      const firstStart = dailyTasks[0].startMin;
-      const lastEnd = dailyTasks[dailyTasks.length-1].endMin;
+      // Focus time (total minutes from first task start to last task end)
+      const firstStart = tasks[0].startMin;
+      const lastEnd = tasks[tasks.length-1].endMin;
       const totalDayMin = lastEnd - firstStart;
       const hours = Math.floor(totalDayMin / 60);
       const mins = totalDayMin % 60;
       document.getElementById('focusTime').textContent = `${hours}h ${mins}m`;
 
+      // Progress bar at top
       const elapsedDayMin = Math.max(0, currentMin - firstStart);
       const dayProgress = totalDayMin > 0 ? Math.min(100, (elapsedDayMin / totalDayMin)*100) : 0;
       document.getElementById('progressBarFill').style.width = dayProgress + '%';
 
+      // Update Countdowns
       updateCountdowns();
     }
 
     function updateCountdowns() {
       const now = new Date().getTime();
+      
+      // AL 2028: August 14, 2028 (Estimated based on trend)
       const alTarget = new Date("August 14, 2028 00:00:00").getTime();
       const alDist = alTarget - now;
       if (alDist > 0) {
         document.getElementById('al-days').textContent = Math.floor(alDist / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
         document.getElementById('al-hours').textContent = Math.floor((alDist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
         document.getElementById('al-mins').textContent = Math.floor((alDist % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+      } else {
+        document.getElementById('alCountdown').innerHTML = "<span style='color:var(--success); font-weight:700;'>EXAM IN PROGRESS</span>";
       }
 
+      // IOI 2027: September 12, 2027
       const ioiTarget = new Date("September 12, 2027 00:00:00").getTime();
       const ioiDist = ioiTarget - now;
       if (ioiDist > 0) {
         document.getElementById('ioi-days').textContent = Math.floor(ioiDist / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
         document.getElementById('ioi-hours').textContent = Math.floor((ioiDist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
         document.getElementById('ioi-mins').textContent = Math.floor((ioiDist % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+      } else {
+        document.getElementById('ioiCountdown').innerHTML = "<span style='color:var(--success); font-weight:700;'>IOI 2027 STARTED</span>";
       }
     }
 
@@ -1237,7 +1221,6 @@
     const sidebarBtns = document.querySelectorAll('.sidebar-btn');
     const views = {
       dashboard: document.getElementById('dashboardView'),
-      ioiplan: document.getElementById('ioiplanView'),
       timetable: document.getElementById('timetableView'),
       todo: document.getElementById('todoView'),
       progress: document.getElementById('progressView')
@@ -1325,11 +1308,14 @@
         currentDay = dayName;
         updateAllUI();
       } else {
+        // Update stats every second
         updateDashboard();
       }
     }
 
+    // ===== Reset Button =====
     document.getElementById('resetBtn').addEventListener('click', () => {
+      // Switch to timetable view if not active
       if (!views.timetable.classList.contains('active')) {
         sidebarBtns.forEach(b => b.classList.remove('active'));
         document.querySelector('[data-view="timetable"]').classList.add('active');
@@ -1337,17 +1323,369 @@
         views.timetable.classList.add('active');
         document.getElementById('resetBtn').style.display = 'flex';
       }
-      renderTimeline();
+      renderTimeline(); // re-render and auto-scroll to current
+    });
+
+    // ===== IOI 2027 – Month 1 Plan =====
+    const ioiPlan = [
+      { week: "Week 1 · C++ Fundamentals & First Problems", days: [
+        { day: 1,  date: "20 Jul Sun", iso: "2026-07-20", tasks: [
+          "Install Code::Blocks or VS Code + g++",
+          "Write Hello World program",
+          "Data types: int, long long, float, double, char, string",
+          "Input/output: cin, cout",
+          "Practice: read two integers, print sum, difference, product",
+        ]},
+        { day: 2,  date: "21 Jul Mon", iso: "2026-07-21", tasks: [
+          "Conditionals: if, else if, else, switch",
+          "Loops: for, while, do-while",
+          "Nested loops",
+          "Practice: right-angled triangle of '*'",
+          "Practice: multiplication table",
+        ]},
+        { day: 3,  date: "22 Jul Tue", iso: "2026-07-22", tasks: [
+          "1D and 2D arrays: indexing, traversal",
+          "Strings: length, indexing, basic manipulation",
+          "Practice: max element in array",
+          "Practice: reverse an array",
+          "Practice: check if string is palindrome",
+        ]},
+        { day: 4,  date: "23 Jul Wed", iso: "2026-07-23", tasks: [
+          "Functions: declaration, parameters, return types, void",
+          "Recursion: factorial",
+          "Recursion: nth Fibonacci number",
+          "Practice: function for nCr (combinations)",
+          "Practice: Euclidean GCD",
+        ]},
+        { day: 5,  date: "24 Jul Thu", iso: "2026-07-24", tasks: [
+          "STL vector: declaration, push_back, pop_back, size, clear",
+          "sort(v.begin(), v.end())",
+          "Practice: 5-8 CF 800 'implementation' problems (4A, 71A, 231A, 158A, 50A)",
+        ]},
+        { day: 6,  date: "25 Jul Fri", iso: "2026-07-25", tasks: [
+          "STL pair, tuple",
+          "String: substr, find, getline, to_string, stoi",
+          "Practice: 5 CF 800 string problems (112A, 339A, 96A, 118A, 266A)",
+        ]},
+        { day: 7,  date: "26 Jul Sat", iso: "2026-07-26", tasks: [
+          "Review day: revisit any shaky concept",
+          "Timed mini-contest (2h): 5 CSES Introductory (Weird Algorithm, Missing Number, Repetitions, Increasing Array, Permutations)",
+          "Rest after contest",
+        ]},
+      ]},
+      { week: "Week 2 · STL & Time Complexity", days: [
+        { day: 8,  date: "27 Jul Sun", iso: "2026-07-27", tasks: [
+          "STL set (ordered): insert, erase, find, count, iteration",
+          "Practice: unique elements in array",
+          "Practice: print frequencies using set",
+        ]},
+        { day: 9,  date: "28 Jul Mon", iso: "2026-07-28", tasks: [
+          "STL map (ordered): key-value, insert, access, iteration",
+          "Practice: count word frequencies",
+          "Practice: check anagrams",
+        ]},
+        { day: 10, date: "29 Jul Tue", iso: "2026-07-29", tasks: [
+          "STL unordered_set, unordered_map (hash based)",
+          "Differences from ordered versions",
+          "Practice: 2 problems where O(1) lookup matters (e.g. two-sum)",
+        ]},
+        { day: 11, date: "30 Jul Wed", iso: "2026-07-30", tasks: [
+          "STL stack: push, pop, top, empty",
+          "STL queue: push, pop, front",
+          "Practice: balanced brackets",
+          "Practice: simulate a queue using two stacks",
+        ]},
+        { day: 12, date: "31 Jul Thu", iso: "2026-07-31", tasks: [
+          "Priority queue (max-heap default, min-heap with greater<int>)",
+          "Practice: K largest elements",
+          "Practice: K smallest elements",
+        ]},
+        { day: 13, date: "1 Aug Fri", iso: "2026-08-01", tasks: [
+          "Time complexity: Big O notation",
+          "Analyze loops: O(1), O(n), O(n^2), O(log n)",
+          "Practice: compute time complexity of given snippets (no coding)",
+        ]},
+        { day: 14, date: "2 Aug Sat", iso: "2026-08-02", tasks: [
+          "Timed mini-contest (2.5h): 6 CF 900-1000 problems using various STL",
+          "Review all errors and understand editorial",
+        ]},
+      ]},
+      { week: "Week 3 · Basic Algorithmic Thinking", days: [
+        { day: 15, date: "3 Aug Sun", iso: "2026-08-03", tasks: [
+          "Brute force / complete search",
+          "Generate subsets via recursion or bitmask (small n)",
+          "Practice: 5 CSES Introductory (e.g. Apple Division, Chessboard and Queens)",
+        ]},
+        { day: 16, date: "4 Aug Mon", iso: "2026-08-04", tasks: [
+          "Basic greedy: coin change (canonical), activity selection (end-time sort)",
+          "Practice: 5 greedy-tagged CF 900 problems (489B, 545B, 1399A)",
+        ]},
+        { day: 17, date: "5 Aug Tue", iso: "2026-08-05", tasks: [
+          "Binary search on sorted array",
+          "Implement lower_bound, upper_bound manually",
+          "Practice: first and last occurrence of X",
+          "Practice: floor and ceil in sorted array",
+        ]},
+        { day: 18, date: "6 Aug Wed", iso: "2026-08-06", tasks: [
+          "Binary search on answer (monotonic functions)",
+          "Practice: Aggressive Cows (SPOJ)",
+          "Practice: Book Allocation (easy version)",
+          "Practice: square root using BS",
+        ]},
+        { day: 19, date: "7 Aug Thu", iso: "2026-08-07", tasks: [
+          "Two pointers technique",
+          "Practice: pair sum (sorted array)",
+          "Practice: container with most water",
+          "Practice: subarray sum equals K (positive numbers)",
+        ]},
+        { day: 20, date: "8 Aug Fri", iso: "2026-08-08", tasks: [
+          "Intro DP: memoization vs tabulation",
+          "Fibonacci, min steps to 1 (3 ops), coin change (min coins)",
+          "CSES DP: Dice Combinations",
+          "CSES DP: Minimizing Coins",
+        ]},
+        { day: 21, date: "9 Aug Sat", iso: "2026-08-09", tasks: [
+          "Weekly contest (3h): 6 problems (2 brute force, 2 greedy, 1 BS, 1 easy DP)",
+          "Time strictly then self-grade",
+        ]},
+      ]},
+      { week: "Week 4 · Speed, Debugging & Review", days: [
+        { day: 22, date: "10 Aug Sun", iso: "2026-08-10", tasks: [
+          "Solve 10 mixed easy CF 800-900 problems as fast as possible",
+          "Aim 5-10 min per problem; focus on accuracy",
+        ]},
+        { day: 23, date: "11 Aug Mon", iso: "2026-08-11", tasks: [
+          "Deep review: list every problem you got wrong so far",
+          "Re-solve them from scratch",
+          "Note mistake type for each (syntax, logic, corner case)",
+        ]},
+        { day: 24, date: "12 Aug Tue", iso: "2026-08-12", tasks: [
+          "10 CF 1000-difficulty problems, timed",
+          "No hints; if stuck >30 min read editorial then code it yourself",
+        ]},
+        { day: 25, date: "13 Aug Wed", iso: "2026-08-13", tasks: [
+          "Learn stress testing: random generator + brute force vs optimized",
+          "Apply stress testing to 2-3 problems you previously solved",
+        ]},
+        { day: 26, date: "14 Aug Thu", iso: "2026-08-14", tasks: [
+          "Full 4-hour mock contest (CSES Introductory 1-20 or CF 900-1000)",
+          "Simulate real rules, no distractions, score afterwards",
+        ]},
+        { day: 27, date: "15 Aug Fri", iso: "2026-08-15", tasks: [
+          "Active rest: watch solution videos (Errichto, SecondThread)",
+          "No coding, just absorb",
+        ]},
+        { day: 28, date: "16 Aug Sat", iso: "2026-08-16", tasks: [
+          "Month recap: write down mastered topics",
+          "List weak spots",
+          "Plan focus areas for Month 2",
+        ]},
+      ]},
+      { week: "Final Buffer · 17-19 Aug", days: [
+        { day: 29, date: "17 Aug Sun", iso: "2026-08-17", tasks: [
+          "Solve 15 random CF 800-1000 problems without filtering by topic",
+        ]},
+        { day: 30, date: "18 Aug Mon", iso: "2026-08-18", tasks: [
+          "Re-solve 5 hard problems from past days from scratch, no peeking",
+        ]},
+        { day: 31, date: "19 Aug Tue", iso: "2026-08-19", tasks: [
+          "Month-end evaluation contest (4h, 8 problems): 2 brute force, 2 greedy, 2 BS, 1 DP, 1 heavy STL",
+          "Grade yourself",
+          "Send: country, total problems solved, hardest topic, contest score (for Month 2 tailoring)",
+        ]},
+      ]},
+    ];
+
+    // planState[taskId] = true/false. taskId = `d{day}-{index}`
+    let planState = {};
+    let planOpenDays = new Set();
+    const planStateRef = db.collection("ioiPlan").doc("state");
+
+    function planTaskId(day, idx) { return `d${day}-${idx}`; }
+
+    function computePlanTotals() {
+      let total = 0, done = 0;
+      ioiPlan.forEach(w => w.days.forEach(d => {
+        d.tasks.forEach((_, i) => {
+          total++;
+          if (planState[planTaskId(d.day, i)]) done++;
+        });
+      }));
+      return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
+    }
+
+    function computeDayTotals(d) {
+      let total = d.tasks.length, done = 0;
+      d.tasks.forEach((_, i) => { if (planState[planTaskId(d.day, i)]) done++; });
+      return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
+    }
+
+    function todayIso() {
+      const n = new Date();
+      const y = n.getFullYear();
+      const m = String(n.getMonth() + 1).padStart(2, '0');
+      const dd = String(n.getDate()).padStart(2, '0');
+      return `${y}-${m}-${dd}`;
+    }
+
+    function renderPlan() {
+      const container = document.getElementById('planContainer');
+      if (!container) return;
+      const today = todayIso();
+
+      // Auto-open today's card the first time we render
+      if (planOpenDays.size === 0) {
+        ioiPlan.forEach(w => w.days.forEach(d => {
+          if (d.iso === today) planOpenDays.add(d.day);
+        }));
+      }
+
+      container.innerHTML = ioiPlan.map(w => `
+        <div class="plan-week">
+          <div class="plan-week-title">${w.week}</div>
+          ${w.days.map(d => {
+            const t = computeDayTotals(d);
+            const isToday = d.iso === today;
+            const isOpen = planOpenDays.has(d.day);
+            const allDone = t.total > 0 && t.done === t.total;
+            return `
+              <div class="plan-day ${isToday ? 'today' : ''} ${isOpen ? 'open' : ''} ${allDone ? 'all-done' : ''}" data-day="${d.day}">
+                <div class="plan-day-header" data-toggle="${d.day}">
+                  <div class="plan-day-title">
+                    <span class="plan-day-label">Day ${d.day}</span>
+                    <span class="plan-day-date">${d.date}</span>
+                  </div>
+                  <div class="plan-day-meta">
+                    <span>${t.done}/${t.total}</span>
+                    <div class="plan-day-mini"><div style="width:${t.pct}%"></div></div>
+                    <svg class="plan-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                  </div>
+                </div>
+                <ul class="plan-tasks">
+                  ${d.tasks.map((task, i) => {
+                    const id = planTaskId(d.day, i);
+                    const checked = !!planState[id];
+                    return `
+                      <li class="plan-task ${checked ? 'done' : ''}" data-taskid="${id}">
+                        <input type="checkbox" ${checked ? 'checked' : ''}>
+                        <span class="plan-task-text">${escapeHtml(task)}</span>
+                      </li>
+                    `;
+                  }).join('')}
+                </ul>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `).join('');
+
+      // Toggle open/close
+      container.querySelectorAll('.plan-day-header').forEach(h => {
+        h.addEventListener('click', () => {
+          const dayNum = Number(h.dataset.toggle);
+          if (planOpenDays.has(dayNum)) planOpenDays.delete(dayNum);
+          else planOpenDays.add(dayNum);
+          renderPlan();
+        });
+      });
+
+      // Task check/uncheck
+      container.querySelectorAll('.plan-task').forEach(el => {
+        const id = el.dataset.taskid;
+        const box = el.querySelector('input[type="checkbox"]');
+        const toggle = (e) => {
+          e.stopPropagation();
+          const newVal = !planState[id];
+          planState[id] = newVal;
+          box.checked = newVal;
+          el.classList.toggle('done', newVal);
+          persistPlanState();
+          updatePlanProgressUI();
+        };
+        el.addEventListener('click', (e) => {
+          if (e.target.tagName === 'INPUT') return; // let native handler run
+          toggle(e);
+        });
+        box.addEventListener('change', () => {
+          planState[id] = box.checked;
+          el.classList.toggle('done', box.checked);
+          persistPlanState();
+          updatePlanProgressUI();
+        });
+      });
+
+      updatePlanProgressUI(false);
+    }
+
+    function updatePlanProgressUI(rerenderMeta = true) {
+      const { total, done, pct } = computePlanTotals();
+      const fill = document.getElementById('planProgressFill');
+      const pctEl = document.getElementById('planProgressPct');
+      const doneEl = document.getElementById('planProgressDone');
+      const totalEl = document.getElementById('planProgressTotal');
+      if (fill) fill.style.width = pct + '%';
+      if (pctEl) pctEl.textContent = pct + '%';
+      if (doneEl) doneEl.textContent = done;
+      if (totalEl) totalEl.textContent = total;
+
+      // Dashboard widget
+      const ring = document.getElementById('planRingFill');
+      const ringTxt = document.getElementById('planPercent');
+      const dc = document.getElementById('planDoneCount');
+      const tc = document.getElementById('planTotalCount');
+      const circumference = 2 * Math.PI * 42;
+      if (ring) ring.style.strokeDashoffset = circumference - (pct / 100) * circumference;
+      if (ringTxt) ringTxt.textContent = pct + '%';
+      if (dc) dc.textContent = done;
+      if (tc) tc.textContent = total;
+
+      // Update per-day mini bars / counters without rebuilding
+      if (rerenderMeta) {
+        ioiPlan.forEach(w => w.days.forEach(d => {
+          const el = document.querySelector(`.plan-day[data-day="${d.day}"]`);
+          if (!el) return;
+          const t = computeDayTotals(d);
+          const meta = el.querySelector('.plan-day-meta span');
+          const mini = el.querySelector('.plan-day-mini > div');
+          if (meta) meta.textContent = `${t.done}/${t.total}`;
+          if (mini) mini.style.width = t.pct + '%';
+          el.classList.toggle('all-done', t.total > 0 && t.done === t.total);
+        }));
+      }
+    }
+
+    let planSaveTimer = null;
+    function persistPlanState() {
+      clearTimeout(planSaveTimer);
+      planSaveTimer = setTimeout(() => {
+        planStateRef.set({ state: planState, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
+          .catch(err => console.error('Plan save failed', err));
+      }, 300);
+    }
+
+    // Live sync of plan state
+    planStateRef.onSnapshot(snap => {
+      const data = snap.exists ? snap.data() : null;
+      planState = (data && data.state) || {};
+      renderPlan();
+    }, err => {
+      console.error('Plan subscribe failed', err);
+      renderPlan();
+    });
+
+    // Dashboard widget click → jump to Progress view
+    document.getElementById('planProgressWidget').addEventListener('click', () => {
+      document.querySelector('.sidebar-btn[data-view="progress"]').click();
     });
 
     // ===== Init =====
     function init() {
       const now = new Date();
       currentDay = dayOrder[now.getDay()];
-      initAndRenderIOIPlan();
       updateAllUI();
       updateDateTime();
       setInterval(updateDateTime, 1000);
+      renderPlan();
     }
 
     init();
