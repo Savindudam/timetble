@@ -10,22 +10,22 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-        :root {
-      --bg: #0F172A; /* Deeper navy blue */
-      --surface: #1E293B; /* Slate 800 */
-      --border: #334155; /* Slate 700 */
-      --text: #F8FAFC; /* Slate 50 */
-      --text-secondary: #94A3B8; /* Slate 400 */
-      --accent: #3B82F6; /* Bright blue */
-      --accent-light: rgba(59, 130, 246, 0.15);
-      --success: #22C55E;
-      --warning: #F59E0B;
-      --glass-bg: rgba(15, 23, 42, 0.8);
-      --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
-      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.4), 0 2px 4px -1px rgba(0,0,0,0.2);
-      --radius: 24px;
-      --radius-sm: 16px;
-      --transition: 0.2s cubic-bezier(0.25, 1, 0.3, 1);
+            :root {
+      --bg: #000000; /* Pitch Black */
+      --surface: #0A0A0A; /* Near Black */
+      --border: #1A1A1A; /* Dark Grey */
+      --text: #00FF41; /* Matrix Green */
+      --text-secondary: #008F11; /* Darker Green */
+      --accent: #00FF41; /* Matrix Green */
+      --accent-light: rgba(0, 255, 65, 0.1);
+      --success: #00FF41;
+      --warning: #FFFF00;
+      --glass-bg: rgba(0, 0, 0, 0.9);
+      --shadow-sm: 0 0 5px rgba(0, 255, 65, 0.2);
+      --shadow-md: 0 0 15px rgba(0, 255, 65, 0.3);
+      --radius: 0px; /* Sharp edges for terminal look */
+      --radius-sm: 0px;
+      --transition: 0.1s; /* Fast terminal response */
     }
     html, body { background: var(--bg); color: var(--text); }
 
@@ -899,6 +899,108 @@
       display: none;
     }
 
+  
+    /* Hacker Terminal Aesthetic */
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;700&display=swap');
+
+    * {
+      font-family: 'Fira Code', 'Courier New', monospace !important;
+      text-transform: lowercase; /* Optional: adds to the aesthetic */
+    }
+    
+    body {
+      background-color: #000;
+      background-image: radial-gradient(rgba(0, 255, 65, 0.15), black 120%);
+    }
+
+    .card-widget, .stat-card, .plan-day, .plan-header, .todo-item, .timeline-content, .sidebar, .top-bar {
+      border: 1px solid var(--accent) !important;
+      background: #000 !important;
+      box-shadow: var(--shadow-sm) !important;
+    }
+
+    .sidebar-btn.active, .sidebar-btn:hover {
+      background: var(--accent) !important;
+      color: #000 !important;
+    }
+
+    .sidebar-btn.active svg, .sidebar-btn:hover svg {
+      stroke: #000 !important;
+    }
+
+    .progress-ring-circle {
+      stroke: #111 !important;
+    }
+
+    .progress-ring-text {
+      fill: var(--accent) !important;
+    }
+
+    .timeline::before {
+      background: var(--accent) !important;
+    }
+
+    .timeline-dot {
+      background: #000 !important;
+      border: 2px solid var(--accent) !important;
+    }
+
+    .timeline-item.current .timeline-dot {
+      background: var(--accent) !important;
+      box-shadow: 0 0 10px var(--accent) !important;
+    }
+
+    .status-badge {
+      border: 1px solid var(--accent) !important;
+      background: #000 !important;
+      color: var(--accent) !important;
+    }
+
+    .todo-input, .login-input {
+      border: 1px solid var(--accent) !important;
+      background: #000 !important;
+      color: var(--accent) !important;
+    }
+
+    .todo-add-btn, .login-btn {
+      border: 1px solid var(--accent) !important;
+      background: var(--accent) !important;
+      color: #000 !important;
+      font-weight: bold !important;
+    }
+
+    .todo-add-btn:hover, .login-btn:hover {
+      background: #000 !important;
+      color: var(--accent) !important;
+    }
+
+    /* Matrix Scanline Effect */
+    body::before {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      z-index: 10000;
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none;
+    }
+
+    #loginOverlay {
+      background: #000 !important;
+    }
+    
+    .login-card {
+      border: 2px solid var(--accent) !important;
+      box-shadow: 0 0 20px var(--accent) !important;
+    }
+
+    /* Hide the greeting/clock background */
+    .live-clock {
+      background: transparent !important;
+      border: 1px solid var(--accent);
+    }
+
   </style>
 </head>
 <body>
@@ -1764,70 +1866,59 @@
     });
 
     
-    // ===== Auth & Cleanup Logic =====
-    const AUTH_HASH = "91dc09bb7b889913c2e0ee5c9fec749356a5e2b59391074b5bee59bba2ef80df";
     
-    function checkAuth() {
-      const isAuthed = sessionStorage.getItem('threnox_authed');
-      if (isAuthed === 'true') {
+    // ===== Hacker Auth & Cleanup =====
+    const H_AUTH = "91dc09bb7b889913c2e0ee5c9fec749356a5e2b59391074b5bee59bba2ef80df";
+    
+    async function checkHackerAuth() {
+      if (sessionStorage.getItem('hacker_access') === 'granted') {
         document.getElementById('loginOverlay').style.display = 'none';
       }
     }
-    
-    document.getElementById('loginBtn').addEventListener('click', () => {
+
+    async function hackerLogin() {
       const pass = document.getElementById('loginPass').value;
-      const hash = Array.from(new Uint8Array(crypto.subtle.digest('SHA-256', new TextEncoder().encode(pass)).then(buf => {
-        const h = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-        if (h === AUTH_HASH) {
-          sessionStorage.setItem('threnox_authed', 'true');
-          document.getElementById('loginOverlay').style.fadeOut = '0.3s';
-          setTimeout(() => document.getElementById('loginOverlay').style.display = 'none', 300);
+      const error = document.getElementById('loginError');
+      
+      try {
+        const msg = new TextEncoder().encode(pass);
+        const buf = await crypto.subtle.digest('SHA-256', msg);
+        const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+        
+        if (hash === H_AUTH) {
+          sessionStorage.setItem('hacker_access', 'granted');
+          document.getElementById('loginOverlay').style.opacity = '0';
+          setTimeout(() => document.getElementById('loginOverlay').style.display = 'none', 200);
         } else {
-          document.getElementById('loginError').style.display = 'block';
+          error.style.display = 'block';
+          error.innerText = "> access_denied: invalid_credentials";
           document.getElementById('loginPass').value = '';
         }
-      })));
-    });
-    
-    document.getElementById('loginPass').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') document.getElementById('loginBtn').click();
-    });
-
-    // Enhanced login logic for async crypto
-    async function performLogin() {
-      const pass = document.getElementById('loginPass').value;
-      const msgUint8 = new TextEncoder().encode(pass);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-      
-      if (hashHex === AUTH_HASH) {
-        sessionStorage.setItem('threnox_authed', 'true');
-        document.getElementById('loginOverlay').style.display = 'none';
-      } else {
-        document.getElementById('loginError').style.display = 'block';
-        document.getElementById('loginPass').value = '';
+      } catch (e) {
+        // Fallback for file:// protocol
+        if (btoa(pass) === "MjAxNjY1MDEyM3NkZg==") {
+          sessionStorage.setItem('hacker_access', 'granted');
+          document.getElementById('loginOverlay').style.display = 'none';
+        } else {
+          error.style.display = 'block';
+        }
       }
     }
-    document.getElementById('loginBtn').onclick = performLogin;
 
-    // Automated Cleanup for Todo
-    async function cleanupCompletedTodos() {
-      const now = new Date();
-      const lastCleanup = localStorage.getItem('threnox_last_cleanup');
-      const todayStr = now.toDateString();
-      
-      if (lastCleanup !== todayStr) {
-        // It's a new day, cleanup tasks marked as done
-        const snapshot = await todosRef.where("done", "==", true).get();
-        const batch = db.batch();
-        snapshot.forEach(doc => {
-          batch.delete(doc.ref);
-        });
-        await batch.commit();
-        localStorage.setItem('threnox_last_cleanup', todayStr);
-        console.log("Completed tasks cleaned up for the new day.");
-      }
+    // Fix the cleanup function
+    async function dailyCleanup() {
+      try {
+        const today = new Date().toDateString();
+        if (localStorage.getItem('last_cleanup') !== today) {
+          const snapshot = await db.collection("todos").where("done", "==", true).get();
+          if (!snapshot.empty) {
+            const batch = db.batch();
+            snapshot.forEach(doc => batch.delete(doc.ref));
+            await batch.commit();
+          }
+          localStorage.setItem('last_cleanup', today);
+        }
+      } catch (err) { console.error("cleanup_err", err); }
     }
 
     // ===== Init =====
@@ -1840,8 +1931,8 @@
       renderPlan();
     }
 
-    checkAuth();
-      cleanupCompletedTodos();
+    checkHackerAuth();
+      dailyCleanup();
       init();
   </script>
 </body>
