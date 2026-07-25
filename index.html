@@ -46,6 +46,10 @@
         padding: 0;
     }
 
+    body {
+        display: flex;
+    }
+
     /* CRT SCANLINES & GLOW */
     body::before {
         content: "";
@@ -94,6 +98,12 @@
 
     .sidebar-logo::before { content: "root@threnox:~$ "; color: #507050; font-size: 0.7rem; display: block; margin-bottom: 0.2rem; }
 
+    .sidebar-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
     .sidebar-btn {
         background: transparent;
         color: #709070;
@@ -108,14 +118,15 @@
         display: flex;
         align-items: center;
         gap: 0.8rem;
+        font-size: 0.85rem;
     }
 
     .sidebar-btn:hover { color: #00ff41; background: rgba(0, 255, 65, 0.05); }
     .sidebar-btn.active { color: #00ff41; border-left: 2px solid #00ff41; background: rgba(0, 255, 65, 0.08); }
-    .sidebar-btn svg { width: 18px; height: 18px; stroke: currentColor; }
+    .sidebar-btn svg { width: 18px; height: 18px; stroke: currentColor; flex-shrink: 0; }
 
     /* MAIN CONTENT */
-    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; min-width: 0; }
     .top-bar { 
         background: #000; 
         border-bottom: 1px solid var(--border); 
@@ -123,7 +134,12 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-shrink: 0;
     }
+
+    .greeting { font-size: 1.1rem; color: var(--text); }
+    .date-time { display: flex; align-items: center; gap: 1rem; }
+    .date-display { color: var(--text-secondary); font-size: 0.85rem; }
 
     .live-clock {
         background: transparent !important;
@@ -133,7 +149,32 @@
         font-weight: bold;
     }
 
-    /* CARDS */
+    /* PROGRESS (top bar day-progress strip) */
+    .progress-bar-container, .plan-progress-track {
+        background: #050505;
+        border: 1px solid var(--border);
+        height: 6px;
+        flex-shrink: 0;
+    }
+    .progress-bar-fill, .plan-progress-fill {
+        background: linear-gradient(90deg, #003b12, #00ff41);
+        box-shadow: 0 0 10px #00ff41;
+        height: 100%;
+        width: 0%;
+        transition: width 0.4s ease;
+    }
+
+    /* VIEWS */
+    .view { display: none; flex: 1; overflow-y: auto; padding: 2rem; }
+    .view.active { display: block; }
+
+    /* DASHBOARD GRID */
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1.25rem;
+    }
+
     .card-widget, .todo-item, .timeline-content, .plan-day, .plan-header, .stats-container {
         background: #050505 !important;
         border: 1px solid var(--border) !important;
@@ -141,7 +182,56 @@
         box-shadow: var(--shadow) !important;
     }
 
+    .card-widget { padding: 1.5rem; }
     .card-widget:hover { border-color: var(--accent) !important; }
+
+    /* Current task / plan progress ring widget */
+    .progress-ring-container { display: flex; align-items: center; gap: 1.25rem; }
+    .progress-ring { width: 100px; height: 100px; flex-shrink: 0; transform: rotate(-90deg); }
+    .progress-ring-circle { fill: none; stroke: var(--border); stroke-width: 6; }
+    .progress-ring-fill { fill: none; stroke: var(--accent); stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 0.4s ease; }
+    .progress-ring-text { transform: rotate(90deg); transform-origin: center; fill: var(--accent); font-size: 1.1rem; font-weight: 700; }
+    .current-task-details h3 { margin: 0 0 0.4rem 0; font-size: 1rem; }
+    .current-task-details p { margin: 0; color: var(--text-secondary); font-size: 0.8rem; }
+
+    /* Countdown widgets */
+    .countdown-title { color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
+    .countdown-timer { display: flex; gap: 1.25rem; }
+    .timer-unit { display: flex; flex-direction: column; align-items: center; }
+    .timer-value { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+    .timer-label { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; margin-top: 0.2rem; }
+
+    /* Stats widget */
+    .stats-widget { display: flex; flex-direction: column; gap: 0.5rem; }
+    .stat-item { display: flex; justify-content: space-between; align-items: center; }
+    .stat-label { color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-value { color: var(--accent); font-weight: 700; font-size: 1.1rem; }
+    .focus-time { color: var(--accent); font-weight: 700; font-size: 1.4rem; }
+
+    /* TIMELINE */
+    .timeline { position: relative; max-width: 700px; margin: 0 auto; padding-left: 1.5rem; }
+    .timeline::before { content: ""; position: absolute; left: 5px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+    .timeline-item { position: relative; margin-bottom: 1rem; padding-left: 1.5rem; }
+    .timeline-dot { position: absolute; left: -1.5rem; top: 1.1rem; width: 12px; height: 12px; border-radius: 50%; background: #000; border: 2px solid var(--border); }
+    .timeline-item.current .timeline-dot { background: var(--accent); box-shadow: 0 0 10px var(--accent); border-color: var(--accent); }
+    .timeline-item.completed { opacity: 0.45; }
+    .timeline-content { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; gap: 1rem; }
+    .timeline-time { color: var(--text-secondary); font-size: 0.75rem; margin-bottom: 0.25rem; }
+    .timeline-task { font-size: 0.95rem; }
+    .status-badge { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 0.25rem 0.6rem; font-size: 0.7rem; text-transform: uppercase; white-space: nowrap; }
+    .current .status-badge { border-color: var(--accent); color: var(--accent); }
+
+    /* TODO */
+    .todo-container { max-width: 650px; margin: 0 auto; }
+    .todo-input-row { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .todo-input { flex: 1; }
+    .todo-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+    .todo-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.9rem 1.1rem; }
+    .todo-item.done .todo-text { text-decoration: line-through; color: var(--text-secondary); }
+    .todo-checkbox { width: 16px; height: 16px; accent-color: var(--accent); flex-shrink: 0; padding: 0; }
+    .todo-text { flex: 1; font-size: 0.9rem; }
+    .todo-delete { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 0.2rem 0.5rem; }
+    .todo-delete:hover { color: var(--danger); }
 
     /* INPUTS & BUTTONS */
     input, button {
@@ -150,6 +240,7 @@
         border: 1px solid var(--border);
         padding: 0.6rem 1rem;
         outline: none;
+        font-size: 0.9rem;
     }
 
     input:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
@@ -165,20 +256,56 @@
 
     .todo-add-btn:hover, .login-btn:hover { background: rgba(0, 255, 65, 0.1); box-shadow: 0 0 15px rgba(0, 255, 65, 0.3); }
 
-    /* PROGRESS */
-    .progress-bar-container, .plan-progress-track { background: #050505; border: 1px solid var(--border); height: 6px; }
-    .progress-bar-fill, .plan-progress-fill { 
-        background: linear-gradient(90deg, #003b12, #00ff41); 
-        box-shadow: 0 0 10px #00ff41;
-        height: 100%;
-    }
+    /* STATS / PLAN VIEW */
+    .stats-container { padding: 1.5rem; max-width: 800px; margin: 0 auto; }
+    .plan-header { border: none !important; box-shadow: none !important; padding: 0 0 1.25rem 0; }
+    .plan-header h2 { margin: 0 0 0.4rem 0; font-size: 1.1rem; }
+    .plan-header p { color: var(--text-secondary); font-size: 0.85rem; margin: 0 0 1rem 0; }
+    .plan-progress-label { display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); }
+    .plan-progress-label strong { color: var(--accent); }
 
-    /* TIMELINE */
-    .timeline::before { background: var(--border); }
-    .timeline-dot { background: #000; border: 2px solid var(--border); }
-    .timeline-item.current .timeline-dot { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
-    .status-badge { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); }
-    .current .status-badge { border-color: var(--accent); color: var(--accent); }
+    .plan-week { margin-bottom: 1.5rem; }
+    .plan-week-title { color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
+
+    .plan-day { margin-bottom: 0.6rem; overflow: hidden; }
+    .plan-day-header { display: flex; justify-content: space-between; align-items: center; padding: 0.9rem 1.1rem; cursor: pointer; }
+    .plan-day.today .plan-day-header { border-left: 2px solid var(--accent); }
+    .plan-day-title { display: flex; align-items: baseline; gap: 0.6rem; }
+    .plan-day-label { color: var(--accent); font-size: 0.85rem; font-weight: 700; }
+    .plan-day-date { color: var(--text-secondary); font-size: 0.75rem; }
+    .plan-day-meta { display: flex; align-items: center; gap: 0.6rem; font-size: 0.75rem; color: var(--text-secondary); }
+    .plan-day-mini { width: 60px; height: 4px; background: #050505; border: 1px solid var(--border); overflow: hidden; }
+    .plan-day-mini > div { height: 100%; background: var(--accent); box-shadow: 0 0 6px var(--accent); transition: width 0.3s ease; }
+    .plan-chev { transition: transform 0.2s ease; flex-shrink: 0; }
+    .plan-day.open .plan-chev { transform: rotate(90deg); }
+    .plan-day.all-done .plan-day-label { color: var(--success); }
+
+    .plan-tasks { list-style: none; margin: 0; padding: 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid transparent; }
+    .plan-day.open .plan-tasks { max-height: 600px; border-top: 1px solid var(--border); }
+    .plan-task { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.6rem 1.1rem; font-size: 0.85rem; cursor: pointer; }
+    .plan-task:hover { background: rgba(0, 255, 65, 0.04); }
+    .plan-task input[type="checkbox"] { width: 14px; height: 14px; margin-top: 0.15rem; accent-color: var(--accent); flex-shrink: 0; padding: 0; }
+    .plan-task.done .plan-task-text { text-decoration: line-through; color: var(--text-secondary); }
+
+    /* FAB */
+    .fab {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        border: 1px solid var(--accent);
+        background: #000;
+        color: var(--accent);
+        font-size: 1.3rem;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 20px rgba(0, 255, 65, 0.25);
+        z-index: 50;
+    }
 
     /* LOGIN OVERLAY */
     #loginOverlay {
@@ -204,26 +331,9 @@
     ::-webkit-scrollbar-thumb { background: var(--border); }
     ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
-    /* VIEWS */
-    .view { display: none; flex: 1; overflow-y: auto; padding: 2rem; }
-    .view.active { display: block; }
-
 </style>
 </head>
 <body>
-
-  <div id="loginOverlay">
-    <div class="login-card">
-      <div class="login-logo">THRENOX</div>
-      <div class="login-subtitle">System Access Required</div>
-      <div class="login-form">
-        <input type="password" id="loginPass" class="login-input" placeholder="ENTER ACCESS KEY" autofocus>
-        <button id="loginBtn" class="login-btn">AUTHENTICATE</button>
-      </div>
-      <div id="loginError" class="login-error">> access_denied: invalid_key</div>
-    </div>
-  </div>
-
 
   <div id="loginOverlay">
     <div class="login-card">
@@ -694,30 +804,28 @@
     todosRef.orderBy("createdAt", "asc").onSnapshot(renderTodos);
 
     // ===== Greeting & Clock =====
-    function updateGreeting() {
-      const hour = new Date().getHours();
-      let greeting = "Good Evening";
-      if (hour < 12) greeting = "Good Morning";
-      else if (hour < 17) greeting = "Good Afternoon";
-      document.getElementById('greetingMessage').textContent = `${greeting}, Savindu`;
-    }
-
     function updateDateTime() {
       const now = new Date();
       const dayName = dayOrder[now.getDay()];
-      document.getElementById('dateDisplay').textContent = now.toLocaleDateString(undefined, {
+
+      document.getElementById('dateDisplay').textContent = now.toLocaleDateString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
-      document.getElementById('liveClock').textContent = now.toLocaleTimeString(undefined, {
+      document.getElementById('liveClock').textContent = now.toLocaleTimeString('en-US', {
         hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit'
       });
+
+      const hour = now.getHours();
+      let greeting = "Good Evening";
+      if (hour < 12) greeting = "Good Morning";
+      else if (hour < 18) greeting = "Good Afternoon";
+      document.getElementById('greetingMessage').textContent = `${greeting}, Dreamxhava`;
+
       if (dayName !== currentDay) {
         currentDay = dayName;
-        updateAllUI();
-      } else {
-        // Update stats every second
-        updateDashboard();
+        renderTimeline();
       }
+      updateDashboard();
     }
 
     // ===== Reset Button =====
@@ -1085,11 +1193,9 @@
       document.querySelector('.sidebar-btn[data-view="progress"]').click();
     });
 
-    
-    
-    // ===== ULTIMATE LOGIC OVERHAUL =====
+    // ===== Auth =====
     const PASS_B64 = "MjAxNjY1MDEyM3NkZg==";
-    
+
     function checkAuth() {
       if (sessionStorage.getItem('threnox_access') === 'granted') {
         document.getElementById('loginOverlay').style.display = 'none';
@@ -1101,6 +1207,7 @@
       const error = document.getElementById('loginError');
       if (btoa(pass) === PASS_B64) {
         sessionStorage.setItem('threnox_access', 'granted');
+        error.style.display = 'none';
         document.getElementById('loginOverlay').style.opacity = '0';
         setTimeout(() => { document.getElementById('loginOverlay').style.display = 'none'; }, 300);
       } else {
@@ -1113,7 +1220,6 @@
       try {
         const today = new Date().toDateString();
         if (localStorage.getItem('threnox_cleanup_date') !== today) {
-          // Fix todosRef dependency
           const snapshot = await db.collection("todos").where("done", "==", true).get();
           if (!snapshot.empty) {
             const batch = db.batch();
@@ -1125,57 +1231,27 @@
       } catch (e) { console.warn("Cleanup deferred:", e); }
     }
 
-    function updateDateTime() {
-      const now = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      if(document.getElementById('dateDisplay')) 
-        document.getElementById('dateDisplay').textContent = now.toLocaleDateString('en-US', options);
-      if(document.getElementById('liveClock')) 
-        document.getElementById('liveClock').textContent = now.toLocaleTimeString('en-US', { hour12: false });
-      
-      const hrs = now.getHours();
-      let greet = "Good Evening";
-      if (hrs < 12) greet = "Good Morning";
-      else if (hrs < 18) greet = "Good Afternoon";
-      if(document.getElementById('greetingMessage'))
-        document.getElementById('greetingMessage').textContent = `${greet}, Dreamxhava`;
-    }
-
     function setupEvents() {
       const btn = document.getElementById('loginBtn');
       const input = document.getElementById('loginPass');
       if (btn) btn.onclick = authenticate;
-      if (input) input.onkeydown = (e) => { if(e.key==='Enter') authenticate(); };
-      
-      // Fixed Sidebar Navigation
-      document.querySelectorAll('.sidebar-btn').forEach(btn => {
-        btn.onclick = () => {
-          const viewId = btn.dataset.view;
-          const targetView = document.getElementById(viewId + 'View');
-          if (targetView) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
-            targetView.classList.add('active');
-            btn.classList.add('active');
-          }
-        };
-      });
+      if (input) input.onkeydown = (e) => { if (e.key === 'Enter') authenticate(); };
     }
 
     // ===== Init =====
     function init() {
       const now = new Date();
       currentDay = dayOrder[now.getDay()];
-      updateAllUI();
+      renderTimeline();
       updateDateTime();
       setInterval(updateDateTime, 1000);
       renderPlan();
     }
 
     checkAuth();
-      runDailyCleanup();
-      init();
-      setupEvents();
+    runDailyCleanup();
+    init();
+    setupEvents();
   </script>
 </body>
 </html>
