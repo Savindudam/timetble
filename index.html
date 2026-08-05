@@ -4,16 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>THRENOX – Focus Flow</title>
-  <!-- Inter & DM Serif Display fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
   <style>
-
-    /* =========================================================
-       THRENOX TERMINAL / HACKER THEME
-       BLACK VOID MODE - STABILIZED VERSION
-    ========================================================= */
     @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap');
 
     :root {
@@ -32,160 +26,70 @@
         --radius-sm: 0px;
     }
 
-    * { 
-        box-sizing: border-box; 
-        font-family: 'JetBrains Mono', monospace !important;
-    }
+    * { box-sizing: border-box; font-family: 'JetBrains Mono', monospace !important; }
 
-    html, body {
-        background: #000;
-        color: var(--text);
-        height: 100vh;
-        overflow: hidden;
-        margin: 0;
-        padding: 0;
-    }
+    html, body { background: #000; color: var(--text); height: 100vh; overflow: hidden; margin: 0; padding: 0; }
+    body { display: flex; }
 
-    body {
-        display: flex;
-    }
-
-    /* CRT SCANLINES & GLOW */
     body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 9999;
+        content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 9999;
         background: repeating-linear-gradient(0deg, rgba(0, 255, 65, 0.02) 0px, rgba(0, 255, 65, 0.02) 1px, transparent 1px, transparent 3px);
     }
-
     body::after {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
+        content: ""; position: fixed; inset: 0; pointer-events: none;
         background: radial-gradient(circle at center, rgba(0, 255, 65, 0.05) 0%, transparent 70%);
         z-index: 9998;
     }
 
-    /* TYPOGRAPHY */
     h1, h2, h3, h4 { color: #d8ffd8; letter-spacing: 1px; text-transform: uppercase; }
     h1::after, h2::after { content: "_"; color: #00ff41; animation: blink 1s infinite; }
     @keyframes blink { 50% { opacity: 0; } }
 
-    /* SIDEBAR */
     .sidebar {
-        width: 240px;
-        background: #000;
-        border-right: 1px solid var(--border);
-        box-shadow: 10px 0 30px rgba(0, 255, 65, 0.03);
-        display: flex;
-        flex-direction: column;
-        padding: 1.5rem 1rem;
-        flex-shrink: 0;
-        z-index: 20;
+        width: 240px; background: #000; border-right: 1px solid var(--border);
+        box-shadow: 10px 0 30px rgba(0, 255, 65, 0.03); display: flex; flex-direction: column;
+        padding: 1.5rem 1rem; flex-shrink: 0; z-index: 20;
     }
-
-    .sidebar-logo {
-        color: #00ff41;
-        font-weight: 900;
-        letter-spacing: 2px;
-        margin-bottom: 2rem;
-        padding: 0 1rem;
-        font-size: 1.4rem;
-    }
-
+    .sidebar-logo { color: #00ff41; font-weight: 900; letter-spacing: 2px; margin-bottom: 2rem; padding: 0 1rem; font-size: 1.4rem; }
     .sidebar-logo::before { content: "root@threnox:~$ "; color: #507050; font-size: 0.7rem; display: block; margin-bottom: 0.2rem; }
-
-    .sidebar-nav {
-        display: flex;
-        flex-direction: column;
-        gap: 0.3rem;
-    }
-
+    .sidebar-nav { display: flex; flex-direction: column; gap: 0.3rem; }
     .sidebar-btn {
-        background: transparent;
-        color: #709070;
-        border: none;
-        border-left: 2px solid transparent;
-        border-radius: 0;
-        padding: 0.8rem 1.2rem;
-        transition: 0.2s;
-        text-align: left;
-        width: 100%;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 0.8rem;
-        font-size: 0.85rem;
+        background: transparent; color: #709070; border: none; border-left: 2px solid transparent;
+        border-radius: 0; padding: 0.8rem 1.2rem; transition: 0.2s; text-align: left; width: 100%;
+        cursor: pointer; display: flex; align-items: center; gap: 0.8rem; font-size: 0.85rem;
     }
-
     .sidebar-btn:hover { color: #00ff41; background: rgba(0, 255, 65, 0.05); }
     .sidebar-btn.active { color: #00ff41; border-left: 2px solid #00ff41; background: rgba(0, 255, 65, 0.08); }
     .sidebar-btn svg { width: 18px; height: 18px; stroke: currentColor; flex-shrink: 0; }
 
-    /* MAIN CONTENT */
     .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; min-width: 0; }
-    .top-bar { 
-        background: #000; 
-        border-bottom: 1px solid var(--border); 
-        padding: 1rem 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-shrink: 0;
+    .top-bar {
+        background: #000; border-bottom: 1px solid var(--border); padding: 1rem 2rem;
+        display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
     }
-
     .greeting { font-size: 1.1rem; color: var(--text); }
     .date-time { display: flex; align-items: center; gap: 1rem; }
     .date-display { color: var(--text-secondary); font-size: 0.85rem; }
+    .live-clock { background: transparent !important; border: 1px solid var(--accent); color: var(--accent); padding: 0.2rem 0.8rem; font-weight: bold; }
 
-    .live-clock {
-        background: transparent !important;
-        border: 1px solid var(--accent);
-        color: var(--accent);
-        padding: 0.2rem 0.8rem;
-        font-weight: bold;
-    }
-
-    /* PROGRESS (top bar day-progress strip) */
-    .progress-bar-container, .plan-progress-track {
-        background: #050505;
-        border: 1px solid var(--border);
-        height: 6px;
-        flex-shrink: 0;
-    }
+    .progress-bar-container, .plan-progress-track { background: #050505; border: 1px solid var(--border); height: 6px; flex-shrink: 0; }
     .progress-bar-fill, .plan-progress-fill {
-        background: linear-gradient(90deg, #003b12, #00ff41);
-        box-shadow: 0 0 10px #00ff41;
-        height: 100%;
-        width: 0%;
-        transition: width 0.4s ease;
+        background: linear-gradient(90deg, #003b12, #00ff41); box-shadow: 0 0 10px #00ff41;
+        height: 100%; width: 0%; transition: width 0.4s ease;
     }
 
-    /* VIEWS */
     .view { display: none; flex: 1; overflow-y: auto; padding: 2rem; }
     .view.active { display: block; }
 
-    /* DASHBOARD GRID */
-    .dashboard-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 1.25rem;
-    }
+    .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; }
 
     .card-widget, .todo-item, .timeline-content, .plan-day, .plan-header, .stats-container {
-        background: #050505 !important;
-        border: 1px solid var(--border) !important;
-        border-radius: 0px !important;
-        box-shadow: var(--shadow) !important;
+        background: #050505 !important; border: 1px solid var(--border) !important;
+        border-radius: 0px !important; box-shadow: var(--shadow) !important;
     }
-
     .card-widget { padding: 1.5rem; }
     .card-widget:hover { border-color: var(--accent) !important; }
 
-    /* Current task / plan progress ring widget */
     .progress-ring-container { display: flex; align-items: center; gap: 1.25rem; }
     .progress-ring { width: 100px; height: 100px; flex-shrink: 0; transform: rotate(-90deg); }
     .progress-ring-circle { fill: none; stroke: var(--border); stroke-width: 6; }
@@ -194,21 +98,18 @@
     .current-task-details h3 { margin: 0 0 0.4rem 0; font-size: 1rem; }
     .current-task-details p { margin: 0; color: var(--text-secondary); font-size: 0.8rem; }
 
-    /* Countdown widgets */
     .countdown-title { color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
     .countdown-timer { display: flex; gap: 1.25rem; }
     .timer-unit { display: flex; flex-direction: column; align-items: center; }
     .timer-value { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
     .timer-label { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; margin-top: 0.2rem; }
 
-    /* Stats widget */
     .stats-widget { display: flex; flex-direction: column; gap: 0.5rem; }
     .stat-item { display: flex; justify-content: space-between; align-items: center; }
     .stat-label { color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
     .stat-value { color: var(--accent); font-weight: 700; font-size: 1.1rem; }
     .focus-time { color: var(--accent); font-weight: 700; font-size: 1.4rem; }
 
-    /* TIMELINE */
     .timeline { position: relative; max-width: 700px; margin: 0 auto; padding-left: 1.5rem; }
     .timeline::before { content: ""; position: absolute; left: 5px; top: 0; bottom: 0; width: 2px; background: var(--border); }
     .timeline-item { position: relative; margin-bottom: 1rem; padding-left: 1.5rem; }
@@ -221,7 +122,6 @@
     .status-badge { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 0.25rem 0.6rem; font-size: 0.7rem; text-transform: uppercase; white-space: nowrap; }
     .current .status-badge { border-color: var(--accent); color: var(--accent); }
 
-    /* TODO */
     .todo-container { max-width: 650px; margin: 0 auto; }
     .todo-input-row { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
     .todo-input { flex: 1; }
@@ -233,30 +133,11 @@
     .todo-delete { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 0.2rem 0.5rem; }
     .todo-delete:hover { color: var(--danger); }
 
-    /* INPUTS & BUTTONS */
-    input, button {
-        background: #000;
-        color: var(--accent);
-        border: 1px solid var(--border);
-        padding: 0.6rem 1rem;
-        outline: none;
-        font-size: 0.9rem;
-    }
-
+    input, button { background: #000; color: var(--accent); border: 1px solid var(--border); padding: 0.6rem 1rem; outline: none; font-size: 0.9rem; }
     input:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
-    
-    .todo-add-btn, .login-btn {
-        background: #000;
-        color: var(--accent);
-        border: 1px solid var(--accent);
-        cursor: pointer;
-        transition: 0.2s;
-        font-weight: bold;
-    }
-
+    .todo-add-btn, .login-btn { background: #000; color: var(--accent); border: 1px solid var(--accent); cursor: pointer; transition: 0.2s; font-weight: bold; }
     .todo-add-btn:hover, .login-btn:hover { background: rgba(0, 255, 65, 0.1); box-shadow: 0 0 15px rgba(0, 255, 65, 0.3); }
 
-    /* STATS / PLAN VIEW */
     .stats-container { padding: 1.5rem; max-width: 800px; margin: 0 auto; }
     .plan-header { border: none !important; box-shadow: none !important; padding: 0 0 1.25rem 0; }
     .plan-header h2 { margin: 0 0 0.4rem 0; font-size: 1.1rem; }
@@ -287,37 +168,18 @@
     .plan-task input[type="checkbox"] { width: 14px; height: 14px; margin-top: 0.15rem; accent-color: var(--accent); flex-shrink: 0; padding: 0; }
     .plan-task.done .plan-task-text { text-decoration: line-through; color: var(--text-secondary); }
 
-    /* FAB */
     .fab {
-        position: fixed;
-        bottom: 2rem;
-        right: 2rem;
-        width: 52px;
-        height: 52px;
-        border-radius: 50%;
-        border: 1px solid var(--accent);
-        background: #000;
-        color: var(--accent);
-        font-size: 1.3rem;
-        cursor: pointer;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 0 20px rgba(0, 255, 65, 0.25);
-        z-index: 50;
+        position: fixed; bottom: 2rem; right: 2rem; width: 52px; height: 52px; border-radius: 50%;
+        border: 1px solid var(--accent); background: #000; color: var(--accent); font-size: 1.3rem;
+        cursor: pointer; display: none; align-items: center; justify-content: center;
+        box-shadow: 0 0 20px rgba(0, 255, 65, 0.25); z-index: 50;
     }
 
-    /* LOGIN OVERLAY */
     #loginOverlay {
         position: fixed; inset: 0; background: #000; z-index: 10000;
-        display: flex; align-items: center; justify-content: center;
-        transition: opacity 0.3s ease;
+        display: flex; align-items: center; justify-content: center; transition: opacity 0.3s ease;
     }
-    .login-card {
-        width: 400px; padding: 3rem; border: 1px solid var(--accent);
-        box-shadow: 0 0 40px rgba(0, 255, 65, 0.15); text-align: center;
-        background: #000;
-    }
+    .login-card { width: 400px; padding: 3rem; border: 1px solid var(--accent); box-shadow: 0 0 40px rgba(0, 255, 65, 0.15); text-align: center; background: #000; }
     .login-logo { font-size: 2.2rem; color: var(--accent); margin-bottom: 0.5rem; font-weight: 900; }
     .login-logo::before { content: "> "; color: #507050; }
     .login-subtitle { color: #507050; margin-bottom: 2rem; font-size: 0.9rem; }
@@ -325,12 +187,39 @@
     .login-input { width: 100%; text-align: center; letter-spacing: 2px; }
     .login-error { color: var(--danger); font-size: 0.8rem; margin-top: 1.5rem; display: none; }
 
-    /* SCROLLBAR */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #000; }
     ::-webkit-scrollbar-thumb { background: var(--border); }
     ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
+    /* CALENDAR / EVENTS */
+    .calendar-container { max-width: 650px; margin: 0 auto; }
+    .event-input-row { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .event-input-row .event-label-input { flex: 1; min-width: 180px; }
+    .event-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+    .event-item {
+        background: #050505 !important; border: 1px solid var(--border) !important;
+        display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+        padding: 0.9rem 1.1rem;
+    }
+    .event-item.today { border-color: var(--accent) !important; box-shadow: 0 0 15px rgba(0, 255, 65, 0.15) !important; }
+    .event-main { display: flex; flex-direction: column; gap: 0.15rem; }
+    .event-name { font-size: 0.9rem; }
+    .event-date { font-size: 0.75rem; color: var(--text-secondary); }
+    .event-badge {
+        background: transparent; border: 1px solid var(--border); color: var(--text-secondary);
+        padding: 0.25rem 0.6rem; font-size: 0.7rem; text-transform: uppercase; white-space: nowrap;
+    }
+    .event-item.today .event-badge { border-color: var(--accent); color: var(--accent); }
+    .event-delete { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 0.2rem 0.5rem; }
+    .event-delete:hover { color: var(--danger); }
+
+    /* Dashboard event note widget */
+    .note-widget { display: flex; flex-direction: column; gap: 0.5rem; justify-content: center; }
+    .note-widget .countdown-title { margin-bottom: 0; }
+    .note-widget-text { font-size: 1rem; color: var(--text); }
+    .note-widget.today-highlight { border-color: var(--accent) !important; box-shadow: 0 0 20px rgba(0, 255, 65, 0.25) !important; }
+    .note-widget.today-highlight .note-widget-text { color: var(--accent); font-weight: 700; }
 </style>
 </head>
 <body>
@@ -347,34 +236,33 @@
     </div>
   </div>
 
-  <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">THRENOX</div>
     <nav class="sidebar-nav">
       <button class="sidebar-btn active" data-view="dashboard">
-        <!-- Home SVG -->
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         <span class="icon-only">Dashboard</span>
       </button>
       <button class="sidebar-btn" data-view="timetable">
-        <!-- Calendar SVG -->
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         <span class="icon-only">Timetable</span>
       </button>
       <button class="sidebar-btn" data-view="todo">
-        <!-- Check Square SVG -->
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         <span class="icon-only">To Do</span>
       </button>
       <button class="sidebar-btn" data-view="progress">
-        <!-- Bar Chart SVG -->
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
         <span class="icon-only">Progress</span>
+      </button>
+      <button class="sidebar-btn" data-view="calendar">
+        <!-- Gift/Star SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span class="icon-only">Calendar</span>
       </button>
     </nav>
   </aside>
 
-  <!-- Main Content -->
   <div class="main" id="mainContent">
     <div class="top-bar">
       <div class="greeting" id="greetingMessage">Good Evening, Savindu</div>
@@ -387,7 +275,6 @@
       <div class="progress-bar-fill" id="progressBarFill"></div>
     </div>
 
-    <!-- Dashboard View -->
     <div class="view active" id="dashboardView">
       <div class="dashboard-grid">
         <div class="card-widget current-task-widget" id="currentTaskWidget">
@@ -404,7 +291,11 @@
           </div>
         </div>
 
-        <!-- AL Countdown Widget -->
+        <div class="card-widget note-widget" id="eventNoteWidget" style="display:none;">
+          <div class="countdown-title">Note</div>
+          <div class="note-widget-text" id="eventNoteText">---</div>
+        </div>
+
         <div class="card-widget countdown-widget">
           <div class="countdown-title">AL 2028 Countdown</div>
           <div class="countdown-timer" id="alCountdown">
@@ -414,7 +305,6 @@
           </div>
         </div>
 
-        <!-- IOI Countdown Widget -->
         <div class="card-widget countdown-widget">
           <div class="countdown-title">IOI 2027 Countdown</div>
           <div class="countdown-timer" id="ioiCountdown">
@@ -432,7 +322,6 @@
           <div class="focus-time" id="focusTime">0h 0m</div>
         </div>
 
-        <!-- IOI Plan Progress Widget -->
         <div class="card-widget current-task-widget" id="planProgressWidget" style="cursor:pointer;">
           <div class="progress-ring-container">
             <svg class="progress-ring" viewBox="0 0 100 100">
@@ -449,12 +338,10 @@
       </div>
     </div>
 
-    <!-- Timetable Timeline View -->
     <div class="view" id="timetableView">
       <div class="timeline" id="timelineContainer"></div>
     </div>
 
-    <!-- Todo View -->
     <div class="view" id="todoView">
       <div class="todo-container">
         <div class="todo-input-row">
@@ -465,7 +352,6 @@
       </div>
     </div>
 
-    <!-- Progress (Stats) View -->
     <div class="view" id="progressView">
       <div class="stats-container">
         <div class="plan-header">
@@ -480,17 +366,25 @@
         <div id="planContainer"></div>
       </div>
     </div>
+
+    <div class="view" id="calendarView">
+      <div class="calendar-container">
+        <div class="event-input-row">
+          <input type="text" class="event-label-input" id="eventLabelInput" placeholder="Name (e.g. Aunt's Birthday)">
+          <input type="date" id="eventDateInput">
+          <button class="todo-add-btn" id="eventAddBtn">Add</button>
+        </div>
+        <ul class="event-list" id="calendarList"></ul>
+      </div>
+    </div>
   </div>
 
-  <!-- Floating Action Button (Reset to current task) -->
   <button class="fab" id="resetBtn" title="Go to current task">📍</button>
 
-  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
 
   <script>
-    // ===== Firebase Config =====
     const firebaseConfig = {
       apiKey: "AIzaSyBb3IIg51MeZEeJ5rk-X4vXQitH-ywew0s",
       authDomain: "timetable-threnox.firebaseapp.com",
@@ -503,94 +397,133 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // ===== Updated Timetable =====
+    // ===== HOLIDAY TIMETABLE — no school block, hobby + gaming every day =====
     const timetable = {
       Monday: [
-        ["03:30","04:00","Exercise"],
-        ["04:00","05:30","IOI Deep Work (C++/Algo)"],
-        ["05:30","20:00","School"],
-        ["20:00","21:00","AL Revision (Past Papers)"],
-        ["21:00","21:30","Wind down"],
-        ["21:30","23:59","SLEEP"]
+        ["04:00","04:30","Exercise"],
+        ["04:30","07:00","IOI Deep Work (C++/Algo)"],
+        ["07:00","07:30","Breakfast"],
+        ["07:30","09:30","AL Intensive"],
+        ["09:30","09:45","Break"],
+        ["09:45","12:15","IOI Practice"],
+        ["12:15","13:15","Lunch"],
+        ["13:15","15:00","AL Revision"],
+        ["15:00","15:30","Break"],
+        ["15:30","17:30","IOI Heavy Block"],
+        ["17:30","18:30","Hobby Time"],
+        ["18:30","19:30","Dinner"],
+        ["19:30","20:30","Gaming Time"],
+        ["20:30","21:15","Recap / Review"],
+        ["21:15","21:45","Wind down"],
+        ["21:45","23:59","SLEEP"]
       ],
       Tuesday: [
-        ["03:30","04:00","Exercise"],
-        ["04:00","05:30","IOI Deep Work"],
-        ["05:30","15:00","School"],
-        ["15:00","17:00","AL Intensive"],
-        ["17:00","17:30","Break"],
-        ["17:30","19:00","Mixed Block"],
-        ["19:00","20:00","Dinner"],
-        ["20:00","21:00","Recap"],
-        ["21:00","21:30","Wind down"],
-        ["21:30","23:59","SLEEP"]
+        ["04:00","04:30","Exercise"],
+        ["04:30","07:00","IOI Deep Work (C++/Algo)"],
+        ["07:00","07:30","Breakfast"],
+        ["07:30","09:30","AL Intensive"],
+        ["09:30","09:45","Break"],
+        ["09:45","12:15","IOI Practice"],
+        ["12:15","13:15","Lunch"],
+        ["13:15","15:00","AL Revision"],
+        ["15:00","15:30","Break"],
+        ["15:30","17:30","IOI Heavy Block"],
+        ["17:30","18:30","Hobby Time"],
+        ["18:30","19:30","Dinner"],
+        ["19:30","20:30","Gaming Time"],
+        ["20:30","21:15","Recap / Review"],
+        ["21:15","21:45","Wind down"],
+        ["21:45","23:59","SLEEP"]
       ],
       Wednesday: [
-        ["03:30","04:00","Exercise"],
-        ["04:00","05:30","IOI Deep Work"],
-        ["05:30","15:00","School"],
-        ["15:00","17:00","AL Intensive"],
-        ["17:00","17:30","Break"],
-        ["17:30","19:00","Mixed Block"],
-        ["19:00","20:00","Dinner"],
-        ["20:00","21:00","Recap"],
-        ["21:00","21:30","Wind down"],
-        ["21:30","23:59","SLEEP"]
+        ["04:00","04:30","Exercise"],
+        ["04:30","07:00","IOI Deep Work (C++/Algo)"],
+        ["07:00","07:30","Breakfast"],
+        ["07:30","09:30","AL Intensive"],
+        ["09:30","09:45","Break"],
+        ["09:45","12:15","IOI Practice"],
+        ["12:15","13:15","Lunch"],
+        ["13:15","15:00","AL Revision"],
+        ["15:00","15:30","Break"],
+        ["15:30","17:30","IOI Heavy Block"],
+        ["17:30","18:30","Hobby Time"],
+        ["18:30","19:30","Dinner"],
+        ["19:30","20:30","Gaming Time"],
+        ["20:30","21:15","Recap / Review"],
+        ["21:15","21:45","Wind down"],
+        ["21:45","23:59","SLEEP"]
       ],
       Thursday: [
-        ["03:30","04:00","Exercise"],
-        ["04:00","05:30","IOI Deep Work"],
-        ["05:30","15:00","School"],
-        ["15:00","17:00","AL Intensive"],
-        ["17:00","17:30","Break"],
-        ["17:30","19:00","Mixed Block"],
-        ["19:00","20:00","Dinner"],
-        ["20:00","21:00","Recap"],
-        ["21:00","21:30","Wind down"],
-        ["21:30","23:59","SLEEP"]
+        ["04:00","04:30","Exercise"],
+        ["04:30","07:00","IOI Deep Work (C++/Algo)"],
+        ["07:00","07:30","Breakfast"],
+        ["07:30","09:30","AL Intensive"],
+        ["09:30","09:45","Break"],
+        ["09:45","12:15","IOI Practice"],
+        ["12:15","13:15","Lunch"],
+        ["13:15","15:00","AL Revision"],
+        ["15:00","15:30","Break"],
+        ["15:30","17:30","IOI Heavy Block"],
+        ["17:30","18:30","Hobby Time"],
+        ["18:30","19:30","Dinner"],
+        ["19:30","20:30","Gaming Time"],
+        ["20:30","21:15","Recap / Review"],
+        ["21:15","21:45","Wind down"],
+        ["21:45","23:59","SLEEP"]
       ],
       Friday: [
-        ["03:30","04:00","Exercise"],
-        ["04:00","05:30","IOI Deep Work"],
-        ["05:30","15:00","School"],
-        ["15:00","17:00","AL Intensive"],
-        ["17:00","17:30","Break"],
-        ["17:30","19:00","Mixed Block"],
-        ["19:00","20:00","Dinner"],
-        ["20:00","21:00","Recap"],
-        ["21:00","21:30","Wind down"],
-        ["21:30","23:59","SLEEP"]
+        ["04:00","04:30","Exercise"],
+        ["04:30","07:00","IOI Deep Work (C++/Algo)"],
+        ["07:00","07:30","Breakfast"],
+        ["07:30","09:30","AL Intensive"],
+        ["09:30","09:45","Break"],
+        ["09:45","12:15","IOI Practice"],
+        ["12:15","13:15","Lunch"],
+        ["13:15","15:00","AL Revision"],
+        ["15:00","15:30","Break"],
+        ["15:30","17:30","IOI Heavy Block"],
+        ["17:30","18:30","Hobby Time"],
+        ["18:30","19:30","Dinner"],
+        ["19:30","20:30","Gaming Time"],
+        ["20:30","21:15","Recap / Review"],
+        ["21:15","21:45","Wind down"],
+        ["21:45","23:59","SLEEP"]
       ],
       Saturday: [
-        ["03:30","04:00","Exercise"],
-        ["06:00","07:30","IOI Heavy Block"],
-        ["07:30","08:00","Travel"],
-        ["08:00","11:00","Class"],
-        ["11:00","11:30","Home"],
-        ["11:30","12:30","AL Revision"],
-        ["12:30","13:30","Lunch"],
-        ["13:30","16:00","IOI Practice"],
-        ["16:00","16:30","Break"],
-        ["16:30","18:00","AL Hard Subject"],
-        ["18:00","19:00","Dinner"],
-        ["19:00","20:00","Social/Recap"],
-        ["20:00","20:30","Wind down"],
-        ["20:30","23:59","SLEEP"]
+        ["04:00","04:30","Exercise"],
+        ["04:30","07:00","IOI Deep Work (C++/Algo)"],
+        ["07:00","07:30","Breakfast"],
+        ["07:30","09:30","AL Intensive"],
+        ["09:30","09:45","Break"],
+        ["09:45","13:00","IOI Mock Contest"],
+        ["13:00","14:00","Lunch"],
+        ["14:00","15:30","AL Hard Subject"],
+        ["15:30","16:00","Break"],
+        ["16:00","17:30","IOI Practice / Editorial Review"],
+        ["17:30","18:30","Hobby Time"],
+        ["18:30","19:30","Dinner"],
+        ["19:30","20:30","Gaming Time"],
+        ["20:30","21:15","Recap / Review"],
+        ["21:15","21:45","Wind down"],
+        ["21:45","23:59","SLEEP"]
       ],
       Sunday: [
-        ["03:30","04:00","Exercise"],
-        ["06:00","08:00","IOI Mock"],
-        ["08:00","08:30","Breakfast"],
-        ["08:30","11:00","AL Blitz"],
-        ["11:00","11:30","Break"],
-        ["11:30","12:30","IOI Theory"],
-        ["12:30","13:30","Lunch"],
-        ["13:30","14:00","Travel"],
-        ["14:00","19:00","Class"],
-        ["19:00","19:30","Home"],
-        ["19:30","20:30","AL Review"],
-        ["20:30","21:00","Wind down"],
-        ["21:00","23:59","SLEEP"]
+        ["04:00","04:30","Exercise"],
+        ["04:30","07:00","IOI Deep Work (C++/Algo)"],
+        ["07:00","07:30","Breakfast"],
+        ["07:30","09:30","AL Blitz"],
+        ["09:30","09:45","Break"],
+        ["09:45","12:00","IOI Theory + Practice"],
+        ["12:00","13:00","Lunch"],
+        ["13:00","14:30","AL Review"],
+        ["14:30","15:00","Break"],
+        ["15:00","17:00","IOI Heavy Block"],
+        ["17:00","18:00","Hobby Time"],
+        ["18:00","19:00","Dinner"],
+        ["19:00","20:00","Gaming Time"],
+        ["20:00","20:45","Recap / Review"],
+        ["20:45","21:15","Wind down"],
+        ["21:15","23:59","SLEEP"]
       ]
     };
 
@@ -610,7 +543,6 @@
       return idx === -1 ? 0 : idx;
     }
 
-    // ===== Build Timeline =====
     function renderTimeline() {
       const container = document.getElementById('timelineContainer');
       container.innerHTML = '';
@@ -648,7 +580,6 @@
         container.appendChild(item);
       });
 
-      // Scroll to current task
       setTimeout(() => {
         const currentEl = document.querySelector('.timeline-item.current');
         if (currentEl) {
@@ -657,7 +588,6 @@
       }, 100);
     }
 
-    // ===== Dashboard Updates =====
     function updateDashboard() {
       if (tasks.length === 0) return;
       const now = new Date();
@@ -665,27 +595,23 @@
       const currentIdx = getCurrentTaskIndex();
       const currentTask = tasks[currentIdx];
 
-      // Current task display
       document.getElementById('currentTaskName').textContent = currentTask.text;
       document.getElementById('currentTaskTime').textContent = currentTask.timeRange;
 
-      // Progress ring
       const totalTaskMin = currentTask.endMin - currentTask.startMin;
       const elapsedMin = Math.max(0, currentMin - currentTask.startMin);
       const percent = totalTaskMin > 0 ? Math.min(100, Math.round((elapsedMin / totalTaskMin)*100)) : 0;
       const circle = document.getElementById('progressRingFill');
-      const circumference = 2 * Math.PI * 42; // ~263.89
+      const circumference = 2 * Math.PI * 42;
       circle.style.strokeDashoffset = circumference - (percent / 100) * circumference;
       document.getElementById('progressPercent').textContent = percent + '%';
 
-      // Stats
       const completed = tasks.filter((_,i) => i < currentIdx).length;
       const remaining = tasks.length - completed - 1;
       document.getElementById('statTasks').textContent = tasks.length;
       document.getElementById('statCompleted').textContent = completed;
       document.getElementById('statRemaining').textContent = remaining;
 
-      // Focus time (total minutes from first task start to last task end)
       const firstStart = tasks[0].startMin;
       const lastEnd = tasks[tasks.length-1].endMin;
       const totalDayMin = lastEnd - firstStart;
@@ -693,19 +619,16 @@
       const mins = totalDayMin % 60;
       document.getElementById('focusTime').textContent = `${hours}h ${mins}m`;
 
-      // Progress bar at top
       const elapsedDayMin = Math.max(0, currentMin - firstStart);
       const dayProgress = totalDayMin > 0 ? Math.min(100, (elapsedDayMin / totalDayMin)*100) : 0;
       document.getElementById('progressBarFill').style.width = dayProgress + '%';
 
-      // Update Countdowns
       updateCountdowns();
     }
 
     function updateCountdowns() {
       const now = new Date().getTime();
-      
-      // AL 2028: August 14, 2028 (Estimated based on trend)
+
       const alTarget = new Date("August 14, 2028 00:00:00").getTime();
       const alDist = alTarget - now;
       if (alDist > 0) {
@@ -716,7 +639,6 @@
         document.getElementById('alCountdown').innerHTML = "<span style='color:var(--success); font-weight:700;'>EXAM IN PROGRESS</span>";
       }
 
-      // IOI 2027: September 12, 2027
       const ioiTarget = new Date("September 12, 2027 00:00:00").getTime();
       const ioiDist = ioiTarget - now;
       if (ioiDist > 0) {
@@ -734,13 +656,13 @@
       updateDateTime();
     }
 
-    // ===== Sidebar Navigation =====
     const sidebarBtns = document.querySelectorAll('.sidebar-btn');
     const views = {
       dashboard: document.getElementById('dashboardView'),
       timetable: document.getElementById('timetableView'),
       todo: document.getElementById('todoView'),
-      progress: document.getElementById('progressView')
+      progress: document.getElementById('progressView'),
+      calendar: document.getElementById('calendarView')
     };
 
     sidebarBtns.forEach(btn => {
@@ -757,7 +679,6 @@
       });
     });
 
-    // ===== Todo Logic (Firestore) =====
     const todosRef = db.collection("todos");
     function renderTodos(snapshot) {
       const list = document.getElementById("todoList");
@@ -803,7 +724,110 @@
 
     todosRef.orderBy("createdAt", "asc").onSnapshot(renderTodos);
 
-    // ===== Greeting & Clock =====
+    // ===== Calendar / Important Dates =====
+    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+    const defaultEvents = [
+      { month: 10, day: 25, label: "Your Birthday" },
+      { month: 8,  day: 15, label: "Vishaka's Birthday" },
+      { month: 6,  day: 12, label: "Amma's Birthday" },
+      { month: 10, day: 5,  label: "Thaththa's Birthday" },
+      { month: 2,  day: 14, label: "Shalani's Birthday" },
+      { month: 10, day: 28, label: "Rayan's Birthday" },
+      { month: 10, day: 3,  label: "Dulina's Birthday" },
+      { month: 11, day: 13, label: "Vidun's Birthday" },
+      { month: 10, day: 13, label: "Abrian's Birthday" }
+    ];
+
+    let customEvents = [];
+    const calendarRef = db.collection("calendarEvents");
+
+    function daysUntil(month, day) {
+      const now = new Date();
+      const today0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      let target = new Date(now.getFullYear(), month - 1, day);
+      if (target < today0) target = new Date(now.getFullYear() + 1, month - 1, day);
+      return Math.round((target - today0) / 86400000);
+    }
+
+    function getAllEvents() {
+      const all = [
+        ...defaultEvents.map((e, i) => ({ ...e, id: `default-${i}`, custom: false })),
+        ...customEvents.map(e => ({ ...e, id: e.docId, custom: true }))
+      ];
+      all.forEach(e => e.daysUntil = daysUntil(e.month, e.day));
+      all.sort((a, b) => a.daysUntil - b.daysUntil);
+      return all;
+    }
+
+    function renderCalendar() {
+      const container = document.getElementById('calendarList');
+      if (!container) return;
+      const all = getAllEvents();
+      container.innerHTML = all.map(e => {
+        let badge = `in ${e.daysUntil} days`;
+        if (e.daysUntil === 0) badge = 'Today!';
+        else if (e.daysUntil === 1) badge = 'Tomorrow';
+        return `
+          <li class="event-item ${e.daysUntil === 0 ? 'today' : ''}" data-id="${e.id}">
+            <div class="event-main">
+              <span class="event-name">${escapeHtml(e.label)}</span>
+              <span class="event-date">${e.day} ${monthNames[e.month - 1]}</span>
+            </div>
+            <span class="event-badge">${badge}</span>
+            ${e.custom ? '<button class="event-delete" data-id="' + e.id + '">✕</button>' : ''}
+          </li>
+        `;
+      }).join('');
+
+      container.querySelectorAll('.event-delete').forEach(btn => {
+        btn.addEventListener('click', () => {
+          calendarRef.doc(btn.dataset.id).delete();
+        });
+      });
+    }
+
+    function updateEventNoteWidget() {
+      const widget = document.getElementById('eventNoteWidget');
+      const text = document.getElementById('eventNoteText');
+      if (!widget || !text) return;
+      const all = getAllEvents();
+      const next = all[0];
+      if (!next || next.daysUntil > 7) {
+        widget.style.display = 'none';
+        widget.classList.remove('today-highlight');
+        return;
+      }
+      widget.style.display = 'flex';
+      if (next.daysUntil === 0) {
+        widget.classList.add('today-highlight');
+        text.textContent = `🎉 Today is ${next.label}!`;
+      } else {
+        widget.classList.remove('today-highlight');
+        const dayWord = next.daysUntil === 1 ? 'tomorrow' : `in ${next.daysUntil} days`;
+        text.textContent = `📅 ${next.label} is ${dayWord}`;
+      }
+    }
+
+    document.getElementById('eventAddBtn').addEventListener('click', async () => {
+      const labelInput = document.getElementById('eventLabelInput');
+      const dateInput = document.getElementById('eventDateInput');
+      const label = labelInput.value.trim();
+      const dateVal = dateInput.value;
+      if (!label || !dateVal) return;
+      const [, m, d] = dateVal.split('-').map(Number);
+      await calendarRef.add({ label, month: m, day: d, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+      labelInput.value = '';
+      dateInput.value = '';
+    });
+
+    calendarRef.orderBy("createdAt", "asc").onSnapshot(snapshot => {
+      customEvents = [];
+      snapshot.forEach(doc => customEvents.push({ ...doc.data(), docId: doc.id }));
+      renderCalendar();
+      updateEventNoteWidget();
+    });
+
     function updateDateTime() {
       const now = new Date();
       const dayName = dayOrder[now.getDay()];
@@ -826,11 +850,10 @@
         renderTimeline();
       }
       updateDashboard();
+      updateEventNoteWidget();
     }
 
-    // ===== Reset Button =====
     document.getElementById('resetBtn').addEventListener('click', () => {
-      // Switch to timetable view if not active
       if (!views.timetable.classList.contains('active')) {
         sidebarBtns.forEach(b => b.classList.remove('active'));
         document.querySelector('[data-view="timetable"]').classList.add('active');
@@ -838,10 +861,9 @@
         views.timetable.classList.add('active');
         document.getElementById('resetBtn').style.display = 'flex';
       }
-      renderTimeline(); // re-render and auto-scroll to current
+      renderTimeline();
     });
 
-    // ===== IOI 2027 – Month 1 Plan =====
     const ioiPlan = [
       { week: "Week 1 · C++ Fundamentals & First Problems", days: [
         { day: 1,  date: "20 Jul Sun", iso: "2026-07-20", tasks: [
@@ -1011,7 +1033,6 @@
       ]},
     ];
 
-    // planState[taskId] = true/false. taskId = `d{day}-{index}`
     let planState = {};
     let planOpenDays = new Set();
     const planStateRef = db.collection("ioiPlan").doc("state");
@@ -1048,7 +1069,6 @@
       if (!container) return;
       const today = todayIso();
 
-      // Auto-open today's card the first time we render
       if (planOpenDays.size === 0) {
         ioiPlan.forEach(w => w.days.forEach(d => {
           if (d.iso === today) planOpenDays.add(d.day);
@@ -1094,7 +1114,6 @@
         </div>
       `).join('');
 
-      // Toggle open/close
       container.querySelectorAll('.plan-day-header').forEach(h => {
         h.addEventListener('click', () => {
           const dayNum = Number(h.dataset.toggle);
@@ -1104,7 +1123,6 @@
         });
       });
 
-      // Task check/uncheck
       container.querySelectorAll('.plan-task').forEach(el => {
         const id = el.dataset.taskid;
         const box = el.querySelector('input[type="checkbox"]');
@@ -1118,7 +1136,7 @@
           updatePlanProgressUI();
         };
         el.addEventListener('click', (e) => {
-          if (e.target.tagName === 'INPUT') return; // let native handler run
+          if (e.target.tagName === 'INPUT') return;
           toggle(e);
         });
         box.addEventListener('change', () => {
@@ -1143,7 +1161,6 @@
       if (doneEl) doneEl.textContent = done;
       if (totalEl) totalEl.textContent = total;
 
-      // Dashboard widget
       const ring = document.getElementById('planRingFill');
       const ringTxt = document.getElementById('planPercent');
       const dc = document.getElementById('planDoneCount');
@@ -1154,7 +1171,6 @@
       if (dc) dc.textContent = done;
       if (tc) tc.textContent = total;
 
-      // Update per-day mini bars / counters without rebuilding
       if (rerenderMeta) {
         ioiPlan.forEach(w => w.days.forEach(d => {
           const el = document.querySelector(`.plan-day[data-day="${d.day}"]`);
@@ -1178,7 +1194,6 @@
       }, 300);
     }
 
-    // Live sync of plan state
     planStateRef.onSnapshot(snap => {
       const data = snap.exists ? snap.data() : null;
       planState = (data && data.state) || {};
@@ -1188,12 +1203,10 @@
       renderPlan();
     });
 
-    // Dashboard widget click → jump to Progress view
     document.getElementById('planProgressWidget').addEventListener('click', () => {
       document.querySelector('.sidebar-btn[data-view="progress"]').click();
     });
 
-    // ===== Auth =====
     const PASS_B64 = "MjAxNjY1MDEyM3NkZg==";
 
     function checkAuth() {
@@ -1238,7 +1251,6 @@
       if (input) input.onkeydown = (e) => { if (e.key === 'Enter') authenticate(); };
     }
 
-    // ===== Init =====
     function init() {
       const now = new Date();
       currentDay = dayOrder[now.getDay()];
