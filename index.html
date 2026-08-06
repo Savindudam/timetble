@@ -193,9 +193,31 @@
     ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
     /* CALENDAR / EVENTS */
-    .calendar-container { max-width: 650px; margin: 0 auto; }
-    .event-input-row { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .calendar-page { display: flex; gap: 1.5rem; max-width: 1000px; margin: 0 auto; flex-wrap: wrap; align-items: flex-start; }
+    .calendar-grid-wrap { flex: 1 1 420px; min-width: 320px; }
+    .calendar-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .calendar-month-label { color: var(--accent); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; }
+    .cal-nav-btn { background: #000; border: 1px solid var(--border); color: var(--accent); width: 32px; height: 32px; padding: 0; cursor: pointer; font-size: 1rem; }
+    .cal-nav-btn:hover { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .cal-weekday { text-align: center; font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; padding-bottom: 0.4rem; }
+    .cal-cell {
+        position: relative; aspect-ratio: 1 / 1; background: #050505; border: 1px solid var(--border);
+        display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem;
+    }
+    .cal-cell:hover { border-color: var(--accent); }
+    .cal-cell.empty { background: transparent; border: none; cursor: default; }
+    .cal-cell.today { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); color: var(--accent); font-weight: 700; }
+    .cal-cell.has-event::after {
+        content: ""; position: absolute; bottom: 5px; width: 5px; height: 5px; border-radius: 50%;
+        background: var(--accent); box-shadow: 0 0 6px var(--accent);
+    }
+    .calendar-container { flex: 1 1 280px; min-width: 260px; margin: 0; }
+    .event-input-row { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
     .event-input-row .event-label-input { flex: 1; min-width: 180px; }
+    .event-type-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .event-type-label { display: flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: var(--text-secondary); cursor: pointer; }
+    .event-type-label input[type="radio"] { width: 13px; height: 13px; accent-color: var(--accent); }
     .event-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
     .event-item {
         background: #050505 !important; border: 1px solid var(--border) !important;
@@ -368,13 +390,27 @@
     </div>
 
     <div class="view" id="calendarView">
-      <div class="calendar-container">
-        <div class="event-input-row">
-          <input type="text" class="event-label-input" id="eventLabelInput" placeholder="Name (e.g. Aunt's Birthday)">
-          <input type="date" id="eventDateInput">
-          <button class="todo-add-btn" id="eventAddBtn">Add</button>
+      <div class="calendar-page">
+        <div class="calendar-grid-wrap">
+          <div class="calendar-nav">
+            <button class="cal-nav-btn" id="calPrevBtn">‹</button>
+            <span class="calendar-month-label" id="calMonthLabel">Month Year</span>
+            <button class="cal-nav-btn" id="calNextBtn">›</button>
+          </div>
+          <div class="calendar-grid" id="calendarGrid"></div>
         </div>
-        <ul class="event-list" id="calendarList"></ul>
+        <div class="calendar-container">
+          <div class="event-input-row">
+            <input type="text" class="event-label-input" id="eventLabelInput" placeholder="Name (e.g. Aunt's Birthday)">
+            <input type="date" id="eventDateInput">
+          </div>
+          <div class="event-type-row">
+            <label class="event-type-label"><input type="radio" name="eventType" value="recurring" checked> Every year (birthday)</label>
+            <label class="event-type-label"><input type="radio" name="eventType" value="once"> One day only</label>
+            <button class="todo-add-btn" id="eventAddBtn">Add</button>
+          </div>
+          <ul class="event-list" id="calendarList"></ul>
+        </div>
       </div>
     </div>
   </div>
@@ -676,6 +712,9 @@
         if (viewName === 'timetable') {
           renderTimeline();
         }
+        if (viewName === 'calendar') {
+          renderCalendarGrid();
+        }
       });
     });
 
@@ -726,27 +765,35 @@
 
     // ===== Calendar / Important Dates =====
     const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const weekdayNames = ["S","M","T","W","T","F","S"];
 
     const defaultEvents = [
-      { month: 10, day: 25, label: "Your Birthday" },
-      { month: 8,  day: 15, label: "Vishaka's Birthday" },
-      { month: 6,  day: 12, label: "Amma's Birthday" },
-      { month: 10, day: 5,  label: "Thaththa's Birthday" },
-      { month: 2,  day: 14, label: "Shalani's Birthday" },
-      { month: 10, day: 28, label: "Rayan's Birthday" },
-      { month: 10, day: 3,  label: "Dulina's Birthday" },
-      { month: 11, day: 13, label: "Vidun's Birthday" },
-      { month: 10, day: 13, label: "Abrian's Birthday" }
+      { month: 10, day: 25, label: "Your Birthday", recurring: true },
+      { month: 8,  day: 15, label: "Vishaka's Birthday", recurring: true },
+      { month: 6,  day: 12, label: "Amma's Birthday", recurring: true },
+      { month: 10, day: 5,  label: "Thaththa's Birthday", recurring: true },
+      { month: 2,  day: 14, label: "Shalani's Birthday", recurring: true },
+      { month: 10, day: 28, label: "Rayan's Birthday", recurring: true },
+      { month: 10, day: 3,  label: "Dulina's Birthday", recurring: true },
+      { month: 11, day: 13, label: "Vidun's Birthday", recurring: true },
+      { month: 10, day: 13, label: "Abrian's Birthday", recurring: true }
     ];
 
     let customEvents = [];
+    let calViewDate = new Date();
     const calendarRef = db.collection("calendarEvents");
 
-    function daysUntil(month, day) {
+    // Days until next occurrence. Recurring events wrap to next year once passed;
+    // one-time events use their exact stored year and can be negative (in the past).
+    function getDaysUntil(e) {
       const now = new Date();
       const today0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      let target = new Date(now.getFullYear(), month - 1, day);
-      if (target < today0) target = new Date(now.getFullYear() + 1, month - 1, day);
+      if (e.recurring !== false) {
+        let target = new Date(now.getFullYear(), e.month - 1, e.day);
+        if (target < today0) target = new Date(now.getFullYear() + 1, e.month - 1, e.day);
+        return Math.round((target - today0) / 86400000);
+      }
+      const target = new Date(e.year, e.month - 1, e.day);
       return Math.round((target - today0) / 86400000);
     }
 
@@ -755,12 +802,14 @@
         ...defaultEvents.map((e, i) => ({ ...e, id: `default-${i}`, custom: false })),
         ...customEvents.map(e => ({ ...e, id: e.docId, custom: true }))
       ];
-      all.forEach(e => e.daysUntil = daysUntil(e.month, e.day));
-      all.sort((a, b) => a.daysUntil - b.daysUntil);
-      return all;
+      all.forEach(e => e.daysUntil = getDaysUntil(e));
+      // One-time events that already happened drop off the upcoming list; recurring ones never do.
+      const upcoming = all.filter(e => e.recurring !== false || e.daysUntil >= 0);
+      upcoming.sort((a, b) => a.daysUntil - b.daysUntil);
+      return upcoming;
     }
 
-    function renderCalendar() {
+    function renderCalendarList() {
       const container = document.getElementById('calendarList');
       if (!container) return;
       const all = getAllEvents();
@@ -771,8 +820,8 @@
         return `
           <li class="event-item ${e.daysUntil === 0 ? 'today' : ''}" data-id="${e.id}">
             <div class="event-main">
-              <span class="event-name">${escapeHtml(e.label)}</span>
-              <span class="event-date">${e.day} ${monthNames[e.month - 1]}</span>
+              <span class="event-name">${escapeHtml(e.label)}${e.recurring === false ? ' (one-time)' : ''}</span>
+              <span class="event-date">${e.day} ${monthNames[e.month - 1]}${e.recurring === false ? ' ' + e.year : ''}</span>
             </div>
             <span class="event-badge">${badge}</span>
             ${e.custom ? '<button class="event-delete" data-id="' + e.id + '">✕</button>' : ''}
@@ -785,6 +834,61 @@
           calendarRef.doc(btn.dataset.id).delete();
         });
       });
+    }
+
+    function renderCalendarGrid() {
+      const grid = document.getElementById('calendarGrid');
+      const label = document.getElementById('calMonthLabel');
+      if (!grid || !label) return;
+
+      const year = calViewDate.getFullYear();
+      const month = calViewDate.getMonth(); // 0-indexed
+      label.textContent = calViewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+      const firstDay = new Date(year, month, 1);
+      const startWeekday = firstDay.getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      const now = new Date();
+      const isCurrentMonth = now.getFullYear() === year && now.getMonth() === month;
+
+      // Map day-of-month -> event labels visible in this displayed month/year
+      const rawEvents = [...defaultEvents, ...customEvents];
+      const eventsByDay = {};
+      rawEvents.forEach(e => {
+        if (e.month - 1 !== month) return;
+        if (e.recurring === false && e.year !== year) return;
+        if (!eventsByDay[e.day]) eventsByDay[e.day] = [];
+        eventsByDay[e.day].push(e.label);
+      });
+
+      let html = '';
+      weekdayNames.forEach(w => html += `<div class="cal-weekday">${w}</div>`);
+      for (let i = 0; i < startWeekday; i++) html += `<div class="cal-cell empty"></div>`;
+      for (let d = 1; d <= daysInMonth; d++) {
+        const hasEvent = !!eventsByDay[d];
+        const isToday = isCurrentMonth && now.getDate() === d;
+        const titleAttr = hasEvent ? eventsByDay[d].join(', ') : '';
+        html += `<div class="cal-cell ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''}" data-day="${d}" title="${escapeHtml(titleAttr)}">
+            <span>${d}</span>
+          </div>`;
+      }
+      grid.innerHTML = html;
+
+      // Clicking a day prefills the add-event date field
+      grid.querySelectorAll('.cal-cell:not(.empty)').forEach(cell => {
+        cell.addEventListener('click', () => {
+          const day = Number(cell.dataset.day);
+          const mm = String(month + 1).padStart(2, '0');
+          const dd = String(day).padStart(2, '0');
+          document.getElementById('eventDateInput').value = `${year}-${mm}-${dd}`;
+        });
+      });
+    }
+
+    function renderCalendar() {
+      renderCalendarList();
+      renderCalendarGrid();
     }
 
     function updateEventNoteWidget() {
@@ -809,14 +913,26 @@
       }
     }
 
+    document.getElementById('calPrevBtn').addEventListener('click', () => {
+      calViewDate = new Date(calViewDate.getFullYear(), calViewDate.getMonth() - 1, 1);
+      renderCalendarGrid();
+    });
+    document.getElementById('calNextBtn').addEventListener('click', () => {
+      calViewDate = new Date(calViewDate.getFullYear(), calViewDate.getMonth() + 1, 1);
+      renderCalendarGrid();
+    });
+
     document.getElementById('eventAddBtn').addEventListener('click', async () => {
       const labelInput = document.getElementById('eventLabelInput');
       const dateInput = document.getElementById('eventDateInput');
       const label = labelInput.value.trim();
       const dateVal = dateInput.value;
+      const recurring = document.querySelector('input[name="eventType"]:checked').value === 'recurring';
       if (!label || !dateVal) return;
-      const [, m, d] = dateVal.split('-').map(Number);
-      await calendarRef.add({ label, month: m, day: d, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+      const [y, m, d] = dateVal.split('-').map(Number);
+      const payload = { label, month: m, day: d, recurring, createdAt: firebase.firestore.FieldValue.serverTimestamp() };
+      if (!recurring) payload.year = y;
+      await calendarRef.add(payload);
       labelInput.value = '';
       dateInput.value = '';
     });
