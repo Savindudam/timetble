@@ -298,11 +298,6 @@
         margin-right: 1rem;
     }
 
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #000; }
-    ::-webkit-scrollbar-thumb { background: var(--border); }
-    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
 </style>
 </head>
 <body>
@@ -513,138 +508,41 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // Optimized Timetable: Integrated "Cognitive Buffers" (Small breaks to reset focus)
     const timetable = {
       Monday: [
-        ["04:00","04:30","Exercise"],
-        ["04:30","06:30","IOI Deep Work (C++/Algo)"],
-        ["06:30","07:00","Short Reset / Hydrate"],
-        ["07:00","07:30","Breakfast"],
-        ["07:30","09:30","AL Intensive"],
-        ["09:30","09:45","Mental Break"],
-        ["09:45","12:15","IOI Practice"],
-        ["12:15","13:15","Lunch & Relaxation"],
-        ["13:15","15:00","AL Revision"],
-        ["15:00","15:30","Power Nap / Break"],
-        ["15:30","17:30","IOI Heavy Block"],
-        ["17:30","18:30","Hobby Time"],
-        ["18:30","19:30","Dinner"],
-        ["19:30","20:30","Gaming Time"],
-        ["20:30","21:15","Recap / Review"],
-        ["21:15","21:45","Wind down"],
-        ["21:45","23:59","SLEEP"]
+        ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], 
+["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
+["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
       ],
       Tuesday: [
-        ["04:00","04:30","Exercise"],
-        ["04:30","06:30","IOI Deep Work (C++/Algo)"],
-        ["06:30","07:00","Short Reset / Hydrate"],
-        ["07:00","07:30","Breakfast"],
-        ["07:30","09:30","AL Intensive"],
-        ["09:30","09:45","Mental Break"],
-        ["09:45","12:15","IOI Practice"],
-        ["12:15","13:15","Lunch & Relaxation"],
-        ["13:15","15:00","AL Revision"],
-        ["15:00","15:30","Power Nap / Break"],
-        ["15:30","17:30","IOI Heavy Block"],
-        ["17:30","18:30","Hobby Time"],
-        ["18:30","19:30","Dinner"],
-        ["19:30","20:30","Gaming Time"],
-        ["20:30","21:15","Recap / Review"],
-        ["21:15","21:45","Wind down"],
-        ["21:45","23:59","SLEEP"]
+        ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], 
+["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
+["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
       ],
       Wednesday: [
-        ["04:00","04:30","Exercise"],
-        ["04:30","06:30","IOI Deep Work (C++/Algo)"],
-        ["06:30","07:00","Short Reset / Hydrate"],
-        ["07:00","07:30","Breakfast"],
-        ["07:30","09:30","AL Intensive"],
-        ["09:30","09:45","Mental Break"],
-        ["09:45","12:15","IOI Practice"],
-        ["12:15","13:15","Lunch & Relaxation"],
-        ["13:15","15:00","AL Revision"],
-        ["15:00","15:30","Power Nap / Break"],
-        ["15:30","17:30","IOI Heavy Block"],
-        ["17:30","18:30","Hobby Time"],
-        ["18:30","19:30","Dinner"],
-        ["19:30","20:30","Gaming Time"],
-        ["20:30","21:15","Recap / Review"],
-        ["21:15","21:45","Wind down"],
-        ["21:45","23:59","SLEEP"]
+        ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], 
+["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
+["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
       ],
       Thursday: [
-        ["04:00","04:30","Exercise"],
-        ["04:30","06:30","IOI Deep Work (C++/Algo)"],
-        ["06:30","07:00","Short Reset / Hydrate"],
-        ["07:00","07:30","Breakfast"],
-        ["07:30","09:30","AL Intensive"],
-        ["09:30","09:45","Mental Break"],
-        ["09:45","12:15","IOI Practice"],
-        ["12:15","13:15","Lunch & Relaxation"],
-        ["13:15","15:00","AL Revision"],
-        ["15:00","15:30","Power Nap / Break"],
-        ["15:30","17:30","IOI Heavy Block"],
-        ["17:30","18:30","Hobby Time"],
-        ["18:30","19:30","Dinner"],
-        ["19:30","20:30","Gaming Time"],
-        ["20:30","21:15","Recap / Review"],
-        ["21:15","21:45","Wind down"],
-        ["21:45","23:59","SLEEP"]
+        ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], 
+["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
+["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
       ],
       Friday: [
-        ["04:00","04:30","Exercise"],
-        ["04:30","06:30","IOI Deep Work (C++/Algo)"],
-        ["06:30","07:00","Short Reset / Hydrate"],
-        ["07:00","07:30","Breakfast"],
-        ["07:30","09:30","AL Intensive"],
-        ["09:30","09:45","Mental Break"],
-        ["09:45","12:15","IOI Practice"],
-        ["12:15","13:15","Lunch & Relaxation"],
-        ["13:15","15:00","AL Revision"],
-        ["15:00","15:30","Power Nap / Break"],
-        ["15:30","17:30","IOI Heavy Block"],
-        ["17:30","18:30","Hobby Time"],
-        ["18:30","19:30","Dinner"],
-        ["19:30","20:30","Gaming Time"],
-        ["20:30","21:15","Recap / Review"],
-        ["21:15","21:45","Wind down"],
-        ["21:45","23:59","SLEEP"]
+        ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], 
+["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
+["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
       ],
       Saturday: [
-        ["04:00","04:30","Exercise"],
-        ["04:30","07:00","IOI Deep Work (C++/Algo)"],
-        ["07:00","07:30","Breakfast"],
-        ["07:30","09:30","AL Intensive"],
-        ["09:30","09:45","Break"],
-        ["09:45","13:00","IOI Mock Contest"],
-        ["13:00","14:00","Lunch"],
-        ["14:00","15:30","AL Hard Subject"],
-        ["15:30","16:00","Break"],
-        ["16:00","17:30","IOI Practice / Editorial Review"],
-        ["17:30","18:30","Hobby Time"],
-        ["18:30","19:30","Dinner"],
-        ["19:30","20:30","Gaming Time"],
-        ["20:30","21:15","Recap / Review"],
-        ["21:15","21:45","Wind down"],
-        ["21:45","23:59","SLEEP"]
+        ["04:00","04:30","Exercise"], ["04:30","07:00","IOI Deep Work (C++/Algo)"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Break"], ["09:45","13:00","IOI Mock Contest"], 
+["13:00","14:00","Lunch"], ["14:00","15:30","AL Hard Subject"], ["15:30","16:00","Break"], ["16:00","17:30","IOI Practice / Editorial Review"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming 
+Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
       ],
       Sunday: [
-        ["04:00","04:30","Exercise"],
-        ["04:30","07:00","IOI Deep Work (C++/Algo)"],
-        ["07:00","07:30","Breakfast"],
-        ["07:30","09:30","AL Blitz"],
-        ["09:30","09:45","Break"],
-        ["09:45","12:00","IOI Theory + Practice"],
-        ["12:00","13:00","Lunch"],
-        ["13:00","14:30","AL Review"],
-        ["14:30","15:00","Break"],
-        ["15:00","17:00","IOI Heavy Block"],
-        ["17:00","18:00","Hobby Time"],
-        ["18:00","19:00","Dinner"],
-        ["19:00","20:00","Gaming Time"],
-        ["20:00","20:45","Recap / Review"],
-        ["20:45","21:15","Wind down"],
-        ["21:15","23:59","SLEEP"]
+        ["04:00","04:30","Exercise"], ["04:30","07:00","IOI Deep Work (C++/Algo)"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Blitz"], ["09:30","09:45","Break"], ["09:45","12:00","IOI Theory + Practice"], 
+["12:00","13:00","Lunch"], ["13:00","14:30","AL Review"], ["14:30","15:00","Break"], ["15:00","17:00","IOI Heavy Block"], ["17:00","18:00","Hobby Time"], ["18:00","19:00","Dinner"], ["19:00","20:00","Gaming Time"], 
+["20:00","20:45","Recap / Review"], ["20:45","21:15","Wind down"], ["21:15","23:59","SLEEP"]
       ]
     };
 
@@ -652,7 +550,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
     let tasks = [];
     let currentDay = "";
 
-    // DOM Cache to prevent excessive searching
     const dom = {
       greeting: document.getElementById('greetingMessage'),
       date: document.getElementById('dateDisplay'),
@@ -679,11 +576,12 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       const now = new Date();
       const currentMin = now.getHours()*60 + now.getMinutes();
       const idx = tasks.findIndex(t => currentMin >= t.startMin && currentMin < t.endMin);
-      return idx === -1 ? 0 : idx;
+      return idx === -1 ? (tasks.length > 0 ? 0 : -1) : idx;
     }
 
     function renderTimeline() {
       const container = document.getElementById('timelineContainer');
+      if (!container) return;
       container.innerHTML = '';
       const raw = timetable[currentDay] || [];
       tasks = raw.map(([start, end, text], idx) => ({
@@ -709,7 +607,7 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         item.innerHTML = `
           <div class="timeline-dot"></div>
           <div class="timeline-content">
-            <div>
+            <div style="display:flex; flex-direction:column">
               <div class="timeline-time">${task.timeRange}</div>
               <div class="timeline-task">${task.text}</div>
             </div>
@@ -730,6 +628,8 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       const now = new Date();
       const currentMin = now.getHours()*60 + now.getMinutes();
       const currentIdx = getCurrentTaskIndex();
+      
+      if (currentIdx === -1) return;
       const currentTask = tasks[currentIdx];
 
       dom.currentName.textContent = currentTask.text;
@@ -800,7 +700,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       updateEventNoteWidget();
     }
 
-    // Sidebar Toggle for Mobile
     dom.menuToggle.addEventListener('click', () => {
       dom.sidebar.classList.toggle('open');
     });
@@ -828,10 +727,10 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       });
     });
 
-    // To-Do Logic
     const todosRef = db.collection("todos");
     function renderTodos(snapshot) {
       const list = document.getElementById("todoList");
+      if (!list) return;
       list.innerHTML = "";
       if (!snapshot) return;
       snapshot.forEach(doc => {
@@ -873,7 +772,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
     });
     todosRef.orderBy("createdAt", "asc").onSnapshot(renderTodos);
 
-    // Calendar Logic
     const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const fullMonthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     const weekdayNames = ["S","M","T","W","T","F","S"];
@@ -1083,7 +981,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       updateEventNoteWidget();
     });
 
-    // IOI Plan Implementation
     const ioiPlan = [
       { week: "Week 1 · C++ Fundamentals & First Problems", days: [
         { day: 1,  date: "20 Jul Sun", iso: "2026-07-20", tasks: ["Install Code::Blocks or VS Code + g++", "Write Hello World program", "Data types: int, long long, float, double, char, string", "Input/output: cin, cout", "Practice: 
@@ -1351,3 +1248,4 @@ table"]},
 </body>
 </html>
 
+1.  **Performance Optimization (Th
