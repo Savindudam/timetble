@@ -536,8 +536,7 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       ],
       Saturday: [
         ["04:00","04:30","Exercise"], ["04:30","07:00","IOI Deep Work (C++/Algo)"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Break"], ["09:45","13:00","IOI Mock Contest"], 
-["13:00","14:00","Lunch"], ["14:00","15:30","AL Hard Subject"], ["15:30","16:00","Break"], ["16:00","17:30","IOI Practice / Editorial Review"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming 
-Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
+["13:00","14:00","Lunch"], ["14:00","15:30","AL Hard Subject"], ["15:30","16:00","Break"], ["16:00","17:30","IOI Practice / Editorial Review"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
       ],
       Sunday: [
         ["04:00","04:30","Exercise"], ["04:30","07:00","IOI Deep Work (C++/Algo)"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Blitz"], ["09:30","09:45","Break"], ["09:45","12:00","IOI Theory + Practice"], 
@@ -817,7 +816,7 @@ Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:
       const all = [...defaultEvents, ...customEvents];
       return all.filter(e => {
         if (e.month !== date.getMonth() + 1 || e.day !== date.getDate()) return false;
-        return e.recurring !== false ? e.year === date.getFullYear() : true;
+        return e.recurring === false ? e.year === date.getFullYear() : true;
       });
     }
 
@@ -983,16 +982,12 @@ Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:
 
     const ioiPlan = [
       { week: "Week 1 · C++ Fundamentals & First Problems", days: [
-        { day: 1,  date: "20 Jul Sun", iso: "2026-07-20", tasks: ["Install Code::Blocks or VS Code + g++", "Write Hello World program", "Data types: int, long long, float, double, char, string", "Input/output: cin, cout", "Practice: 
-read two integers, print sum, difference, product"]},
-        { day: 2,  date: "21 Jul Mon", iso: "2026-07-21", tasks: ["Conditionals: if, else if, else, switch", "Loops: for, while, do-while", "Nested loops", "Practice: right-angled triangle of '*'", "Practice: multiplication 
-table"]},
-        { day: 3,  date: "22 Jul Tue", iso: "2026-07-22", tasks: ["1D and 2D arrays: indexing, traversal", "Strings: length, indexing, basic manipulation", "Practice: max element in array", "Practice: reverse an array", 
-"Practice: check if string is palindrome"]},
+        { day: 1,  date: "20 Jul Sun", iso: "2026-07-20", tasks: ["Install Code::Blocks or VS Code + g++", "Write Hello World program", "Data types: int, long long, float, double, char, string", "Input/output: cin, cout", "Practice: read two integers, print sum, difference, product"]},
+        { day: 2,  date: "21 Jul Mon", iso: "2026-07-21", tasks: ["Conditionals: if, else if, else, switch", "Loops: for, while, do-while", "Nested loops", "Practice: right-angled triangle of '*'", "Practice: multiplication table"]},
+        { day: 3,  date: "22 Jul Tue", iso: "2026-07-22", tasks: ["1D and 2D arrays: indexing, traversal", "Strings: length, indexing, basic manipulation", "Practice: max element in array", "Practice: reverse an array", "Practice: check if string is palindrome"]},
         { day: 4,  date: "23 Jul Wed", iso: "2026-07-23", tasks: ["Functions: declaration, parameters, return types, void", "Recursion: factorial", "Recursion: nth Fibonacci number", "Practice: function for nCr (combinations)", 
 "Practice: Euclidean GCD"]},
-        { day: 5,  date: "24 Jul Thu", iso: "2026-07-24", tasks: ["STL vector: declaration, push_back, pop_back, size, clear", "sort(v.begin(), v.end())", "Practice: 5-8 CF 800 'implementation' problems (4A, 71A, 231A, 158A, 
-50A)"]},
+        { day: 5,  date: "24 Jul Thu", iso: "2026-07-24", tasks: ["STL vector: declaration, push_back, pop_back, size, clear", "sort(v.begin(), v.end())", "Practice: 5-8 CF 800 'implementation' problems (4A, 71A, 231A, 158A, 50A)"]},
         { day: 6,  date: "25 Jul Fri", iso: "2026-07-25", tasks: ["STL pair, tuple", "String: substr, find, getline, to_string, stoi", "Practice: 5 CF 800 string problems (112A, 339A, 96A, 118A, 266A)"]},
         { day: 7,  date: "26 Jul Sat", iso: "2026-07-26", tasks: ["Review day: revisit any shaky concept", "Timed mini-contest (2h): 5 CSES Introductory", "Rest after contest"]}
       ]},
@@ -1247,5 +1242,3 @@ table"]},
   </script>
 </body>
 </html>
-
-1.  **Performance Optimization (Th
