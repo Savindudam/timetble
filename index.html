@@ -208,6 +208,7 @@
     .cal-cell:hover { border-color: var(--accent); }
     .cal-cell.empty { background: transparent; border: none; cursor: default; }
     .cal-cell.today { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); color: var(--accent); font-weight: 700; }
+    .cal-cell.selected { border-color: var(--accent); background: rgba(0, 255, 65, 0.12); box-shadow: 0 0 14px rgba(0, 255, 65, 0.3); }
     .cal-cell.has-event::after {
         content: ""; position: absolute; bottom: 5px; width: 5px; height: 5px; border-radius: 50%;
         background: var(--accent); box-shadow: 0 0 6px var(--accent);
@@ -242,6 +243,26 @@
     .note-widget-text { font-size: 1rem; color: var(--text); }
     .note-widget.today-highlight { border-color: var(--accent) !important; box-shadow: 0 0 20px rgba(0, 255, 65, 0.25) !important; }
     .note-widget.today-highlight .note-widget-text { color: var(--accent); font-weight: 700; }
+
+    /* Day detail panel */
+    .day-detail-panel {
+        padding: 1.1rem 1.25rem; margin-bottom: 1.25rem;
+    }
+    .day-detail-top { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.6rem; }
+    .day-detail-nav-btn {
+        background: #000; border: 1px solid var(--border); color: var(--accent);
+        width: 30px; height: 30px; padding: 0; cursor: pointer; font-size: 0.95rem; flex-shrink: 0;
+    }
+    .day-detail-nav-btn:hover { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
+    .day-detail-heading { text-align: center; flex: 1; }
+    .day-detail-weekday { color: var(--text-secondary); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+    .day-detail-date { color: var(--accent); font-weight: 700; font-size: 1rem; }
+    .day-detail-today-tag { display: inline-block; margin-left: 0.4rem; font-size: 0.65rem; border: 1px solid var(--accent); color: var(--accent); padding: 0.05rem 0.4rem; text-transform: uppercase; vertical-align: middle; }
+    .day-detail-events { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+    .day-detail-event { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; padding: 0.5rem 0.7rem; background: #000; border: 1px solid var(--border); font-size: 0.82rem; }
+    .day-detail-empty { color: var(--text-secondary); font-size: 0.82rem; text-align: center; padding: 0.4rem 0; }
+    .day-detail-jump { display: block; margin: 0.7rem auto 0; background: transparent; border: 1px solid var(--border); color: var(--text-secondary); font-size: 0.72rem; padding: 0.3rem 0.7rem; cursor: pointer; }
+    .day-detail-jump:hover { border-color: var(--accent); color: var(--accent); }
 </style>
 </head>
 <body>
@@ -400,6 +421,18 @@
           <div class="calendar-grid" id="calendarGrid"></div>
         </div>
         <div class="calendar-container">
+          <div class="card-widget day-detail-panel" id="dayDetailPanel">
+            <div class="day-detail-top">
+              <button class="day-detail-nav-btn" id="dayDetailPrevBtn">‹</button>
+              <div class="day-detail-heading">
+                <div class="day-detail-weekday" id="dayDetailWeekday">---</div>
+                <div class="day-detail-date" id="dayDetailDate">-- --- ----<span class="day-detail-today-tag" id="dayDetailTodayTag" style="display:none;">Today</span></div>
+              </div>
+              <button class="day-detail-nav-btn" id="dayDetailNextBtn">›</button>
+            </div>
+            <ul class="day-detail-events" id="dayDetailEvents"></ul>
+            <button class="day-detail-jump" id="dayDetailJumpToday">Jump to Today</button>
+          </div>
           <div class="event-input-row">
             <input type="text" class="event-label-input" id="eventLabelInput" placeholder="Name (e.g. Aunt's Birthday)">
             <input type="date" id="eventDateInput">
@@ -714,6 +747,7 @@
         }
         if (viewName === 'calendar') {
           renderCalendarGrid();
+          renderDayDetail(selectedCalDate);
         }
       });
     });
@@ -765,7 +799,9 @@
 
     // ===== Calendar / Important Dates =====
     const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const fullMonthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     const weekdayNames = ["S","M","T","W","T","F","S"];
+    const fullWeekdayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
     const defaultEvents = [
       { month: 10, day: 25, label: "Your Birthday", recurring: true },
@@ -781,6 +817,8 @@
 
     let customEvents = [];
     let calViewDate = new Date();
+    let selectedCalDate = new Date();
+    selectedCalDate.setHours(0,0,0,0);
     const calendarRef = db.collection("calendarEvents");
 
     // Days until next occurrence. Recurring events wrap to next year once passed;
@@ -807,6 +845,16 @@
       const upcoming = all.filter(e => e.recurring !== false || e.daysUntil >= 0);
       upcoming.sort((a, b) => a.daysUntil - b.daysUntil);
       return upcoming;
+    }
+
+    // Events that fall on a specific calendar date (any year for recurring, exact year for one-time)
+    function getEventsOnDate(date) {
+      const all = [...defaultEvents, ...customEvents];
+      return all.filter(e => {
+        if (e.month !== date.getMonth() + 1 || e.day !== date.getDate()) return false;
+        if (e.recurring === false) return e.year === date.getFullYear();
+        return true;
+      });
     }
 
     function renderCalendarList() {
@@ -851,6 +899,7 @@
 
       const now = new Date();
       const isCurrentMonth = now.getFullYear() === year && now.getMonth() === month;
+      const isSelectedMonth = selectedCalDate.getFullYear() === year && selectedCalDate.getMonth() === month;
 
       // Map day-of-month -> event labels visible in this displayed month/year
       const rawEvents = [...defaultEvents, ...customEvents];
@@ -868,27 +917,84 @@
       for (let d = 1; d <= daysInMonth; d++) {
         const hasEvent = !!eventsByDay[d];
         const isToday = isCurrentMonth && now.getDate() === d;
+        const isSelected = isSelectedMonth && selectedCalDate.getDate() === d;
         const titleAttr = hasEvent ? eventsByDay[d].join(', ') : '';
-        html += `<div class="cal-cell ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''}" data-day="${d}" title="${escapeHtml(titleAttr)}">
+        html += `<div class="cal-cell ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''} ${hasEvent ? 'has-event' : ''}" data-day="${d}" title="${escapeHtml(titleAttr)}">
             <span>${d}</span>
           </div>`;
       }
       grid.innerHTML = html;
 
-      // Clicking a day prefills the add-event date field
+      // Clicking a day selects it, shows its info in the day-detail panel, and prefills the add-event date field
       grid.querySelectorAll('.cal-cell:not(.empty)').forEach(cell => {
         cell.addEventListener('click', () => {
           const day = Number(cell.dataset.day);
-          const mm = String(month + 1).padStart(2, '0');
-          const dd = String(day).padStart(2, '0');
-          document.getElementById('eventDateInput').value = `${year}-${mm}-${dd}`;
+          const clicked = new Date(year, month, day);
+          selectDate(clicked);
         });
       });
     }
 
+    function selectDate(date) {
+      selectedCalDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      const mm = String(selectedCalDate.getMonth() + 1).padStart(2, '0');
+      const dd = String(selectedCalDate.getDate()).padStart(2, '0');
+      document.getElementById('eventDateInput').value = `${selectedCalDate.getFullYear()}-${mm}-${dd}`;
+
+      // If the selected date falls outside the currently displayed month, jump the grid to it
+      if (selectedCalDate.getFullYear() !== calViewDate.getFullYear() || selectedCalDate.getMonth() !== calViewDate.getMonth()) {
+        calViewDate = new Date(selectedCalDate.getFullYear(), selectedCalDate.getMonth(), 1);
+      }
+      renderCalendarGrid();
+      renderDayDetail(selectedCalDate);
+    }
+
+    function renderDayDetail(date) {
+      const weekdayEl = document.getElementById('dayDetailWeekday');
+      const dateEl = document.getElementById('dayDetailDate');
+      const todayTag = document.getElementById('dayDetailTodayTag');
+      const eventsEl = document.getElementById('dayDetailEvents');
+      if (!weekdayEl || !dateEl || !eventsEl) return;
+
+      const now = new Date();
+      const isToday = now.getFullYear() === date.getFullYear() && now.getMonth() === date.getMonth() && now.getDate() === date.getDate();
+
+      weekdayEl.textContent = fullWeekdayNames[date.getDay()];
+      dateEl.childNodes[0].textContent = `${date.getDate()} ${fullMonthNames[date.getMonth()]} ${date.getFullYear()} `;
+      todayTag.style.display = isToday ? 'inline-block' : 'none';
+
+      const dayEvents = getEventsOnDate(date);
+      if (dayEvents.length === 0) {
+        eventsEl.innerHTML = `<li class="day-detail-empty">No events on this date</li>`;
+      } else {
+        eventsEl.innerHTML = dayEvents.map(e => `
+          <li class="day-detail-event">
+            <span>${escapeHtml(e.label)}</span>
+            <span class="event-badge">${e.recurring === false ? 'one-time' : 'yearly'}</span>
+          </li>
+        `).join('');
+      }
+    }
+
+    function shiftSelectedDate(deltaDays) {
+      const next = new Date(selectedCalDate);
+      next.setDate(next.getDate() + deltaDays);
+      selectDate(next);
+    }
+
+    document.getElementById('dayDetailPrevBtn').addEventListener('click', () => shiftSelectedDate(-1));
+    document.getElementById('dayDetailNextBtn').addEventListener('click', () => shiftSelectedDate(1));
+    document.getElementById('dayDetailJumpToday').addEventListener('click', () => {
+      const t = new Date();
+      t.setHours(0,0,0,0);
+      calViewDate = new Date(t.getFullYear(), t.getMonth(), 1);
+      selectDate(t);
+    });
+
     function renderCalendar() {
       renderCalendarList();
       renderCalendarGrid();
+      renderDayDetail(selectedCalDate);
     }
 
     function updateEventNoteWidget() {
@@ -1374,6 +1480,7 @@
       updateDateTime();
       setInterval(updateDateTime, 1000);
       renderPlan();
+      renderDayDetail(selectedCalDate);
     }
 
     checkAuth();
