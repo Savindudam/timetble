@@ -1416,15 +1416,34 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
 
     // ─── Send postMessage to iframe ───
     function sendScreenscapeRequest(type, requestId = 'req-' + Date.now()) {
-      if (!ssIframe.contentWindow) {
-        console.warn('[Screenscape] Iframe not ready.');
-        return;
-      }
-      ssIframe.contentWindow.postMessage({
-        type: type,
-        requestId: requestId
-      }, 'https://screenscape.me');
-    }
+  if (!ssIframe.contentWindow) {
+    console.warn('[Screenscape] Iframe not ready.');
+    return;
+  }
+  try {
+    ssIframe.contentWindow.postMessage({
+      type: type,
+      requestId: requestId
+    }, 'https://screenscape.me');
+    console.log('[Screenscape] Sent:', type, requestId);
+  } catch (err) {
+    console.warn('[Screenscape] postMessage error:', err.message);
+  }
+}
+    function loadScreenscape() {
+  const url = buildScreenscapeURL();
+  ssIframe.src = url;
+  console.log('[Screenscape] Loaded:', url);
+  
+  // Wait for iframe to load before sending messages
+  ssIframe.onload = function() {
+    console.log('[Screenscape] Iframe loaded');
+    // Request progress after load
+    setTimeout(() => {
+      sendScreenscapeRequest('SCREENSCAPE_GET_PROGRESS');
+    }, 2000);
+  };
+}
 
     // ─── Save watch progress to Firestore ───
     // ─── Save watch progress to Firestore (with full logging) ───
@@ -1580,19 +1599,27 @@ window.addEventListener('message', (event) => {
     let unsubHistory = null;
 
     function subscribeWatchHistory() {
-      if (unsubHistory) unsubHistory();
-      const user = firebase.auth().currentUser;
-      if (!user) return;
+  if (unsubHistory) unsubHistory();
+  const user = firebase.auth().currentUser;
+  if (!user) return;
 
-      unsubHistory = watchHistoryRef
-        .where('userId', '==', user.uid)
-        .orderBy('lastUpdated', 'desc')
-        .onSnapshot(snapshot => {
-          renderWatchHistory(snapshot);
-        }, err => {
-          console.error('History subscription error:', err);
-        });
-    }
+  // Query without orderBy to avoid index requirement
+  unsubHistory = watchHistoryRef
+    .where('userId', '==', user.uid)
+    .onSnapshot(snapshot => {
+      // Sort manually in descending order of lastUpdated
+      const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      docs.sort((a, b) => {
+        const aTime = a.lastUpdated?.toMillis?.() || 0;
+        const bTime = b.lastUpdated?.toMillis?.() || 0;
+        return bTime - aTime; // newest first
+      });
+      // Pass a fake snapshot-like object to renderWatchHistory
+      renderWatchHistory({ empty: docs.length === 0, forEach: (cb) => docs.forEach(d => cb({ data: () => d, id: d.id })) });
+    }, err => {
+      console.error('History subscription error:', err);
+    });
+}
 
     // ─── Auto-save timer ───
     function startAutoSave() {
