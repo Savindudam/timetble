@@ -808,7 +808,10 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         views[viewName].classList.add('active');
         document.getElementById('resetBtn').style.display = (viewName === 'timetable') ? 'flex' : 'none';
         if (viewName === 'timetable') renderTimeline();
-        if (viewName === 'calendar') { renderCalendarGrid(); renderDayDetail(selectedCalDate); }
+        if (viewName === 'calendar') { renderCalendarGrid(); renderDayDetail(selectedCalDate); 
+        if (viewName === 'screenscape') { 
+        if (!ssIframe.src) loadScreenscape();
+}}
         if (window.innerWidth <= 768) dom.sidebar.classList.remove('open');
       });
     });
