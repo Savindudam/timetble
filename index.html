@@ -353,11 +353,11 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         <span class="icon-only">Calendar</span>
       </button>
       <button class="sidebar-btn" data-view="screenscape">
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <polygon points="5 3 19 12 5 21 5 3"/>
-  </svg>
-  <span class="icon-only">Movie Time</span>
-</button>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="5 3 19 12 5 21 5 3"/>
+        </svg>
+        <span class="icon-only">Screenscape</span>
+      </button>
     </nav>
     <div class="sidebar-footer">
       <button class="logout-btn" id="logoutBtn">Log out</button>
@@ -507,80 +507,88 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         </div>
       </div>
     </div>
+
     <!-- ===== SCREENSCAPE VIEW ===== -->
-<div class="view" id="screenscapeView">
-  <div style="max-width: 1100px; margin: 0 auto; padding: 0 1rem;">
+    <div class="view" id="screenscapeView">
+      <div style="max-width: 1100px; margin: 0 auto; padding: 0 1rem;">
 
-    <!-- Config Card -->
-    <div class="card-widget" style="padding: 1.5rem; margin-bottom: 1.5rem;">
-      <h3 style="color: var(--accent); margin-top: 0; margin-bottom: 1rem;">🎬 Embed Player</h3>
-      <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end;">
-        <!-- Title (NEW) -->
-        <div style="flex: 1; min-width: 150px;">
-          <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Title (for log)</label>
-          <input type="text" id="screenscapeTitle" value="Titanic" placeholder="e.g. Titanic, GoT S1E1" style="width: 100%;">
+        <!-- Config Card -->
+        <div class="card-widget" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+          <h3 style="color: var(--accent); margin-top: 0; margin-bottom: 1rem;">🎬 Embed Player</h3>
+          <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end;">
+            <!-- Title -->
+            <div style="flex: 1; min-width: 150px;">
+              <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Title (for log)</label>
+              <input type="text" id="screenscapeTitle" value="Titanic" placeholder="e.g. Titanic, GoT S1E1" style="width: 100%;">
+            </div>
+            <!-- TMDB/IMDB -->
+            <div style="flex: 1; min-width: 140px;">
+              <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">TMDB / IMDB ID</label>
+              <input type="text" id="screenscapeId" value="597" placeholder="e.g. 597 or tt0800369" style="width: 100%;">
+            </div>
+            <!-- Type -->
+            <div style="min-width: 100px;">
+              <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Type</label>
+              <select id="screenscapeType" style="width: 100%; background: #000; color: var(--accent); border: 1px solid var(--border); padding: 0.6rem 1rem;">
+                <option value="movie">Movie</option>
+                <option value="tv">TV Series</option>
+              </select>
+            </div>
+            <!-- Season -->
+            <div style="min-width: 80px;">
+              <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Season</label>
+              <input type="number" id="screenscapeSeason" value="1" min="1" style="width: 100%;">
+            </div>
+            <!-- Episode -->
+            <div style="min-width: 80px;">
+              <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Episode</label>
+              <input type="number" id="screenscapeEpisode" value="1" min="1" style="width: 100%;">
+            </div>
+            <!-- Language -->
+            <div style="min-width: 100px;">
+              <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Language</label>
+              <input type="text" id="screenscapeLang" value="eng" placeholder="eng, hindi..." style="width: 100%;">
+            </div>
+            <!-- Buttons -->
+            <div style="display: flex; gap: 0.5rem;">
+              <button id="screenscapeLoadBtn" class="todo-add-btn" style="padding: 0.6rem 1.8rem;">▶ Load</button>
+            </div>
+          </div>
+          <div style="margin-top: 0.75rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+            <span style="font-size: 0.7rem; color: var(--text-secondary);">💡 Use TMDB ID (e.g. 597) or IMDB ID (e.g. tt0800369).</span>
+            <label style="font-size: 0.75rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+              <input type="checkbox" id="autoSaveToggle" checked> Auto-save progress
+            </label>
+            <button id="manualSaveBtn" class="todo-add-btn" style="padding: 0.2rem 1rem; font-size: 0.7rem;">💾 Save Now</button>
+          </div>
+          <!-- Status display -->
+          <div id="saveStatus" style="margin-top: 0.75rem; color: var(--text-secondary); font-size: 0.8rem;"></div>
         </div>
-        <!-- TMDB/IMDB -->
-        <div style="flex: 1; min-width: 140px;">
-          <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">TMDB / IMDB ID</label>
-          <input type="text" id="screenscapeId" value="597" placeholder="e.g. 597 or tt0800369" style="width: 100%;">
+
+        <!-- Player Container -->
+        <div style="position: relative; width: 100%; padding-top: 56.25%; background: #000; border: 1px solid var(--border); margin-bottom: 1.5rem;">
+          <iframe id="screenscapeIframe" 
+            src="" 
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" 
+            allow="fullscreen; autoplay; picture-in-picture" 
+            allowfullscreen>
+          </iframe>
         </div>
-        <!-- Type -->
-        <div style="min-width: 100px;">
-          <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Type</label>
-          <select id="screenscapeType" style="width: 100%; background: #000; color: var(--accent); border: 1px solid var(--border); padding: 0.6rem 1rem;">
-            <option value="movie">Movie</option>
-            <option value="tv">TV Series</option>
-          </select>
+
+        <!-- WATCH HISTORY SECTION -->
+        <div class="card-widget" style="padding: 1.5rem; margin-top: 0.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+            <h3 style="color: var(--accent); margin: 0;">📜 Watch History & Progress</h3>
+            <button id="clearHistoryBtn" style="background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 0.2rem 0.8rem; cursor: pointer; font-size: 0.7rem;">Clear All</button>
+          </div>
+          <div id="watchHistoryContainer">
+            <p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">No watch history yet. Load a video and it will auto-save!</p>
+          </div>
         </div>
-        <!-- Season -->
-        <div style="min-width: 80px;">
-          <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Season</label>
-          <input type="number" id="screenscapeSeason" value="1" min="1" style="width: 100%;">
-        </div>
-        <!-- Episode -->
-        <div style="min-width: 80px;">
-          <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Episode</label>
-          <input type="number" id="screenscapeEpisode" value="1" min="1" style="width: 100%;">
-        </div>
-        <!-- Language -->
-        <div style="min-width: 100px;">
-          <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Language</label>
-          <input type="text" id="screenscapeLang" value="eng" placeholder="eng, hindi..." style="width: 100%;">
-        </div>
-        <!-- Buttons -->
-        <div style="display: flex; gap: 0.5rem;">
-          <button id="screenscapeLoadBtn" class="todo-add-btn" style="padding: 0.6rem 1.8rem;">▶ Load</button>
-        </div>
-      </div>
-      <div style="margin-top: 0.75rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
-        <span style="font-size: 0.7rem; color: var(--text-secondary);">💡 Use TMDB ID (e.g. 597) or IMDB ID (e.g. tt0800369).</span>
-        <label style="font-size: 0.75rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
-          <input type="checkbox" id="autoSaveToggle" checked> Auto-save progress
-        </label>
-        <button id="manualSaveBtn" class="todo-add-btn" style="padding: 0.2rem 1rem; font-size: 0.7rem;">💾 Save Now</button>
+
       </div>
     </div>
 
-    <!-- Player Container -->
-    <div style="position: relative; width: 100%; padding-top: 56.25%; background: #000; border: 1px solid var(--border); margin-bottom: 1.5rem;">
-      <iframe id="screenscapeIframe" src="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe>
-    </div>
-
-    <!-- WATCH HISTORY SECTION -->
-    <div class="card-widget" style="padding: 1.5rem; margin-top: 0.5rem;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
-        <h3 style="color: var(--accent); margin: 0;">📜 Watch History & Progress</h3>
-        <button id="clearHistoryBtn" style="background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 0.2rem 0.8rem; cursor: pointer; font-size: 0.7rem;">Clear All</button>
-      </div>
-      <div id="watchHistoryContainer">
-        <p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">No watch history yet. Load a video and it will auto-save!</p>
-      </div>
-    </div>
-
-  </div>
-</div>
-    
   </div>
 
   <button class="fab" id="resetBtn" title="Go to current task">📍</button>
@@ -590,6 +598,9 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
 
   <script>
+    // ================================================================
+    // FIREBASE CONFIG
+    // ================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyBb3IIg51MeZEeJ5rk-X4vXQitH-ywew0s",
       authDomain: "timetable-threnox.firebaseapp.com",
@@ -600,12 +611,16 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       measurementId: "G-JSDKVYBPQS"
     };
     firebase.initializeApp(firebaseConfig);
-    
-    // ✅ FIXED: db and auth first, then watchHistoryRef
+
+    // Initialize Firebase services
     const db = firebase.firestore();
     const auth = firebase.auth();
+    // Watch history collection reference
     const watchHistoryRef = db.collection("watchHistory");
 
+    // ================================================================
+    // TIMETABLE DATA
+    // ================================================================
     const timetable = {
       Monday: [
         ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], 
@@ -647,6 +662,9 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
     let tasks = [];
     let currentDay = "";
 
+    // ================================================================
+    // DOM REFS FOR DASHBOARD
+    // ================================================================
     const dom = {
       greeting: document.getElementById('greetingMessage'),
       date: document.getElementById('dateDisplay'),
@@ -801,6 +819,9 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       dom.sidebar.classList.toggle('open');
     });
 
+    // ================================================================
+    // SIDEBAR NAVIGATION
+    // ================================================================
     const sidebarBtns = document.querySelectorAll('.sidebar-btn');
     const views = {
       dashboard: document.getElementById('dashboardView'),
@@ -811,7 +832,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       screenscape: document.getElementById('screenscapeView')
     };
 
-    // ✅ FIXED: Added missing closing brace for calendar
     sidebarBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         sidebarBtns.forEach(b => b.classList.remove('active'));
@@ -832,6 +852,9 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       });
     });
 
+    // ================================================================
+    // TODO LIST (Firestore)
+    // ================================================================
     const todosRef = db.collection("todos");
     let unsubTodos = null;
     function renderTodos(snapshot) {
@@ -877,6 +900,9 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       if (e.key === "Enter") document.getElementById("todoAddBtn").click();
     });
 
+    // ================================================================
+    // CALENDAR & EVENTS
+    // ================================================================
     const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const fullMonthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     const weekdayNames = ["S","M","T","W","T","F","S"];
@@ -1080,6 +1106,9 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       labelInput.value = ''; dateInput.value = '';
     });
 
+    // ================================================================
+    // IOI PLAN (Firestore)
+    // ================================================================
     const ioiPlan = [
       { week: "Week 1 · C++ Fundamentals & First Problems", days: [
         { day: 1,  date: "20 Jul Sun", iso: "2026-07-20", tasks: ["Install Code::Blocks or VS Code + g++", "Write Hello World program", "Data types: int, long long, float, double, char, string", "Input/output: cin, cout", "Practice: read two integers, print sum, difference, product"]},
@@ -1293,7 +1322,9 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       } catch (e) { console.warn("Cleanup deferred:", e); }
     }
 
-    // ---- Real Firebase Authentication ----
+    // ================================================================
+    // FIREBASE AUTH & DATA LISTENERS
+    // ================================================================
     function attachDataListeners() {
       unsubTodos = todosRef.orderBy("createdAt", "asc").onSnapshot(renderTodos);
       unsubCalendar = calendarRef.orderBy("createdAt", "asc").onSnapshot(snapshot => {
@@ -1357,18 +1388,23 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         setTimeout(() => { overlay.style.display = 'none'; }, 300);
         attachDataListeners();
         runDailyCleanup();
+        // Also subscribe to watch history if user exists
+        subscribeWatchHistory();
+        startAutoSave();
       } else {
         overlay.style.display = 'flex';
         overlay.style.opacity = '1';
         detachDataListeners();
+        // Stop history subscription
+        if (unsubHistory) { unsubHistory(); unsubHistory = null; }
+        if (historyContainer) historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">Please log in to see watch history.</p>`;
+        stopAutoSave();
       }
     });
 
-    // ============================================
+    // ================================================================
     // SCREENSCAPE INTEGRATION (with Watch History)
-    // ============================================
-
-    // DOM refs
+    // ================================================================
     const ssTitle = document.getElementById('screenscapeTitle');
     const ssId = document.getElementById('screenscapeId');
     const ssType = document.getElementById('screenscapeType');
@@ -1381,10 +1417,11 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
     const manualSaveBtn = document.getElementById('manualSaveBtn');
     const historyContainer = document.getElementById('watchHistoryContainer');
     const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+    const saveStatus = document.getElementById('saveStatus');
 
     let autoSaveInterval = null;
+    let unsubHistory = null;
 
-    // ─── Build embed URL ───
     function buildScreenscapeURL() {
       let id = ssId.value.trim();
       const type = ssType.value;
@@ -1407,128 +1444,90 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       return url;
     }
 
-    // ─── Load embed ───
     function loadScreenscape() {
       const url = buildScreenscapeURL();
       ssIframe.src = url;
       console.log('[Screenscape] Loaded:', url);
+      // Wait for iframe to load before sending messages
+      ssIframe.onload = function() {
+        console.log('[Screenscape] Iframe loaded');
+        setTimeout(() => {
+          sendScreenscapeRequest('SCREENSCAPE_GET_PROGRESS');
+        }, 2000);
+      };
     }
 
-    // ─── Send postMessage to iframe ───
     function sendScreenscapeRequest(type, requestId = 'req-' + Date.now()) {
-  if (!ssIframe.contentWindow) {
-    console.warn('[Screenscape] Iframe not ready.');
-    return;
-  }
-  try {
-    ssIframe.contentWindow.postMessage({
-      type: type,
-      requestId: requestId
-    }, 'https://screenscape.me');
-    console.log('[Screenscape] Sent:', type, requestId);
-  } catch (err) {
-    console.warn('[Screenscape] postMessage error:', err.message);
-  }
-}
-    function loadScreenscape() {
-  const url = buildScreenscapeURL();
-  ssIframe.src = url;
-  console.log('[Screenscape] Loaded:', url);
-  
-  // Wait for iframe to load before sending messages
-  ssIframe.onload = function() {
-    console.log('[Screenscape] Iframe loaded');
-    // Request progress after load
-    setTimeout(() => {
-      sendScreenscapeRequest('SCREENSCAPE_GET_PROGRESS');
-    }, 2000);
-  };
-}
-
-    // ─── Save watch progress to Firestore ───
-    // ─── Save watch progress to Firestore (with full logging) ───
-async function saveWatchProgress(progressData) {
-  console.log('[DEBUG] saveWatchProgress called with:', progressData);
-
-  const user = firebase.auth().currentUser;
-  if (!user) {
-    console.warn('[WatchHistory] User not logged in, skipping save.');
-    return;
-  }
-  console.log('[WatchHistory] User logged in:', user.uid);
-
-  const id = ssId.value.trim();
-  const type = ssType.value;
-  const title = ssTitle.value.trim() || 'Untitled';
-  const lang = ssLang.value.trim() || 'eng';
-  let season = null, episode = null;
-
-  if (type === 'tv') {
-    season = parseInt(ssSeason.value) || 1;
-    episode = parseInt(ssEpisode.value) || 1;
-  }
-
-  let mediaId = id;
-  if (type === 'tv') mediaId += `_S${season}E${episode}`;
-
-  const payload = {
-    userId: user.uid,
-    mediaId: mediaId,
-    tmdbId: /^\d+$/.test(id) ? id : null,
-    imdbId: /^tt\d+$/.test(id) ? id : null,
-    title: title,
-    type: type,
-    season: season,
-    episode: episode,
-    language: lang,
-    progress: Math.min(100, Math.round(progressData.progress || 0)),
-    lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-  };
-
-  console.log('[WatchHistory] Payload to save:', payload);
-
-  try {
-    const docRef = watchHistoryRef.doc(mediaId);
-    await docRef.set(payload, { merge: true });
-    console.log('[WatchHistory] ✅ Saved successfully!');
-  } catch (err) {
-    console.error('[WatchHistory] ❌ Save error:', err);
-  }
-}
-
-// ─── PostMessage Listener (verbose) ───
-window.addEventListener('message', (event) => {
-  console.log('[DEBUG] Message received from origin:', event.origin);
-
-  // Allow both localhost and screenscape.me for testing
-  if (!event.origin.includes('screenscape.me') && !event.origin.includes('localhost')) {
-    console.warn('[DEBUG] Ignoring message from untrusted origin:', event.origin);
-    return;
-  }
-
-  const data = event.data;
-  if (!data?.type) return;
-
-  console.log('[Screenscape] Received:', data.type, data);
-
-  if (data.type === 'SCREENSCAPE_PROGRESS_RESPONSE') {
-    console.log('[Screenscape] Progress value:', data.progress);
-    if (data.progress !== undefined) {
-      saveWatchProgress({ progress: data.progress });
-    } else {
-      console.warn('[Screenscape] Progress response missing progress field.');
+      if (!ssIframe.contentWindow) {
+        console.warn('[Screenscape] Iframe not ready.');
+        return;
+      }
+      try {
+        ssIframe.contentWindow.postMessage({
+          type: type,
+          requestId: requestId
+        }, 'https://screenscape.me');
+        console.log('[Screenscape] Sent:', type, requestId);
+      } catch (err) {
+        console.warn('[Screenscape] postMessage error:', err.message);
+      }
     }
-  }
 
-  if (data.type === 'SCREENSCAPE_WATCH_HISTORY_WITH_PROGRESS_RESPONSE') {
-    console.log('[Screenscape] History received:', data.watchHistory);
-  }
-});
+    async function saveWatchProgress(progressData) {
+      if (!saveStatus) return;
+      saveStatus.textContent = '⏳ Saving...';
+      saveStatus.style.color = 'var(--text-secondary)';
 
-    // ─── Render Watch History ───
+      const user = firebase.auth().currentUser;
+      if (!user) {
+        saveStatus.textContent = '❌ Not logged in!';
+        saveStatus.style.color = 'var(--danger)';
+        return;
+      }
+
+      const id = ssId.value.trim();
+      const type = ssType.value;
+      const title = ssTitle.value.trim() || 'Untitled';
+      const lang = ssLang.value.trim() || 'eng';
+      let season = null, episode = null;
+
+      if (type === 'tv') {
+        season = parseInt(ssSeason.value) || 1;
+        episode = parseInt(ssEpisode.value) || 1;
+      }
+
+      let mediaId = id;
+      if (type === 'tv') mediaId += `_S${season}E${episode}`;
+
+      const payload = {
+        userId: user.uid,
+        mediaId: mediaId,
+        tmdbId: /^\d+$/.test(id) ? id : null,
+        imdbId: /^tt\d+$/.test(id) ? id : null,
+        title: title,
+        type: type,
+        season: season,
+        episode: episode,
+        language: lang,
+        progress: Math.min(100, Math.round(progressData.progress || 0)),
+        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      console.log('[WatchHistory] Saving:', payload);
+      try {
+        await watchHistoryRef.doc(mediaId).set(payload, { merge: true });
+        saveStatus.textContent = '✅ Saved!';
+        saveStatus.style.color = 'var(--success)';
+        console.log('[WatchHistory] ✅ Saved successfully!');
+      } catch (err) {
+        saveStatus.textContent = `❌ Error: ${err.message}`;
+        saveStatus.style.color = 'var(--danger)';
+        console.error('[WatchHistory] ❌ Save error:', err);
+      }
+    }
+
     function renderWatchHistory(snapshot) {
       if (!historyContainer) return;
-
       if (snapshot.empty) {
         historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">No watch history yet. Load a video and it will auto-save!</p>`;
         return;
@@ -1536,7 +1535,7 @@ window.addEventListener('message', (event) => {
 
       let html = '<div style="display: flex; flex-direction: column; gap: 0.75rem;">';
       snapshot.forEach(doc => {
-        const data = doc.data();
+        const data = typeof doc.data === 'function' ? doc.data() : doc; // handle both snapshot and plain obj
         const progress = data.progress || 0;
         const isMovie = data.type === 'movie';
         const label = isMovie ? data.title : `${data.title} (S${data.season}E${data.episode})`;
@@ -1561,7 +1560,7 @@ window.addEventListener('message', (event) => {
       html += '</div>';
       historyContainer.innerHTML = html;
 
-      // ─── Resume buttons ───
+      // Resume buttons
       historyContainer.querySelectorAll('.resume-btn').forEach(btn => {
         btn.addEventListener('click', async () => {
           const mediaId = btn.dataset.mediaid;
@@ -1584,44 +1583,49 @@ window.addEventListener('message', (event) => {
         });
       });
 
-      // ─── Delete buttons ───
+      // Delete buttons
       historyContainer.querySelectorAll('.delete-history-btn').forEach(btn => {
         btn.addEventListener('click', async () => {
           const mediaId = btn.dataset.mediaid;
-          if (confirm(`Delete this entry?`)) {
+          if (confirm('Delete this entry?')) {
             await watchHistoryRef.doc(mediaId).delete();
           }
         });
       });
     }
 
-    // ─── Listen to Firestore for real-time updates ───
-    let unsubHistory = null;
-
     function subscribeWatchHistory() {
-  if (unsubHistory) unsubHistory();
-  const user = firebase.auth().currentUser;
-  if (!user) return;
+      if (unsubHistory) unsubHistory();
+      const user = firebase.auth().currentUser;
+      if (!user) {
+        if (historyContainer) historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">Please log in to see watch history.</p>`;
+        return;
+      }
 
-  // Query without orderBy to avoid index requirement
-  unsubHistory = watchHistoryRef
-    .where('userId', '==', user.uid)
-    .onSnapshot(snapshot => {
-      // Sort manually in descending order of lastUpdated
-      const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      docs.sort((a, b) => {
-        const aTime = a.lastUpdated?.toMillis?.() || 0;
-        const bTime = b.lastUpdated?.toMillis?.() || 0;
-        return bTime - aTime; // newest first
-      });
-      // Pass a fake snapshot-like object to renderWatchHistory
-      renderWatchHistory({ empty: docs.length === 0, forEach: (cb) => docs.forEach(d => cb({ data: () => d, id: d.id })) });
-    }, err => {
-      console.error('History subscription error:', err);
-    });
-}
+      unsubHistory = watchHistoryRef
+        .where('userId', '==', user.uid)
+        .onSnapshot(snapshot => {
+          const docs = [];
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            data.id = doc.id;
+            docs.push(data);
+          });
+          docs.sort((a, b) => {
+            const aTime = a.lastUpdated?.toMillis?.() || 0;
+            const bTime = b.lastUpdated?.toMillis?.() || 0;
+            return bTime - aTime;
+          });
+          renderWatchHistory({
+            empty: docs.length === 0,
+            forEach: (cb) => docs.forEach(d => cb({ data: () => d, id: d.id }))
+          });
+        }, err => {
+          console.error('[WatchHistory] subscription error:', err);
+          if (historyContainer) historyContainer.innerHTML = `<p style="color: var(--danger);">⚠️ Error loading history: ${err.message}</p>`;
+        });
+    }
 
-    // ─── Auto-save timer ───
     function startAutoSave() {
       if (autoSaveInterval) clearInterval(autoSaveInterval);
       autoSaveInterval = setInterval(() => {
@@ -1638,27 +1642,29 @@ window.addEventListener('message', (event) => {
       }
     }
 
-    // ─── PostMessage Listener ───
+    // PostMessage listener
     window.addEventListener('message', (event) => {
-      if (event.origin !== 'https://screenscape.me') return;
-
+      // Accept messages from screenscape.me (and localhost for testing)
+      if (!event.origin.includes('screenscape.me') && !event.origin.includes('localhost')) {
+        return;
+      }
       const data = event.data;
       if (!data?.type) return;
-
       console.log('[Screenscape] Received:', data.type, data);
 
       if (data.type === 'SCREENSCAPE_PROGRESS_RESPONSE') {
         if (data.progress !== undefined) {
           saveWatchProgress({ progress: data.progress });
+        } else {
+          console.warn('[Screenscape] Progress response missing progress field.');
         }
       }
-
       if (data.type === 'SCREENSCAPE_WATCH_HISTORY_WITH_PROGRESS_RESPONSE') {
         console.log('[Screenscape] History received:', data.watchHistory);
       }
     });
 
-    // ─── Manual Save ───
+    // Manual save
     manualSaveBtn.addEventListener('click', () => {
       if (!ssIframe.src) {
         alert('Load a video first!');
@@ -1667,20 +1673,21 @@ window.addEventListener('message', (event) => {
       sendScreenscapeRequest('SCREENSCAPE_GET_PROGRESS');
     });
 
-    // ─── Load Button ───
+    // Load button
     ssLoadBtn.addEventListener('click', () => {
       loadScreenscape();
+      // Also request progress after load
       setTimeout(() => {
         sendScreenscapeRequest('SCREENSCAPE_GET_PROGRESS');
-      }, 2000);
+      }, 3000);
     });
 
-    // Enter key support
+    // Enter key on fields
     [ssTitle, ssId, ssType, ssSeason, ssEpisode, ssLang].forEach(el => {
       el.addEventListener('keydown', (e) => { if (e.key === 'Enter') ssLoadBtn.click(); });
     });
 
-    // ─── Clear History ───
+    // Clear history
     clearHistoryBtn.addEventListener('click', async () => {
       if (!confirm('Delete ALL watch history? This cannot be undone.')) return;
       const user = firebase.auth().currentUser;
@@ -1692,24 +1699,15 @@ window.addEventListener('message', (event) => {
       await batch.commit();
     });
 
-    // ─── Auto-save toggle ───
+    // Auto-save toggle
     autoSaveToggle.addEventListener('change', () => {
       if (autoSaveToggle.checked) startAutoSave();
       else stopAutoSave();
     });
 
-    // ─── Auth listener for history ───
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        subscribeWatchHistory();
-        startAutoSave();
-      } else {
-        stopAutoSave();
-        if (unsubHistory) { unsubHistory(); unsubHistory = null; }
-        historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">Please log in to see watch history.</p>`;
-      }
-    });
-
+    // ================================================================
+    // INIT
+    // ================================================================
     function init() {
       const now = new Date();
       currentDay = dayOrder[now.getDay()];
@@ -1718,6 +1716,7 @@ window.addEventListener('message', (event) => {
       setInterval(updateDateTime, 1000);
       renderPlan();
       renderDayDetail(selectedCalDate);
+      // If user already logged in, history subscription is triggered by auth state
     }
 
     init();
