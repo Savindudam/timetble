@@ -600,9 +600,11 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       measurementId: "G-JSDKVYBPQS"
     };
     firebase.initializeApp(firebaseConfig);
-    const watchHistoryRef = db.collection("watchHistory");
+    
+    // ✅ FIXED: db and auth first, then watchHistoryRef
     const db = firebase.firestore();
     const auth = firebase.auth();
+    const watchHistoryRef = db.collection("watchHistory");
 
     const timetable = {
       Monday: [
@@ -809,6 +811,7 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       screenscape: document.getElementById('screenscapeView')
     };
 
+    // ✅ FIXED: Added missing closing brace for calendar
     sidebarBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         sidebarBtns.forEach(b => b.classList.remove('active'));
@@ -818,10 +821,13 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         views[viewName].classList.add('active');
         document.getElementById('resetBtn').style.display = (viewName === 'timetable') ? 'flex' : 'none';
         if (viewName === 'timetable') renderTimeline();
-        if (viewName === 'calendar') { renderCalendarGrid(); renderDayDetail(selectedCalDate); 
+        if (viewName === 'calendar') { 
+          renderCalendarGrid(); 
+          renderDayDetail(selectedCalDate); 
+        }
         if (viewName === 'screenscape') { 
-        if (!ssIframe.src) loadScreenscape();
-}}
+          if (!ssIframe.src) loadScreenscape();
+        }
         if (window.innerWidth <= 768) dom.sidebar.classList.remove('open');
       });
     });
@@ -1358,6 +1364,288 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       }
     });
 
+    // ============================================
+    // SCREENSCAPE INTEGRATION (with Watch History)
+    // ============================================
+
+    // DOM refs
+    const ssTitle = document.getElementById('screenscapeTitle');
+    const ssId = document.getElementById('screenscapeId');
+    const ssType = document.getElementById('screenscapeType');
+    const ssSeason = document.getElementById('screenscapeSeason');
+    const ssEpisode = document.getElementById('screenscapeEpisode');
+    const ssLang = document.getElementById('screenscapeLang');
+    const ssLoadBtn = document.getElementById('screenscapeLoadBtn');
+    const ssIframe = document.getElementById('screenscapeIframe');
+    const autoSaveToggle = document.getElementById('autoSaveToggle');
+    const manualSaveBtn = document.getElementById('manualSaveBtn');
+    const historyContainer = document.getElementById('watchHistoryContainer');
+    const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+
+    let autoSaveInterval = null;
+
+    // ─── Build embed URL ───
+    function buildScreenscapeURL() {
+      let id = ssId.value.trim();
+      const type = ssType.value;
+      const lang = ssLang.value.trim() || 'eng';
+      let url = 'https://screenscape.me/embed?';
+
+      if (/^\d+$/.test(id)) url += `tmdb=${id}&type=${type}`;
+      else if (/^tt\d+$/.test(id)) {
+        url += `imdb=${id}`;
+        if (type === 'tv') url += `&type=tv`;
+      } else {
+        url += `tmdb=${id}&type=${type}`;
+      }
+
+      if (type === 'tv') {
+        url += `&s=${parseInt(ssSeason.value) || 1}&e=${parseInt(ssEpisode.value) || 1}`;
+      }
+      if (lang) url += `&lan=${encodeURIComponent(lang)}`;
+
+      return url;
+    }
+
+    // ─── Load embed ───
+    function loadScreenscape() {
+      const url = buildScreenscapeURL();
+      ssIframe.src = url;
+      console.log('[Screenscape] Loaded:', url);
+    }
+
+    // ─── Send postMessage to iframe ───
+    function sendScreenscapeRequest(type, requestId = 'req-' + Date.now()) {
+      if (!ssIframe.contentWindow) {
+        console.warn('[Screenscape] Iframe not ready.');
+        return;
+      }
+      ssIframe.contentWindow.postMessage({
+        type: type,
+        requestId: requestId
+      }, 'https://screenscape.me');
+    }
+
+    // ─── Save watch progress to Firestore ───
+    async function saveWatchProgress(progressData) {
+      if (!firebase.auth().currentUser) {
+        console.warn('User not logged in, skipping save.');
+        return;
+      }
+
+      const id = ssId.value.trim();
+      const type = ssType.value;
+      const title = ssTitle.value.trim() || 'Untitled';
+      const lang = ssLang.value.trim() || 'eng';
+      let season = null, episode = null;
+
+      if (type === 'tv') {
+        season = parseInt(ssSeason.value) || 1;
+        episode = parseInt(ssEpisode.value) || 1;
+      }
+
+      let mediaId = id;
+      if (type === 'tv') mediaId += `_S${season}E${episode}`;
+
+      const payload = {
+        userId: firebase.auth().currentUser.uid,
+        mediaId: mediaId,
+        tmdbId: /^\d+$/.test(id) ? id : null,
+        imdbId: /^tt\d+$/.test(id) ? id : null,
+        title: title,
+        type: type,
+        season: season,
+        episode: episode,
+        language: lang,
+        progress: Math.min(100, Math.round(progressData.progress || 0)),
+        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      try {
+        await watchHistoryRef.doc(mediaId).set(payload, { merge: true });
+        console.log('[WatchHistory] Saved:', mediaId, payload.progress + '%');
+      } catch (err) {
+        console.error('[WatchHistory] Save error:', err);
+      }
+    }
+
+    // ─── Render Watch History ───
+    function renderWatchHistory(snapshot) {
+      if (!historyContainer) return;
+
+      if (snapshot.empty) {
+        historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">No watch history yet. Load a video and it will auto-save!</p>`;
+        return;
+      }
+
+      let html = '<div style="display: flex; flex-direction: column; gap: 0.75rem;">';
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const progress = data.progress || 0;
+        const isMovie = data.type === 'movie';
+        const label = isMovie ? data.title : `${data.title} (S${data.season}E${data.episode})`;
+        const pct = progress + '%';
+
+        html += `
+          <div style="background: #050505; border: 1px solid var(--border); padding: 0.8rem 1rem; display: flex; flex-direction: column; gap: 0.3rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+              <span style="font-size: 0.9rem; color: var(--text);">${escapeHtml(label)}</span>
+              <span style="font-size: 0.75rem; color: var(--accent); font-weight: bold;">${pct}</span>
+            </div>
+            <div style="width: 100%; height: 6px; background: #080808; border: 1px solid var(--border); overflow: hidden;">
+              <div style="width: ${progress}%; height: 100%; background: var(--accent); box-shadow: 0 0 8px var(--accent); transition: width 0.3s;"></div>
+            </div>
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.2rem;">
+              <button class="resume-btn" data-mediaid="${data.mediaId}" style="background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 0.15rem 0.8rem; font-size: 0.65rem; cursor: pointer;">▶ Resume</button>
+              <button class="delete-history-btn" data-mediaid="${data.mediaId}" style="background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 0.15rem 0.8rem; font-size: 0.65rem; cursor: pointer;">✕</button>
+            </div>
+          </div>
+        `;
+      });
+      html += '</div>';
+      historyContainer.innerHTML = html;
+
+      // ─── Resume buttons ───
+      historyContainer.querySelectorAll('.resume-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const mediaId = btn.dataset.mediaid;
+          const doc = await watchHistoryRef.doc(mediaId).get();
+          if (!doc.exists) return;
+          const data = doc.data();
+          
+          ssTitle.value = data.title || '';
+          if (data.tmdbId) ssId.value = data.tmdbId;
+          else if (data.imdbId) ssId.value = data.imdbId;
+          ssType.value = data.type || 'movie';
+          if (data.type === 'tv') {
+            ssSeason.value = data.season || 1;
+            ssEpisode.value = data.episode || 1;
+          }
+          ssLang.value = data.language || 'eng';
+
+          loadScreenscape();
+          alert(`🎬 Loaded "${data.title}" (${data.progress}% watched).\nPlay and it will auto-save again!`);
+        });
+      });
+
+      // ─── Delete buttons ───
+      historyContainer.querySelectorAll('.delete-history-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const mediaId = btn.dataset.mediaid;
+          if (confirm(`Delete this entry?`)) {
+            await watchHistoryRef.doc(mediaId).delete();
+          }
+        });
+      });
+    }
+
+    // ─── Listen to Firestore for real-time updates ───
+    let unsubHistory = null;
+
+    function subscribeWatchHistory() {
+      if (unsubHistory) unsubHistory();
+      const user = firebase.auth().currentUser;
+      if (!user) return;
+
+      unsubHistory = watchHistoryRef
+        .where('userId', '==', user.uid)
+        .orderBy('lastUpdated', 'desc')
+        .onSnapshot(snapshot => {
+          renderWatchHistory(snapshot);
+        }, err => {
+          console.error('History subscription error:', err);
+        });
+    }
+
+    // ─── Auto-save timer ───
+    function startAutoSave() {
+      if (autoSaveInterval) clearInterval(autoSaveInterval);
+      autoSaveInterval = setInterval(() => {
+        if (autoSaveToggle.checked && ssIframe.src) {
+          sendScreenscapeRequest('SCREENSCAPE_GET_PROGRESS');
+        }
+      }, 10000);
+    }
+
+    function stopAutoSave() {
+      if (autoSaveInterval) {
+        clearInterval(autoSaveInterval);
+        autoSaveInterval = null;
+      }
+    }
+
+    // ─── PostMessage Listener ───
+    window.addEventListener('message', (event) => {
+      if (event.origin !== 'https://screenscape.me') return;
+
+      const data = event.data;
+      if (!data?.type) return;
+
+      console.log('[Screenscape] Received:', data.type, data);
+
+      if (data.type === 'SCREENSCAPE_PROGRESS_RESPONSE') {
+        if (data.progress !== undefined) {
+          saveWatchProgress({ progress: data.progress });
+        }
+      }
+
+      if (data.type === 'SCREENSCAPE_WATCH_HISTORY_WITH_PROGRESS_RESPONSE') {
+        console.log('[Screenscape] History received:', data.watchHistory);
+      }
+    });
+
+    // ─── Manual Save ───
+    manualSaveBtn.addEventListener('click', () => {
+      if (!ssIframe.src) {
+        alert('Load a video first!');
+        return;
+      }
+      sendScreenscapeRequest('SCREENSCAPE_GET_PROGRESS');
+    });
+
+    // ─── Load Button ───
+    ssLoadBtn.addEventListener('click', () => {
+      loadScreenscape();
+      setTimeout(() => {
+        sendScreenscapeRequest('SCREENSCAPE_GET_PROGRESS');
+      }, 2000);
+    });
+
+    // Enter key support
+    [ssTitle, ssId, ssType, ssSeason, ssEpisode, ssLang].forEach(el => {
+      el.addEventListener('keydown', (e) => { if (e.key === 'Enter') ssLoadBtn.click(); });
+    });
+
+    // ─── Clear History ───
+    clearHistoryBtn.addEventListener('click', async () => {
+      if (!confirm('Delete ALL watch history? This cannot be undone.')) return;
+      const user = firebase.auth().currentUser;
+      if (!user) return;
+      const snapshot = await watchHistoryRef.where('userId', '==', user.uid).get();
+      if (snapshot.empty) return;
+      const batch = db.batch();
+      snapshot.forEach(doc => batch.delete(doc.ref));
+      await batch.commit();
+    });
+
+    // ─── Auto-save toggle ───
+    autoSaveToggle.addEventListener('change', () => {
+      if (autoSaveToggle.checked) startAutoSave();
+      else stopAutoSave();
+    });
+
+    // ─── Auth listener for history ───
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        subscribeWatchHistory();
+        startAutoSave();
+      } else {
+        stopAutoSave();
+        if (unsubHistory) { unsubHistory(); unsubHistory = null; }
+        historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">Please log in to see watch history.</p>`;
+      }
+    });
+
     function init() {
       const now = new Date();
       currentDay = dayOrder[now.getDay()];
@@ -1367,142 +1655,7 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       renderPlan();
       renderDayDetail(selectedCalDate);
     }
-    // ============================================
-// SCREENSCAPE.INTEGRATION
-// ============================================
 
-// DOM refs
-const ssId = document.getElementById('screenscapeId');
-const ssType = document.getElementById('screenscapeType');
-const ssSeason = document.getElementById('screenscapeSeason');
-const ssEpisode = document.getElementById('screenscapeEpisode');
-const ssLang = document.getElementById('screenscapeLang');
-const ssLoadBtn = document.getElementById('screenscapeLoadBtn');
-const ssIframe = document.getElementById('screenscapeIframe');
-const ssLog = document.getElementById('screenscapeLog');
-
-// Build embed URL
-function buildScreenscapeURL() {
-  let id = ssId.value.trim();
-  const type = ssType.value;
-  const lang = ssLang.value.trim() || 'eng';
-  let url = 'https://screenscape.me/embed?';
-
-  // Determine if it's TMDB (number) or IMDB (starts with tt)
-  if (/^\d+$/.test(id)) {
-    url += `tmdb=${id}&type=${type}`;
-  } else if (/^tt\d+$/.test(id)) {
-    url += `imdb=${id}`;
-    if (type === 'tv') url += `&type=tv`;
-  } else {
-    // fallback: treat as tmdb
-    url += `tmdb=${id}&type=${type}`;
-  }
-
-  if (type === 'tv') {
-    const s = parseInt(ssSeason.value) || 1;
-    const e = parseInt(ssEpisode.value) || 1;
-    url += `&s=${s}&e=${e}`;
-  }
-
-  if (lang) url += `&lan=${encodeURIComponent(lang)}`;
-
-  return url;
-}
-
-// Load embed
-function loadScreenscape() {
-  const url = buildScreenscapeURL();
-  ssIframe.src = url;
-  // Log to console
-  console.log('[Screenscape] Loading:', url);
-  appendLog(`⏳ Loading: ${url}`);
-}
-
-// Append message to log
-function appendLog(msg) {
-  const time = new Date().toLocaleTimeString();
-  ssLog.textContent += `[${time}] ${msg}\n`;
-  ssLog.scrollTop = ssLog.scrollHeight;
-}
-
-// Load on button click
-ssLoadBtn.addEventListener('click', loadScreenscape);
-
-// Load on Enter key in fields
-[ssId, ssType, ssSeason, ssEpisode, ssLang].forEach(el => {
-  el.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') loadScreenscape();
-  });
-});
-
-// --- PostMessage listeners for watch history & progress ---
-
-window.addEventListener('message', (event) => {
-  // Only accept messages from screenscape.me
-  if (event.origin !== 'https://screenscape.me') return;
-
-  const data = event.data;
-  if (data?.type) {
-    const type = data.type;
-    // Log the event
-    appendLog(`📨 ${type} received`);
-    console.log('[Screenscape] PostMessage:', data);
-
-    // Optionally display summary
-    if (type === 'SCREENSCAPE_WATCH_HISTORY_WITH_PROGRESS_RESPONSE') {
-      appendLog(`   History entries: ${data.watchHistory?.length || 0}`);
-    }
-    if (type === 'SCREENSCAPE_PROGRESS_RESPONSE') {
-      appendLog(`   Progress: ${data.progress || 'none'}`);
-    }
-  }
-});
-
-// Send a postMessage request
-function sendScreenscapeRequest(type, requestId = 'req-' + Date.now()) {
-  if (!ssIframe.contentWindow) {
-    appendLog('❌ Iframe not loaded yet.');
-    return;
-  }
-  ssIframe.contentWindow.postMessage({
-    type: type,
-    requestId: requestId
-  }, 'https://screenscape.me');
-  appendLog(`📤 Sent ${type} (${requestId})`);
-}
-
-// Buttons for history/progress
-document.getElementById('screenscapeGetHistoryBtn').addEventListener('click', () => {
-  sendScreenscapeRequest('SCREENSCAPE_GET_WATCH_HISTORY_WITH_PROGRESS');
-});
-
-document.getElementById('screenscapeGetProgressBtn').addEventListener('click', () => {
-  // For progress, you may need to include tmdb/season/episode – we'll send as params
-  const id = ssId.value.trim();
-  const type = ssType.value;
-  let progressPayload = {};
-  if (/^\d+$/.test(id)) {
-    progressPayload.tmdb = id;
-  } else if (/^tt\d+$/.test(id)) {
-    progressPayload.imdb = id;
-  }
-  if (type === 'tv') {
-    progressPayload.season = parseInt(ssSeason.value) || 1;
-    progressPayload.episode = parseInt(ssEpisode.value) || 1;
-  }
-  // You can also send SCREENSCAPE_GET_PROGRESS with these params
-  // But the API might expect them in the message data.
-  // We'll send a generic GET_PROGRESS without params, it will return current player progress.
-  sendScreenscapeRequest('SCREENSCAPE_GET_PROGRESS');
-});
-
-// Auto-load a default on first visit (optional)
-let screenscapeFirstLoad = true;
-// We'll load when the view becomes active (see step 5)
-
-// Also set the iframe src initially to something (maybe empty or default)
-// We'll load on view activation.
     init();
     setupEvents();
   </script>
