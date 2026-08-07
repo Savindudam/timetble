@@ -199,7 +199,6 @@
   </style>
 </head>
 <body>
-  <!-- LOGIN OVERLAY -->
   <div id="loginOverlay">
     <div class="login-card">
       <div class="login-logo">THRENOX</div>
@@ -213,7 +212,6 @@
     </div>
   </div>
 
-  <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">THRENOX</div>
     <nav class="sidebar-nav">
@@ -247,9 +245,7 @@
     </div>
   </aside>
 
-  <!-- MAIN CONTENT -->
   <div class="main" id="mainContent">
-    <!-- Top bar -->
     <div class="top-bar">
       <div style="display: flex; align-items: center;">
         <button id="menuToggle">☰</button>
@@ -264,7 +260,6 @@
       <div class="progress-bar-fill" id="progressBarFill"></div>
     </div>
 
-    <!-- DASHBOARD -->
     <div class="view active" id="dashboardView">
       <div class="dashboard-grid">
         <div class="card-widget current-task-widget" id="currentTaskWidget">
@@ -323,12 +318,10 @@
       </div>
     </div>
 
-    <!-- TIMETABLE -->
     <div class="view" id="timetableView">
       <div class="timeline" id="timelineContainer"></div>
     </div>
 
-    <!-- TODO -->
     <div class="view" id="todoView">
       <div class="todo-container">
         <div class="todo-input-row">
@@ -339,7 +332,6 @@
       </div>
     </div>
 
-    <!-- PROGRESS -->
     <div class="view" id="progressView">
       <div class="stats-container">
         <div class="plan-header">
@@ -355,7 +347,6 @@
       </div>
     </div>
 
-    <!-- CALENDAR -->
     <div class="view" id="calendarView">
       <div class="calendar-page">
         <div class="calendar-grid-wrap">
@@ -393,11 +384,10 @@
       </div>
     </div>
 
-    <!-- SCREENSCAPE -->
     <div class="view" id="screenscapeView">
       <div style="max-width: 1100px; margin: 0 auto; padding: 0 1rem;">
         <div class="card-widget" style="padding: 1.5rem; margin-bottom: 1.5rem;">
-          <h3 style="color: var(--accent); margin-top: 0; margin-bottom: 1rem;">🎬 Embed Player</h3>
+          <h3 style="color: var(--accent); margin-top: 0; margin-bottom: 1rem;">Embed Player</h3>
           <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end;">
             <div style="flex: 1; min-width: 150px;">
               <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Title (for log)</label>
@@ -427,12 +417,12 @@
               <input type="text" id="screenscapeLang" value="eng" placeholder="eng, hindi..." style="width: 100%;">
             </div>
             <div style="display: flex; gap: 0.5rem;">
-              <button id="screenscapeLoadBtn" class="todo-add-btn" style="padding: 0.6rem 1.8rem;">▶ Load</button>
-              <button id="manualSaveBtn" class="todo-add-btn" style="padding: 0.2rem 1rem; font-size: 0.7rem;">💾 Save Now</button>
+              <button id="screenscapeLoadBtn" class="todo-add-btn" style="padding: 0.6rem 1.8rem;">Load</button>
+              <button id="manualSaveBtn" class="todo-add-btn" style="padding: 0.2rem 1rem; font-size: 0.7rem;">Save Now</button>
             </div>
           </div>
           <div style="margin-top: 0.75rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
-            <span style="font-size: 0.7rem; color: var(--text-secondary);">💡 Use TMDB ID (e.g. 597) or IMDB ID (e.g. tt0800369).</span>
+            <span style="font-size: 0.7rem; color: var(--text-secondary);">Use TMDB ID (e.g. 597) or IMDB ID (e.g. tt0800369).</span>
           </div>
           <div id="saveStatus" style="margin-top: 0.75rem; color: var(--text-secondary); font-size: 0.8rem;"></div>
         </div>
@@ -441,10 +431,9 @@
           <iframe id="screenscapeIframe" src="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="fullscreen; autoplay; picture-in-picture" allowfullscreen></iframe>
         </div>
 
-        <!-- WATCH HISTORY (UPDATED: no progress bars, scrollable, newest first, load buttons) -->
         <div class="card-widget" style="padding: 1.5rem; margin-top: 0.5rem;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
-            <h3 style="color: var(--accent); margin: 0;">📜 Watch History</h3>
+            <h3 style="color: var(--accent); margin: 0;">Watch History</h3>
             <span style="font-size: 0.7rem; color: var(--text-secondary);">Click any entry to load it</span>
           </div>
           <div id="watchHistoryContainer" style="max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem;">
@@ -457,15 +446,11 @@
 
   <button class="fab" id="resetBtn" title="Go to current task">📍</button>
 
-  <!-- FIREBASE -->
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
 
   <script>
-    // ================================================================
-    // FIREBASE CONFIG
-    // ================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyBb3IIg51MeZEeJ5rk-X4vXQitH-ywew0s",
       authDomain: "timetable-threnox.firebaseapp.com",
@@ -480,53 +465,19 @@
     const auth = firebase.auth();
     const watchHistoryRef = db.collection("watchHistory");
 
-    // ================================================================
-    // TIMETABLE DATA (unchanged)
-    // ================================================================
     const timetable = {
-      Monday: [
-        ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], 
-        ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
-        ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
-      ],
-      Tuesday: [
-        ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], 
-        ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
-        ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
-      ],
-      Wednesday: [
-        ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], 
-        ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
-        ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
-      ],
-      Thursday: [
-        ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], 
-        ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
-        ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
-      ],
-      Friday: [
-        ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], 
-        ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
-        ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
-      ],
-      Saturday: [
-        ["04:00","04:30","Exercise"], ["04:30","07:00","IOI Deep Work (C++/Algo)"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Break"], ["09:45","13:00","IOI Mock Contest"], 
-        ["13:00","14:00","Lunch"], ["14:00","15:30","AL Hard Subject"], ["15:30","16:00","Break"], ["16:00","17:30","IOI Practice / Editorial Review"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], 
-        ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
-      ],
-      Sunday: [
-        ["04:00","04:30","Exercise"], ["04:30","07:00","IOI Deep Work (C++/Algo)"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Blitz"], ["09:30","09:45","Break"], ["09:45","12:00","IOI Theory + Practice"], 
-        ["12:00","13:00","Lunch"], ["13:00","14:30","AL Review"], ["14:30","15:00","Break"], ["15:00","17:00","IOI Heavy Block"], ["17:00","18:00","Hobby Time"], ["18:00","19:00","Dinner"], 
-        ["19:00","20:00","Gaming Time"], ["20:00","20:45","Recap / Review"], ["20:45","21:15","Wind down"], ["21:15","23:59","SLEEP"]
-      ]
+      Monday: [ ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
+      Tuesday: [ ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
+      Wednesday: [ ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
+      Thursday: [ ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
+      Friday: [ ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
+      Saturday: [ ["04:00","04:30","Exercise"], ["04:30","07:00","IOI Deep Work (C++/Algo)"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Break"], ["09:45","13:00","IOI Mock Contest"], ["13:00","14:00","Lunch"], ["14:00","15:30","AL Hard Subject"], ["15:30","16:00","Break"], ["16:00","17:30","IOI Practice / Editorial Review"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
+      Sunday: [ ["04:00","04:30","Exercise"], ["04:30","07:00","IOI Deep Work (C++/Algo)"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Blitz"], ["09:30","09:45","Break"], ["09:45","12:00","IOI Theory + Practice"], ["12:00","13:00","Lunch"], ["13:00","14:30","AL Review"], ["14:30","15:00","Break"], ["15:00","17:00","IOI Heavy Block"], ["17:00","18:00","Hobby Time"], ["18:00","19:00","Dinner"], ["19:00","20:00","Gaming Time"], ["20:00","20:45","Recap / Review"], ["20:45","21:15","Wind down"], ["21:15","23:59","SLEEP"] ]
     };
     const dayOrder = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
     let tasks = [];
     let currentDay = "";
 
-    // ================================================================
-    // DOM REFS
-    // ================================================================
     const dom = {
       greeting: document.getElementById('greetingMessage'),
       date: document.getElementById('dateDisplay'),
@@ -661,9 +612,6 @@
       dom.sidebar.classList.toggle('open');
     });
 
-    // ================================================================
-    // SIDEBAR NAVIGATION
-    // ================================================================
     const sidebarBtns = document.querySelectorAll('.sidebar-btn');
     const views = {
       dashboard: document.getElementById('dashboardView'),
@@ -688,9 +636,6 @@
       });
     });
 
-    // ================================================================
-    // TODO LIST
-    // ================================================================
     const todosRef = db.collection("todos");
     let unsubTodos = null;
     function renderTodos(snapshot) {
@@ -733,9 +678,6 @@
       if (e.key === "Enter") document.getElementById("todoAddBtn").click();
     });
 
-    // ================================================================
-    // CALENDAR
-    // ================================================================
     const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const fullMonthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     const weekdayNames = ["S","M","T","W","T","F","S"];
@@ -888,10 +830,10 @@
       widget.style.display = 'flex';
       if (next.daysUntil === 0) {
         widget.classList.add('today-highlight');
-        text.textContent = `🎉 Today is ${next.label}!`;
+        text.textContent = `Today is ${next.label}!`;
       } else {
         widget.classList.remove('today-highlight');
-        text.textContent = `📅 ${next.label} is ${next.daysUntil === 1 ? 'tomorrow' : `in ${next.daysUntil} days`}`;
+        text.textContent = `${next.label} is ${next.daysUntil === 1 ? 'tomorrow' : `in ${next.daysUntil} days`}`;
       }
     }
     document.getElementById('calPrevBtn').addEventListener('click', () => {
@@ -916,9 +858,6 @@
       labelInput.value = ''; dateInput.value = '';
     });
 
-    // ================================================================
-    // IOI PLAN
-    // ================================================================
     const ioiPlan = [
       { week: "Week 1 · C++ Fundamentals & First Problems", days: [
         { day: 1,  date: "20 Jul Sun", iso: "2026-07-20", tasks: ["Install Code::Blocks or VS Code + g++", "Write Hello World program", "Data types: int, long long, float, double, char, string", "Input/output: cin, cout", "Practice: read two integers, print sum, difference, product"]},
@@ -1100,7 +1039,6 @@
     document.getElementById('planProgressWidget').addEventListener('click', () => {
       document.querySelector('.sidebar-btn[data-view="progress"]').click();
     });
-
     async function runDailyCleanup() {
       try {
         const today = new Date().toDateString();
@@ -1116,9 +1054,6 @@
       } catch (e) { console.warn("Cleanup deferred:", e); }
     }
 
-    // ================================================================
-    // FIREBASE AUTH & DATA LISTENERS
-    // ================================================================
     function attachDataListeners() {
       unsubTodos = todosRef.orderBy("createdAt", "asc").onSnapshot(renderTodos);
       unsubCalendar = calendarRef.orderBy("createdAt", "asc").onSnapshot(snapshot => {
@@ -1170,9 +1105,23 @@
       if (logoutBtn) logoutBtn.onclick = () => auth.signOut();
     }
 
-    // ================================================================
-    // SCREENSCAPE INTEGRATION – UPDATED
-    // ================================================================
+    auth.onAuthStateChanged(user => {
+      const overlay = document.getElementById('loginOverlay');
+      if (user) {
+        overlay.style.opacity = '0';
+        setTimeout(() => { overlay.style.display = 'none'; }, 300);
+        attachDataListeners();
+        runDailyCleanup();
+        subscribeWatchHistory();
+      } else {
+        overlay.style.display = 'flex';
+        overlay.style.opacity = '1';
+        detachDataListeners();
+        if (unsubHistory) { unsubHistory(); unsubHistory = null; }
+        if (historyContainer) historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">Please log in to see watch history.</p>`;
+      }
+    });
+
     const ssTitle = document.getElementById('screenscapeTitle');
     const ssId = document.getElementById('screenscapeId');
     const ssType = document.getElementById('screenscapeType');
@@ -1186,9 +1135,8 @@
     const saveStatus = document.getElementById('saveStatus');
 
     let unsubHistory = null;
-    let latestDocId = null; // to track the most recent entry for auto-load
+    let latestDocId = null;
 
-    // Build embed URL
     function buildScreenscapeURL() {
       let id = ssId.value.trim();
       const type = ssType.value;
@@ -1208,19 +1156,16 @@
       return url;
     }
 
-    // Save media info to history (no progress)
     async function saveMediaToHistory() {
       if (!saveStatus) return;
-      saveStatus.textContent = '⏳ Saving history...';
+      saveStatus.textContent = 'Saving history...';
       saveStatus.style.color = 'var(--text-secondary)';
-
       const user = firebase.auth().currentUser;
       if (!user) {
-        saveStatus.textContent = '❌ Not logged in!';
+        saveStatus.textContent = 'Not logged in!';
         saveStatus.style.color = 'var(--danger)';
         return;
       }
-
       const id = ssId.value.trim();
       const type = ssType.value;
       const title = ssTitle.value.trim() || 'Untitled';
@@ -1230,10 +1175,8 @@
         season = parseInt(ssSeason.value) || 1;
         episode = parseInt(ssEpisode.value) || 1;
       }
-
       let mediaId = id;
       if (type === 'tv') mediaId += `_S${season}E${episode}`;
-
       const payload = {
         userId: user.uid,
         mediaId: mediaId,
@@ -1246,30 +1189,23 @@
         language: lang,
         lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
       };
-
       try {
         await watchHistoryRef.doc(mediaId).set(payload, { merge: true });
-        saveStatus.textContent = '✅ Saved!';
+        saveStatus.textContent = 'Saved!';
         saveStatus.style.color = 'var(--success)';
-        console.log('[WatchHistory] Saved:', mediaId);
-        // Update latestDocId to this mediaId so it becomes the new top
         latestDocId = mediaId;
       } catch (err) {
-        saveStatus.textContent = '❌ Error: ' + err.message;
+        saveStatus.textContent = 'Error: ' + err.message;
         saveStatus.style.color = 'var(--danger)';
-        console.error('[WatchHistory] Save error:', err);
       }
     }
 
-    // Load player and automatically save to history
     function loadScreenscape() {
       const url = buildScreenscapeURL();
       ssIframe.src = url;
-      console.log('[Screenscape] Loaded:', url);
       saveMediaToHistory();
     }
 
-    // Send progress request (manual)
     function sendProgressRequest() {
       if (!ssIframe.contentWindow) {
         alert('Player not loaded yet.');
@@ -1280,38 +1216,31 @@
           type: 'SCREENSCAPE_GET_PROGRESS',
           requestId: 'manual-' + Date.now()
         }, 'https://screenscape.me');
-        saveStatus.textContent = '⏳ Requesting progress...';
+        saveStatus.textContent = 'Requesting progress...';
       } catch (err) {
-        saveStatus.textContent = '❌ Cannot reach player: ' + err.message;
+        saveStatus.textContent = 'Cannot reach player: ' + err.message;
       }
     }
 
-    // Listen for progress response (optional)
     window.addEventListener('message', (event) => {
       if (!event.origin.includes('screenscape.me')) return;
       const data = event.data;
       if (!data?.type) return;
       if (data.type === 'SCREENSCAPE_PROGRESS_RESPONSE') {
         if (data.progress !== undefined) {
-          // If you want to save progress, you can update the entry.
-          // But we're not showing progress in history, so we'll just log.
-          console.log('[Screenscape] Progress received:', data.progress);
-          saveStatus.textContent = `✅ Progress: ${data.progress}%`;
+          saveStatus.textContent = 'Progress: ' + data.progress + '%';
         } else {
-          saveStatus.textContent = '⚠️ Progress not available';
+          saveStatus.textContent = 'Progress not available';
         }
       }
     });
 
-    // Render watch history (no progress bars)
     function renderWatchHistory(snapshot) {
       if (!historyContainer) return;
       if (snapshot.empty) {
         historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">No watch history yet. Load a video and it will be added!</p>`;
         return;
       }
-
-      // Build list: newest first is already sorted
       let html = '';
       snapshot.forEach(doc => {
         const data = typeof doc.data === 'function' ? doc.data() : doc;
@@ -1320,7 +1249,6 @@
         if (!isMovie && data.season && data.episode) {
           label += ` (S${data.season}E${data.episode})`;
         }
-
         html += `
           <div class="history-item" data-mediaid="${data.mediaId}" style="background: #050505; border: 1px solid var(--border); padding: 0.6rem 1rem; cursor: pointer; transition: background 0.2s;">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
@@ -1331,15 +1259,12 @@
         `;
       });
       historyContainer.innerHTML = html;
-
-      // Add click listener to each history item to load that media
       historyContainer.querySelectorAll('.history-item').forEach(item => {
         item.addEventListener('click', async function() {
           const mediaId = this.dataset.mediaid;
           const doc = await watchHistoryRef.doc(mediaId).get();
           if (!doc.exists) return;
           const data = doc.data();
-          // Fill the form fields
           ssTitle.value = data.title || '';
           if (data.tmdbId) ssId.value = data.tmdbId;
           else if (data.imdbId) ssId.value = data.imdbId;
@@ -1349,13 +1274,10 @@
             ssEpisode.value = data.episode || 1;
           }
           ssLang.value = data.language || 'eng';
-          // Load it
           loadScreenscape();
-          // Highlight it in the list (optional)
           historyContainer.querySelectorAll('.history-item').forEach(el => el.style.borderColor = 'var(--border)');
           this.style.borderColor = 'var(--accent)';
         });
-        // Hover effect
         item.addEventListener('mouseenter', () => {
           item.style.background = 'rgba(0, 255, 65, 0.05)';
         });
@@ -1363,15 +1285,12 @@
           item.style.background = '#050505';
         });
       });
-
-      // Also store the first (newest) document ID for auto-load
       const firstChild = historyContainer.querySelector('.history-item');
       if (firstChild) {
         latestDocId = firstChild.dataset.mediaid;
       }
     }
 
-    // Subscribe to history (sorted manually)
     function subscribeWatchHistory() {
       if (unsubHistory) unsubHistory();
       const user = firebase.auth().currentUser;
@@ -1379,7 +1298,6 @@
         historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">Please log in to see watch history.</p>`;
         return;
       }
-
       unsubHistory = watchHistoryRef
         .where('userId', '==', user.uid)
         .onSnapshot(snapshot => {
@@ -1398,10 +1316,8 @@
             empty: docs.length === 0,
             forEach: (cb) => docs.forEach(d => cb({ data: () => d, id: d.id }))
           });
-          // Auto-load the latest entry if we haven't loaded anything yet
           if (docs.length > 0 && !ssIframe.src) {
             const latest = docs[0];
-            // Fill fields with latest data
             ssTitle.value = latest.title || '';
             if (latest.tmdbId) ssId.value = latest.tmdbId;
             else if (latest.imdbId) ssId.value = latest.imdbId;
@@ -1411,52 +1327,20 @@
               ssEpisode.value = latest.episode || 1;
             }
             ssLang.value = latest.language || 'eng';
-            // Load it
             loadScreenscape();
           }
         }, err => {
-          console.error('[WatchHistory] subscription error:', err);
-          historyContainer.innerHTML = `<p style="color: var(--danger);">⚠️ Error loading history: ${err.message}</p>`;
+          console.error('History subscription error:', err);
+          historyContainer.innerHTML = `<p style="color: var(--danger);">Error loading history: ${err.message}</p>`;
         });
     }
 
-    // Override the original auth state to also call subscribeWatchHistory
-    const originalOnAuth = firebase.auth().onAuthStateChanged;
-    firebase.auth().onAuthStateChanged(user => {
-      const overlay = document.getElementById('loginOverlay');
-      if (user) {
-        overlay.style.opacity = '0';
-        setTimeout(() => { overlay.style.display = 'none'; }, 300);
-        attachDataListeners();
-        runDailyCleanup();
-        subscribeWatchHistory(); // this will auto-load the latest
-      } else {
-        overlay.style.display = 'flex';
-        overlay.style.opacity = '1';
-        detachDataListeners();
-        if (unsubHistory) { unsubHistory(); unsubHistory = null; }
-        if (historyContainer) historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">Please log in to see watch history.</p>`;
-        // Reset the player to default (optional)
-        ssId.value = '597';
-        ssTitle.value = 'Titanic';
-        ssType.value = 'movie';
-        ssSeason.value = '1';
-        ssEpisode.value = '1';
-        ssLang.value = 'eng';
-        ssIframe.src = '';
-      }
-    });
-
-    // Event listeners for Screenscape
     ssLoadBtn.addEventListener('click', loadScreenscape);
     [ssTitle, ssId, ssType, ssSeason, ssEpisode, ssLang].forEach(el => {
       el.addEventListener('keydown', (e) => { if (e.key === 'Enter') ssLoadBtn.click(); });
     });
     manualSaveBtn.addEventListener('click', sendProgressRequest);
 
-    // ================================================================
-    // INIT
-    // ================================================================
     function init() {
       const now = new Date();
       currentDay = dayOrder[now.getDay()];
