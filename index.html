@@ -1427,47 +1427,84 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
     }
 
     // ─── Save watch progress to Firestore ───
-    async function saveWatchProgress(progressData) {
-      if (!firebase.auth().currentUser) {
-        console.warn('User not logged in, skipping save.');
-        return;
-      }
+    // ─── Save watch progress to Firestore (with full logging) ───
+async function saveWatchProgress(progressData) {
+  console.log('[DEBUG] saveWatchProgress called with:', progressData);
 
-      const id = ssId.value.trim();
-      const type = ssType.value;
-      const title = ssTitle.value.trim() || 'Untitled';
-      const lang = ssLang.value.trim() || 'eng';
-      let season = null, episode = null;
+  const user = firebase.auth().currentUser;
+  if (!user) {
+    console.warn('[WatchHistory] User not logged in, skipping save.');
+    return;
+  }
+  console.log('[WatchHistory] User logged in:', user.uid);
 
-      if (type === 'tv') {
-        season = parseInt(ssSeason.value) || 1;
-        episode = parseInt(ssEpisode.value) || 1;
-      }
+  const id = ssId.value.trim();
+  const type = ssType.value;
+  const title = ssTitle.value.trim() || 'Untitled';
+  const lang = ssLang.value.trim() || 'eng';
+  let season = null, episode = null;
 
-      let mediaId = id;
-      if (type === 'tv') mediaId += `_S${season}E${episode}`;
+  if (type === 'tv') {
+    season = parseInt(ssSeason.value) || 1;
+    episode = parseInt(ssEpisode.value) || 1;
+  }
 
-      const payload = {
-        userId: firebase.auth().currentUser.uid,
-        mediaId: mediaId,
-        tmdbId: /^\d+$/.test(id) ? id : null,
-        imdbId: /^tt\d+$/.test(id) ? id : null,
-        title: title,
-        type: type,
-        season: season,
-        episode: episode,
-        language: lang,
-        progress: Math.min(100, Math.round(progressData.progress || 0)),
-        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-      };
+  let mediaId = id;
+  if (type === 'tv') mediaId += `_S${season}E${episode}`;
 
-      try {
-        await watchHistoryRef.doc(mediaId).set(payload, { merge: true });
-        console.log('[WatchHistory] Saved:', mediaId, payload.progress + '%');
-      } catch (err) {
-        console.error('[WatchHistory] Save error:', err);
-      }
+  const payload = {
+    userId: user.uid,
+    mediaId: mediaId,
+    tmdbId: /^\d+$/.test(id) ? id : null,
+    imdbId: /^tt\d+$/.test(id) ? id : null,
+    title: title,
+    type: type,
+    season: season,
+    episode: episode,
+    language: lang,
+    progress: Math.min(100, Math.round(progressData.progress || 0)),
+    lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  console.log('[WatchHistory] Payload to save:', payload);
+
+  try {
+    const docRef = watchHistoryRef.doc(mediaId);
+    await docRef.set(payload, { merge: true });
+    console.log('[WatchHistory] ✅ Saved successfully!');
+  } catch (err) {
+    console.error('[WatchHistory] ❌ Save error:', err);
+  }
+}
+
+// ─── PostMessage Listener (verbose) ───
+window.addEventListener('message', (event) => {
+  console.log('[DEBUG] Message received from origin:', event.origin);
+
+  // Allow both localhost and screenscape.me for testing
+  if (!event.origin.includes('screenscape.me') && !event.origin.includes('localhost')) {
+    console.warn('[DEBUG] Ignoring message from untrusted origin:', event.origin);
+    return;
+  }
+
+  const data = event.data;
+  if (!data?.type) return;
+
+  console.log('[Screenscape] Received:', data.type, data);
+
+  if (data.type === 'SCREENSCAPE_PROGRESS_RESPONSE') {
+    console.log('[Screenscape] Progress value:', data.progress);
+    if (data.progress !== undefined) {
+      saveWatchProgress({ progress: data.progress });
+    } else {
+      console.warn('[Screenscape] Progress response missing progress field.');
     }
+  }
+
+  if (data.type === 'SCREENSCAPE_WATCH_HISTORY_WITH_PROGRESS_RESPONSE') {
+    console.log('[Screenscape] History received:', data.watchHistory);
+  }
+});
 
     // ─── Render Watch History ───
     function renderWatchHistory(snapshot) {
