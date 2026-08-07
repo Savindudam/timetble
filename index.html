@@ -9,7 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap');
-
     :root {
         --bg: #000000;
         --surface: #030303;
@@ -26,81 +25,39 @@
         --radius-sm: 0px;
         --sidebar-width: 240px;
     }
-
     * { box-sizing: border-box; font-family: 'JetBrains Mono', monospace !important; }
-
     html, body { background: #000; color: var(--text); height: 100vh; overflow: hidden; margin: 0; padding: 0; }
     body { display: flex; }
-
-    /* CRT Scanline Effect */
-    body::before {
-        content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 9999;
-        background: repeating-linear-gradient(0deg, rgba(0, 255, 65, 0.02) 0px, rgba(0, 255, 65, 0.02) 1px, transparent 1px, transparent 3px);
-    }
-    body::after {
-        content: ""; position: fixed; inset: 0; pointer-events: none;
-        background: radial-gradient(circle at center, rgba(0, 255, 65, 0.05) 0%, transparent 70%);
-        z-index: 9998;
-    }
-
+    body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 9999; background: repeating-linear-gradient(0deg, rgba(0, 255, 65, 0.02) 0px, rgba(0, 255, 65, 0.02) 1px, transparent 1px, transparent 3px); }
+    body::after { content: ""; position: fixed; inset: 0; pointer-events: none; background: radial-gradient(circle at center, rgba(0, 255, 65, 0.05) 0%, transparent 70%); z-index: 9998; }
     h1, h2, h3, h4 { color: #d8ffd8; letter-spacing: 1px; text-transform: uppercase; }
     h1::after, h2::after { content: "_"; color: #00ff41; animation: blink 1s infinite; }
     @keyframes blink { 50% { opacity: 0; } }
-
-    /* Responsive Sidebar */
-    .sidebar {
-        width: var(--sidebar-width); background: #000; border-right: 1px solid var(--border);
-        box-shadow: 10px 0 30px rgba(0, 255, 65, 0.03); display: flex; flex-direction: column;
-        padding: 1.5rem 1rem; flex-shrink: 0; z-index: 100; transition: transform 0.3s ease;
-    }
+    .sidebar { width: var(--sidebar-width); background: #000; border-right: 1px solid var(--border); box-shadow: 10px 0 30px rgba(0, 255, 65, 0.03); display: flex; flex-direction: column; padding: 1.5rem 1rem; flex-shrink: 0; z-index: 100; transition: transform 0.3s ease; }
     .sidebar-logo { color: #00ff41; font-weight: 900; letter-spacing: 2px; margin-bottom: 2rem; padding: 0 1rem; font-size: 1.4rem; }
     .sidebar-logo::before { content: "root@threnox:~$ "; color: #507050; font-size: 0.7rem; display: block; margin-bottom: 0.2rem; }
     .sidebar-nav { display: flex; flex-direction: column; gap: 0.3rem; flex: 1; }
-    .sidebar-btn {
-        background: transparent; color: #709070; border: none; border-left: 2px solid transparent;
-        border-radius: 0; padding: 0.8rem 1.2rem; transition: 0.2s; text-align: left; width: 100%;
-        cursor: pointer; display: flex; align-items: center; gap: 0.8rem; font-size: 0.85rem;
-    }
+    .sidebar-btn { background: transparent; color: #709070; border: none; border-left: 2px solid transparent; border-radius: 0; padding: 0.8rem 1.2rem; transition: 0.2s; text-align: left; width: 100%; cursor: pointer; display: flex; align-items: center; gap: 0.8rem; font-size: 0.85rem; }
     .sidebar-btn:hover { color: #00ff41; background: rgba(0, 255, 65, 0.05); }
     .sidebar-btn.active { color: #00ff41; border-left: 2px solid #00ff41; background: rgba(0, 255, 65, 0.08); }
     .sidebar-btn svg { width: 18px; height: 18px; stroke: currentColor; flex-shrink: 0; }
-
     .sidebar-footer { border-top: 1px solid var(--border); padding-top: 0.75rem; margin-top: 0.75rem; }
-    .logout-btn {
-        background: transparent; color: #709070; border: 1px solid var(--border);
-        padding: 0.6rem 1rem; width: 100%; cursor: pointer; font-size: 0.75rem;
-        text-transform: uppercase; letter-spacing: 0.5px; transition: 0.2s;
-    }
+    .logout-btn { background: transparent; color: #709070; border: 1px solid var(--border); padding: 0.6rem 1rem; width: 100%; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; transition: 0.2s; }
     .logout-btn:hover { color: var(--danger); border-color: var(--danger); }
-
     .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; min-width: 0; }
-    .top-bar {
-        background: #000; border-bottom: 1px solid var(--border); padding: 1rem 2rem;
-        display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
-    }
+    .top-bar { background: #000; border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
     .greeting { font-size: 1.1rem; color: var(--text); }
     .date-time { display: flex; align-items: center; gap: 1rem; }
     .date-display { color: var(--text-secondary); font-size: 0.85rem; }
     .live-clock { background: transparent !important; border: 1px solid var(--accent); color: var(--accent); padding: 0.2rem 0.8rem; font-weight: bold; }
-
     .progress-bar-container, .plan-progress-track { background: #050505; border: 1px solid var(--border); height: 6px; flex-shrink: 0; }
-    .progress-bar-fill, .plan-progress-fill {
-        background: linear-gradient(90deg, #003b12, #00ff41); box-shadow: 0 0 10px #00ff41;
-        height: 100%; width: 0%; transition: width 0.4s ease;
-    }
-
+    .progress-bar-fill, .plan-progress-fill { background: linear-gradient(90deg, #003b12, #00ff41); box-shadow: 0 0 10px #00ff41; height: 100%; width: 0%; transition: width 0.4s ease; }
     .view { display: none; flex: 1; overflow-y: auto; padding: 2rem; }
     .view.active { display: block; }
-
     .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; }
-
-    .card-widget, .todo-item, .timeline-content, .plan-day, .plan-header, .stats-container {
-        background: #050505 !important; border: 1px solid var(--border) !important;
-        border-radius: 0px !important; box-shadow: var(--shadow) !important;
-    }
+    .card-widget, .todo-item, .timeline-content, .plan-day, .plan-header, .stats-container { background: #050505 !important; border: 1px solid var(--border) !important; border-radius: 0px !important; box-shadow: var(--shadow) !important; }
     .card-widget { padding: 1.5rem; }
     .card-widget:hover { border-color: var(--accent) !important; }
-
     .progress-ring-container { display: flex; align-items: center; gap: 1.25rem; }
     .progress-ring { width: 100px; height: 100px; flex-shrink: 0; transform: rotate(-90deg); }
     .progress-ring-circle { fill: none; stroke: var(--border); stroke-width: 6; }
@@ -108,19 +65,16 @@
     .progress-ring-text { transform: rotate(90deg); transform-origin: center; fill: var(--accent); font-size: 1.1rem; font-weight: 700; }
     .current-task-details h3 { margin: 0 0 0.4rem 0; font-size: 1rem; }
     .current-task-details p { margin: 0; color: var(--text-secondary); font-size: 0.8rem; }
-
     .countdown-title { color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
     .countdown-timer { display: flex; gap: 1.25rem; }
     .timer-unit { display: flex; flex-direction: column; align-items: center; }
     .timer-value { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
     .timer-label { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; margin-top: 0.2rem; }
-
     .stats-widget { display: flex; flex-direction: column; gap: 0.5rem; }
     .stat-item { display: flex; justify-content: space-between; align-items: center; }
     .stat-label { color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
     .stat-value { color: var(--accent); font-weight: 700; font-size: 1.1rem; }
     .focus-time { color: var(--accent); font-weight: 700; font-size: 1.4rem; }
-
     .timeline { position: relative; max-width: 700px; margin: 0 auto; padding-left: 1.5rem; }
     .timeline::before { content: ""; position: absolute; left: 5px; top: 0; bottom: 0; width: 2px; background: var(--border); }
     .timeline-item { position: relative; margin-bottom: 1rem; padding-left: 1.5rem; }
@@ -132,7 +86,6 @@
     .timeline-task { font-size: 0.95rem; }
     .status-badge { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 0.25rem 0.6rem; font-size: 0.7rem; text-transform: uppercase; white-space: nowrap; }
     .current .status-badge { border-color: var(--accent); color: var(--accent); }
-
     .todo-container { max-width: 650px; margin: 0 auto; }
     .todo-input-row { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
     .todo-input { flex: 1; }
@@ -143,23 +96,19 @@
     .todo-text { flex: 1; font-size: 0.9rem; }
     .todo-delete { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 0.2rem 0.5rem; }
     .todo-delete:hover { color: var(--danger); }
-
     input, button { background: #000; color: var(--accent); border: 1px solid var(--border); padding: 0.6rem 1rem; outline: none; font-size: 0.9rem; }
     input:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
     .todo-add-btn, .login-btn { background: #000; color: var(--accent); border: 1px solid var(--accent); cursor: pointer; transition: 0.2s; font-weight: bold; }
     .todo-add-btn:hover, .login-btn:hover { background: rgba(0, 255, 65, 0.1); box-shadow: 0 0 15px rgba(0, 255, 65, 0.3); }
     .login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
     .stats-container { padding: 1.5rem; max-width: 800px; margin: 0 auto; }
     .plan-header { border: none !important; box-shadow: none !important; padding: 0 0 1.25rem 0; }
     .plan-header h2 { margin: 0 0 0.4rem 0; font-size: 1.1rem; }
     .plan-header p { color: var(--text-secondary); font-size: 0.85rem; margin: 0 0 1rem 0; }
     .plan-progress-label { display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); }
     .plan-progress-label strong { color: var(--accent); }
-
     .plan-week { margin-bottom: 1.5rem; }
     .plan-week-title { color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
-
     .plan-day { margin-bottom: 0.6rem; overflow: hidden; }
     .plan-day-header { display: flex; justify-content: space-between; align-items: center; padding: 0.9rem 1.1rem; cursor: pointer; }
     .plan-day.today .plan-day-header { border-left: 2px solid var(--accent); }
@@ -172,25 +121,14 @@
     .plan-chev { transition: transform 0.2s ease; flex-shrink: 0; }
     .plan-day.open .plan-chev { transform: rotate(90deg); }
     .plan-day.all-done .plan-day-label { color: var(--success); }
-
     .plan-tasks { list-style: none; margin: 0; padding: 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid transparent; }
     .plan-day.open .plan-tasks { max-height: 600px; border-top: 1px solid var(--border); }
     .plan-task { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.6rem 1.1rem; font-size: 0.85rem; cursor: pointer; }
     .plan-task:hover { background: rgba(0, 255, 65, 0.04); }
     .plan-task input[type="checkbox"] { width: 14px; height: 14px; margin-top: 0.15rem; accent-color: var(--accent); flex-shrink: 0; padding: 0; }
     .plan-task.done .plan-task-text { text-decoration: line-through; color: var(--text-secondary); }
-
-    .fab {
-        position: fixed; bottom: 2rem; right: 2rem; width: 52px; height: 52px; border-radius: 50%;
-        border: 1px solid var(--accent); background: #000; color: var(--accent); font-size: 1.3rem;
-        cursor: pointer; display: none; align-items: center; justify-content: center;
-        box-shadow: 0 0 20px rgba(0, 255, 65, 0.25); z-index: 50;
-    }
-
-    #loginOverlay {
-        position: fixed; inset: 0; background: #000; z-index: 10000;
-        display: flex; align-items: center; justify-content: center; transition: opacity 0.3s ease;
-    }
+    .fab { position: fixed; bottom: 2rem; right: 2rem; width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--accent); background: #000; color: var(--accent); font-size: 1.3rem; cursor: pointer; display: none; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(0, 255, 65, 0.25); z-index: 50; }
+    #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; transition: opacity 0.3s ease; }
     .login-card { width: 400px; padding: 3rem; border: 1px solid var(--accent); box-shadow: 0 0 40px rgba(0, 255, 65, 0.15); text-align: center; background: #000; }
     .login-logo { font-size: 2.2rem; color: var(--accent); margin-bottom: 0.5rem; font-weight: 900; }
     .login-logo::before { content: "> "; color: #507050; }
@@ -198,13 +136,10 @@
     .login-form { display: flex; flex-direction: column; gap: 1.2rem; }
     .login-input { width: 100%; text-align: center; letter-spacing: 1px; }
     .login-error { color: var(--danger); font-size: 0.8rem; margin-top: 1.5rem; display: none; }
-
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #000; }
     ::-webkit-scrollbar-thumb { background: var(--border); }
     ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
-    /* CALENDAR / EVENTS */
     .calendar-page { display: flex; gap: 1.5rem; max-width: 1000px; margin: 0 auto; flex-wrap: wrap; align-items: flex-start; }
     .calendar-grid-wrap { flex: 1 1 420px; min-width: 320px; }
     .calendar-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
@@ -213,18 +148,12 @@
     .cal-nav-btn:hover { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
     .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
     .cal-weekday { text-align: center; font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; padding-bottom: 0.4rem; }
-    .cal-cell {
-        position: relative; aspect-ratio: 1 / 1; background: #050505; border: 1px solid var(--border);
-        display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem;
-    }
+    .cal-cell { position: relative; aspect-ratio: 1 / 1; background: #050505; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem; }
     .cal-cell:hover { border-color: var(--accent); }
     .cal-cell.empty { background: transparent; border: none; cursor: default; }
     .cal-cell.today { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); color: var(--accent); font-weight: 700; }
     .cal-cell.selected { border-color: var(--accent); background: rgba(0, 255, 65, 0.12); box-shadow: 0 0 14px rgba(0, 255, 65, 0.3); }
-    .cal-cell.has-event::after {
-        content: ""; position: absolute; bottom: 5px; width: 5px; height: 5px; border-radius: 50%;
-        background: var(--accent); box-shadow: 0 0 6px var(--accent);
-    }
+    .cal-cell.has-event::after { content: ""; position: absolute; bottom: 5px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 6px var(--accent); }
     .calendar-container { flex: 1 1 280px; min-width: 260px; margin: 0; }
     .event-input-row { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
     .event-input-row .event-label-input { flex: 1; min-width: 180px; }
@@ -232,39 +161,23 @@
     .event-type-label { display: flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: var(--text-secondary); cursor: pointer; }
     .event-type-label input[type="radio"] { width: 13px; height: 13px; accent-color: var(--accent); }
     .event-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
-    .event-item {
-        background: #050505 !important; border: 1px solid var(--border) !important;
-        display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
-        padding: 0.9rem 1.1rem;
-    }
+    .event-item { background: #050505 !important; border: 1px solid var(--border) !important; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.9rem 1.1rem; }
     .event-item.today { border-color: var(--accent) !important; box-shadow: 0 0 15px rgba(0, 255, 65, 0.15) !important; }
     .event-main { display: flex; flex-direction: column; gap: 0.15rem; }
     .event-name { font-size: 0.9rem; }
     .event-date { font-size: 0.75rem; color: var(--text-secondary); }
-    .event-badge {
-        background: transparent; border: 1px solid var(--border); color: var(--text-secondary);
-        padding: 0.25rem 0.6rem; font-size: 0.7rem; text-transform: uppercase; white-space: nowrap;
-    }
+    .event-badge { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 0.25rem 0.6rem; font-size: 0.7rem; text-transform: uppercase; white-space: nowrap; }
     .event-item.today .event-badge { border-color: var(--accent); color: var(--accent); }
     .event-delete { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 0.2rem 0.5rem; }
     .event-delete:hover { color: var(--danger); }
-
-    /* Dashboard event note widget */
     .note-widget { display: flex; flex-direction: column; gap: 0.5rem; justify-content: center; }
     .note-widget .countdown-title { margin-bottom: 0; }
     .note-widget-text { font-size: 1rem; color: var(--text); }
     .note-widget.today-highlight { border-color: var(--accent) !important; box-shadow: 0 0 20px rgba(0, 255, 65, 0.25) !important; }
     .note-widget.today-highlight .note-widget-text { color: var(--accent); font-weight: 700; }
-
-    /* Day detail panel */
-    .day-detail-panel {
-        padding: 1.1rem 1.25rem; margin-bottom: 1.25rem;
-    }
+    .day-detail-panel { padding: 1.1rem 1.25rem; margin-bottom: 1.25rem; }
     .day-detail-top { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.6rem; }
-    .day-detail-nav-btn {
-        background: #000; border: 1px solid var(--border); color: var(--accent);
-        width: 30px; height: 30px; padding: 0; cursor: pointer; font-size: 0.95rem; flex-shrink: 0;
-    }
+    .day-detail-nav-btn { background: #000; border: 1px solid var(--border); color: var(--accent); width: 30px; height: 30px; padding: 0; cursor: pointer; font-size: 0.95rem; flex-shrink: 0; }
     .day-detail-nav-btn:hover { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
     .day-detail-heading { text-align: center; flex: 1; }
     .day-detail-weekday { color: var(--text-secondary); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
@@ -275,42 +188,18 @@
     .day-detail-empty { color: var(--text-secondary); font-size: 0.82rem; text-align: center; padding: 0.4rem 0; }
     .day-detail-jump { display: block; margin: 0.7rem auto 0; background: transparent; border: 1px solid var(--border); color: var(--text-secondary); font-size: 0.72rem; padding: 0.3rem 0.7rem; cursor: pointer; }
     .day-detail-jump:hover { border-color: var(--accent); color: var(--accent); }
-
-    /* Mobile responsiveness */
     @media (max-width: 768px) {
-        .sidebar {
-            position: absolute;
-            transform: translateX(-100%);
-            height: 100vh;
-        }
-        .sidebar.open {
-            transform: translateX(0);
-        }
-        .top-bar {
-            padding: 1rem;
-        }
-        .dashboard-grid {
-            grid-template-columns: 1fr;
-        }
-        #menuToggle {
-            display: block !important;
-        }
+      .sidebar { position: absolute; transform: translateX(-100%); height: 100vh; }
+      .sidebar.open { transform: translateX(0); }
+      .top-bar { padding: 1rem; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      #menuToggle { display: block !important; }
     }
-
-    #menuToggle {
-        display: none;
-        background: #000;
-        border: 1px solid var(--accent);
-        color: var(--accent);
-        padding: 0.5rem;
-        cursor: pointer;
-        margin-right: 1rem;
-    }
-
-</style>
+    #menuToggle { display: none; background: #000; border: 1px solid var(--accent); color: var(--accent); padding: 0.5rem; cursor: pointer; margin-right: 1rem; }
+  </style>
 </head>
 <body>
-
+  <!-- LOGIN OVERLAY -->
   <div id="loginOverlay">
     <div class="login-card">
       <div class="login-logo">THRENOX</div>
@@ -324,38 +213,32 @@
     </div>
   </div>
 
+  <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">THRENOX</div>
     <nav class="sidebar-nav">
       <button class="sidebar-btn active" data-view="dashboard">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 
-2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         <span class="icon-only">Dashboard</span>
       </button>
       <button class="sidebar-btn" data-view="timetable">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" 
-rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         <span class="icon-only">Timetable</span>
       </button>
       <button class="sidebar-btn" data-view="todo">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path 
-d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         <span class="icon-only">To Do</span>
       </button>
       <button class="sidebar-btn" data-view="progress">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" 
-y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
         <span class="icon-only">Progress</span>
       </button>
       <button class="sidebar-btn" data-view="calendar">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 
-14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         <span class="icon-only">Calendar</span>
       </button>
       <button class="sidebar-btn" data-view="screenscape">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="5 3 19 12 5 21 5 3"/>
-        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         <span class="icon-only">Screenscape</span>
       </button>
     </nav>
@@ -364,7 +247,9 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
     </div>
   </aside>
 
+  <!-- MAIN CONTENT -->
   <div class="main" id="mainContent">
+    <!-- Top bar -->
     <div class="top-bar">
       <div style="display: flex; align-items: center;">
         <button id="menuToggle">☰</button>
@@ -379,6 +264,7 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       <div class="progress-bar-fill" id="progressBarFill"></div>
     </div>
 
+    <!-- DASHBOARD VIEW -->
     <div class="view active" id="dashboardView">
       <div class="dashboard-grid">
         <div class="card-widget current-task-widget" id="currentTaskWidget">
@@ -394,12 +280,10 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
             </div>
           </div>
         </div>
-
         <div class="card-widget note-widget" id="eventNoteWidget" style="display:none;">
           <div class="countdown-title">Note</div>
           <div class="note-widget-text" id="eventNoteText">---</div>
         </div>
-
         <div class="card-widget countdown-widget">
           <div class="countdown-title">AL 2028 Countdown</div>
           <div class="countdown-timer" id="alCountdown">
@@ -408,7 +292,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
             <div class="timer-unit"><span class="timer-value" id="al-mins">00</span><span class="timer-label">Min</span></div>
           </div>
         </div>
-
         <div class="card-widget countdown-widget">
           <div class="countdown-title">IOI 2027 Countdown</div>
           <div class="countdown-timer" id="ioiCountdown">
@@ -417,7 +300,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
             <div class="timer-unit"><span class="timer-value" id="ioi-mins">00</span><span class="timer-label">Min</span></div>
           </div>
         </div>
-
         <div class="card-widget stats-widget" id="statsWidget">
           <div class="stat-item"><span class="stat-label">Tasks</span><span class="stat-value" id="statTasks">0</span></div>
           <div class="stat-item"><span class="stat-label">Completed</span><span class="stat-value" id="statCompleted">0</span></div>
@@ -425,7 +307,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
           <div style="margin-top: 0.5rem;"><span class="stat-label">Focus Time</span></div>
           <div class="focus-time" id="focusTime">0h 0m</div>
         </div>
-
         <div class="card-widget current-task-widget" id="planProgressWidget" style="cursor:pointer;">
           <div class="progress-ring-container">
             <svg class="progress-ring" viewBox="0 0 100 100">
@@ -442,10 +323,12 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       </div>
     </div>
 
+    <!-- TIMETABLE VIEW -->
     <div class="view" id="timetableView">
       <div class="timeline" id="timelineContainer"></div>
     </div>
 
+    <!-- TODO VIEW -->
     <div class="view" id="todoView">
       <div class="todo-container">
         <div class="todo-input-row">
@@ -456,6 +339,7 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       </div>
     </div>
 
+    <!-- PROGRESS VIEW -->
     <div class="view" id="progressView">
       <div class="stats-container">
         <div class="plan-header">
@@ -471,6 +355,7 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       </div>
     </div>
 
+    <!-- CALENDAR VIEW -->
     <div class="view" id="calendarView">
       <div class="calendar-page">
         <div class="calendar-grid-wrap">
@@ -508,25 +393,20 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       </div>
     </div>
 
-    <!-- ===== SCREENSCAPE VIEW ===== -->
+    <!-- SCREENSCAPE VIEW -->
     <div class="view" id="screenscapeView">
       <div style="max-width: 1100px; margin: 0 auto; padding: 0 1rem;">
-
-        <!-- Config Card -->
         <div class="card-widget" style="padding: 1.5rem; margin-bottom: 1.5rem;">
           <h3 style="color: var(--accent); margin-top: 0; margin-bottom: 1rem;">🎬 Embed Player</h3>
           <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end;">
-            <!-- Title -->
             <div style="flex: 1; min-width: 150px;">
               <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Title (for log)</label>
               <input type="text" id="screenscapeTitle" value="Titanic" placeholder="e.g. Titanic, GoT S1E1" style="width: 100%;">
             </div>
-            <!-- TMDB/IMDB -->
             <div style="flex: 1; min-width: 140px;">
               <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">TMDB / IMDB ID</label>
               <input type="text" id="screenscapeId" value="597" placeholder="e.g. 597 or tt0800369" style="width: 100%;">
             </div>
-            <!-- Type -->
             <div style="min-width: 100px;">
               <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Type</label>
               <select id="screenscapeType" style="width: 100%; background: #000; color: var(--accent); border: 1px solid var(--border); padding: 0.6rem 1rem;">
@@ -534,65 +414,48 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
                 <option value="tv">TV Series</option>
               </select>
             </div>
-            <!-- Season -->
             <div style="min-width: 80px;">
               <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Season</label>
               <input type="number" id="screenscapeSeason" value="1" min="1" style="width: 100%;">
             </div>
-            <!-- Episode -->
             <div style="min-width: 80px;">
               <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Episode</label>
               <input type="number" id="screenscapeEpisode" value="1" min="1" style="width: 100%;">
             </div>
-            <!-- Language -->
             <div style="min-width: 100px;">
               <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Language</label>
               <input type="text" id="screenscapeLang" value="eng" placeholder="eng, hindi..." style="width: 100%;">
             </div>
-            <!-- Buttons -->
             <div style="display: flex; gap: 0.5rem;">
               <button id="screenscapeLoadBtn" class="todo-add-btn" style="padding: 0.6rem 1.8rem;">▶ Load</button>
+              <button id="manualSaveBtn" class="todo-add-btn" style="padding: 0.2rem 1rem; font-size: 0.7rem;">💾 Save Now</button>
             </div>
           </div>
           <div style="margin-top: 0.75rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
             <span style="font-size: 0.7rem; color: var(--text-secondary);">💡 Use TMDB ID (e.g. 597) or IMDB ID (e.g. tt0800369).</span>
-            <label style="font-size: 0.75rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
-              <input type="checkbox" id="autoSaveToggle" checked> Auto-save progress
-            </label>
-            <button id="manualSaveBtn" class="todo-add-btn" style="padding: 0.2rem 1rem; font-size: 0.7rem;">💾 Save Now</button>
           </div>
-          <!-- Status display -->
           <div id="saveStatus" style="margin-top: 0.75rem; color: var(--text-secondary); font-size: 0.8rem;"></div>
         </div>
 
-        <!-- Player Container -->
         <div style="position: relative; width: 100%; padding-top: 56.25%; background: #000; border: 1px solid var(--border); margin-bottom: 1.5rem;">
-          <iframe id="screenscapeIframe" 
-            src="" 
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" 
-            allow="fullscreen; autoplay; picture-in-picture" 
-            allowfullscreen>
-          </iframe>
+          <iframe id="screenscapeIframe" src="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="fullscreen; autoplay; picture-in-picture" allowfullscreen></iframe>
         </div>
 
-        <!-- WATCH HISTORY SECTION -->
         <div class="card-widget" style="padding: 1.5rem; margin-top: 0.5rem;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
-            <h3 style="color: var(--accent); margin: 0;">📜 Watch History & Progress</h3>
-            <button id="clearHistoryBtn" style="background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 0.2rem 0.8rem; cursor: pointer; font-size: 0.7rem;">Clear All</button>
+            <h3 style="color: var(--accent); margin: 0;">📜 Watch History</h3>
           </div>
           <div id="watchHistoryContainer">
-            <p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">No watch history yet. Load a video and it will auto-save!</p>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">No watch history yet. Load a video and it will be added!</p>
           </div>
         </div>
-
       </div>
     </div>
-
   </div>
 
   <button class="fab" id="resetBtn" title="Go to current task">📍</button>
 
+  <!-- FIREBASE -->
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
@@ -611,11 +474,8 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       measurementId: "G-JSDKVYBPQS"
     };
     firebase.initializeApp(firebaseConfig);
-
-    // Initialize Firebase services
     const db = firebase.firestore();
     const auth = firebase.auth();
-    // Watch history collection reference
     const watchHistoryRef = db.collection("watchHistory");
 
     // ================================================================
@@ -624,46 +484,46 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
     const timetable = {
       Monday: [
         ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], 
-["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
-["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
+        ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
+        ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
       ],
       Tuesday: [
         ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], 
-["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
-["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
+        ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
+        ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
       ],
       Wednesday: [
         ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], 
-["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
-["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
+        ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
+        ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
       ],
       Thursday: [
         ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], 
-["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
-["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
+        ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
+        ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
       ],
       Friday: [
         ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], 
-["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
-["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
+        ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], 
+        ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
       ],
       Saturday: [
         ["04:00","04:30","Exercise"], ["04:30","07:00","IOI Deep Work (C++/Algo)"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Break"], ["09:45","13:00","IOI Mock Contest"], 
-["13:00","14:00","Lunch"], ["14:00","15:30","AL Hard Subject"], ["15:30","16:00","Break"], ["16:00","17:30","IOI Practice / Editorial Review"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
+        ["13:00","14:00","Lunch"], ["14:00","15:30","AL Hard Subject"], ["15:30","16:00","Break"], ["16:00","17:30","IOI Practice / Editorial Review"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], 
+        ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"]
       ],
       Sunday: [
         ["04:00","04:30","Exercise"], ["04:30","07:00","IOI Deep Work (C++/Algo)"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Blitz"], ["09:30","09:45","Break"], ["09:45","12:00","IOI Theory + Practice"], 
-["12:00","13:00","Lunch"], ["13:00","14:30","AL Review"], ["14:30","15:00","Break"], ["15:00","17:00","IOI Heavy Block"], ["17:00","18:00","Hobby Time"], ["18:00","19:00","Dinner"], ["19:00","20:00","Gaming Time"], 
-["20:00","20:45","Recap / Review"], ["20:45","21:15","Wind down"], ["21:15","23:59","SLEEP"]
+        ["12:00","13:00","Lunch"], ["13:00","14:30","AL Review"], ["14:30","15:00","Break"], ["15:00","17:00","IOI Heavy Block"], ["17:00","18:00","Hobby Time"], ["18:00","19:00","Dinner"], 
+        ["19:00","20:00","Gaming Time"], ["20:00","20:45","Recap / Review"], ["20:45","21:15","Wind down"], ["21:15","23:59","SLEEP"]
       ]
     };
-
     const dayOrder = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
     let tasks = [];
     let currentDay = "";
 
     // ================================================================
-    // DOM REFS FOR DASHBOARD
+    // DOM REFS
     // ================================================================
     const dom = {
       greeting: document.getElementById('greetingMessage'),
@@ -686,14 +546,12 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       const [h,m] = str.split(':').map(Number);
       return h*60 + m;
     }
-
     function getCurrentTaskIndex() {
       const now = new Date();
       const currentMin = now.getHours()*60 + now.getMinutes();
       const idx = tasks.findIndex(t => currentMin >= t.startMin && currentMin < t.endMin);
       return idx === -1 ? (tasks.length > 0 ? 0 : -1) : idx;
     }
-
     function renderTimeline() {
       const container = document.getElementById('timelineContainer');
       if (!container) return;
@@ -706,19 +564,15 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         timeRange: `${start} – ${end}`,
         text
       }));
-
       const currentIdx = getCurrentTaskIndex();
-
       tasks.forEach((task, idx) => {
         const item = document.createElement('div');
         item.className = 'timeline-item';
         if (idx === currentIdx) item.classList.add('current');
         else if (idx < currentIdx) item.classList.add('completed');
-
         let badgeText = 'Upcoming';
         if (idx < currentIdx) badgeText = 'Done';
         else if (idx === currentIdx) badgeText = 'Now';
-
         item.innerHTML = `
           <div class="timeline-dot"></div>
           <div class="timeline-content">
@@ -731,52 +585,42 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         `;
         container.appendChild(item);
       });
-
       setTimeout(() => {
         const currentEl = document.querySelector('.timeline-item.current');
         if (currentEl) currentEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 100);
     }
-
     function updateDashboard() {
       if (tasks.length === 0) return;
       const now = new Date();
       const currentMin = now.getHours()*60 + now.getMinutes();
       const currentIdx = getCurrentTaskIndex();
-      
       if (currentIdx === -1) return;
       const currentTask = tasks[currentIdx];
-
       dom.currentName.textContent = currentTask.text;
       dom.currentTime.textContent = currentTask.timeRange;
-
       const totalTaskMin = currentTask.endMin - currentTask.startMin;
       const elapsedMin = Math.max(0, currentMin - currentTask.startMin);
       const percent = totalTaskMin > 0 ? Math.min(100, Math.round((elapsedMin / totalTaskMin)*100)) : 0;
       const circumference = 2 * Math.PI * 42;
       dom.ringFill.style.strokeDashoffset = circumference - (percent / 100) * circumference;
       dom.percent.textContent = percent + '%';
-
       const completed = tasks.filter((_,i) => i < currentIdx).length;
       const remaining = tasks.length - completed - 1;
       dom.statTasks.textContent = tasks.length;
       dom.statDone.textContent = completed;
       dom.statRem.textContent = remaining;
-
       const firstStart = tasks[0].startMin;
       const lastEnd = tasks[tasks.length-1].endMin;
       const totalDayMin = lastEnd - firstStart;
       const hours = Math.floor(totalDayMin / 60);
       const mins = totalDayMin % 60;
       dom.focusTime.textContent = `${hours}h ${mins}m`;
-
       const elapsedDayMin = Math.max(0, currentMin - firstStart);
       const dayProgress = totalDayMin > 0 ? Math.min(100, (elapsedDayMin / totalDayMin)*100) : 0;
       dom.barFill.style.width = dayProgress + '%';
-
       updateCountdowns();
     }
-
     function updateCountdowns() {
       const now = new Date().getTime();
       const alTarget = new Date("August 14, 2028 00:00:00").getTime();
@@ -794,19 +638,16 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         document.getElementById('ioi-mins').textContent = Math.floor((ioiDist % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
       }
     }
-
     function updateDateTime() {
       const now = new Date();
       const dayName = dayOrder[now.getDay()];
       dom.date.textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
       dom.clock.textContent = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
       const hour = now.getHours();
       let greeting = "Good Evening";
       if (hour < 12) greeting = "Good Morning";
       else if (hour < 18) greeting = "Good Afternoon";
       dom.greeting.textContent = `${greeting}, Dreamxhava`;
-
       if (dayName !== currentDay) {
         currentDay = dayName;
         renderTimeline();
@@ -814,7 +655,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       updateDashboard();
       updateEventNoteWidget();
     }
-
     dom.menuToggle.addEventListener('click', () => {
       dom.sidebar.classList.toggle('open');
     });
@@ -831,7 +671,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       calendar: document.getElementById('calendarView'),
       screenscape: document.getElementById('screenscapeView')
     };
-
     sidebarBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         sidebarBtns.forEach(b => b.classList.remove('active'));
@@ -841,19 +680,14 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         views[viewName].classList.add('active');
         document.getElementById('resetBtn').style.display = (viewName === 'timetable') ? 'flex' : 'none';
         if (viewName === 'timetable') renderTimeline();
-        if (viewName === 'calendar') { 
-          renderCalendarGrid(); 
-          renderDayDetail(selectedCalDate); 
-        }
-        if (viewName === 'screenscape') { 
-          if (!ssIframe.src) loadScreenscape();
-        }
+        if (viewName === 'calendar') { renderCalendarGrid(); renderDayDetail(selectedCalDate); }
+        if (viewName === 'screenscape') { if (!ssIframe.src) loadScreenscape(); }
         if (window.innerWidth <= 768) dom.sidebar.classList.remove('open');
       });
     });
 
     // ================================================================
-    // TODO LIST (Firestore)
+    // TODO LIST
     // ================================================================
     const todosRef = db.collection("todos");
     let unsubTodos = null;
@@ -881,13 +715,11 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         list.appendChild(li);
       });
     }
-
     function escapeHtml(str) {
       const div = document.createElement("div");
       div.textContent = str;
       return div.innerHTML;
     }
-
     document.getElementById("todoAddBtn").addEventListener("click", async () => {
       const input = document.getElementById("todoInput");
       const text = input.value.trim();
@@ -895,19 +727,17 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       await todosRef.add({ text, done: false, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
       input.value = "";
     });
-
     document.getElementById("todoInput").addEventListener("keydown", (e) => {
       if (e.key === "Enter") document.getElementById("todoAddBtn").click();
     });
 
     // ================================================================
-    // CALENDAR & EVENTS
+    // CALENDAR
     // ================================================================
     const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const fullMonthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     const weekdayNames = ["S","M","T","W","T","F","S"];
     const fullWeekdayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-
     const defaultEvents = [
       { month: 10, day: 25, label: "Your Birthday", recurring: true },
       { month: 8,  day: 15, label: "Vishaka's Birthday", recurring: true },
@@ -919,14 +749,12 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       { month: 11, day: 13, label: "Vidun's Birthday", recurring: true },
       { month: 10, day: 13, label: "Abrian's Birthday", recurring: true }
     ];
-
     let customEvents = [];
     let calViewDate = new Date();
     let selectedCalDate = new Date();
     selectedCalDate.setHours(0,0,0,0);
     const calendarRef = db.collection("calendarEvents");
     let unsubCalendar = null;
-
     function getDaysUntil(e) {
       const now = new Date();
       const today0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -938,13 +766,11 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       const target = new Date(e.year, e.month - 1, e.day);
       return Math.round((target - today0) / 86400000);
     }
-
     function getAllEvents() {
       const all = [...defaultEvents.map((e, i) => ({ ...e, id: `default-${i}`, custom: false })), ...customEvents.map(e => ({ ...e, id: e.docId, custom: true }))];
       all.forEach(e => e.daysUntil = getDaysUntil(e));
       return all.filter(e => e.recurring !== false || e.daysUntil >= 0).sort((a, b) => a.daysUntil - b.daysUntil);
     }
-
     function getEventsOnDate(date) {
       const all = [...defaultEvents, ...customEvents];
       return all.filter(e => {
@@ -952,7 +778,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         return e.recurring === false ? e.year === date.getFullYear() : true;
       });
     }
-
     function renderCalendarList() {
       const container = document.getElementById('calendarList');
       if (!container) return;
@@ -974,22 +799,18 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       }).join('');
       container.querySelectorAll('.event-delete').forEach(btn => btn.addEventListener('click', () => calendarRef.doc(btn.dataset.id).delete()));
     }
-
     function renderCalendarGrid() {
       const grid = document.getElementById('calendarGrid');
       const label = document.getElementById('calMonthLabel');
       if (!grid || !label) return;
-
       const year = calViewDate.getFullYear();
       const month = calViewDate.getMonth();
       label.textContent = calViewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-
       const firstDay = new Date(year, month, 1).getDay();
       const daysInMonth = new Date(year, month + 1, 0).getDate();
       const now = new Date();
       const isCurrentMonth = now.getFullYear() === year && now.getMonth() === month;
       const isSelectedMonth = selectedCalDate.getFullYear() === year && selectedCalDate.getMonth() === month;
-
       const rawEvents = [...defaultEvents, ...customEvents];
       const eventsByDay = {};
       rawEvents.forEach(e => {
@@ -998,7 +819,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         if (!eventsByDay[e.day]) eventsByDay[e.day] = [];
         eventsByDay[e.day].push(e.label);
       });
-
       let html = '';
       weekdayNames.forEach(w => html += `<div class="cal-weekday">${w}</div>`);
       for (let i = 0; i < firstDay; i++) html += `<div class="cal-cell empty"></div>`;
@@ -1006,16 +826,13 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         const hasEvent = !!eventsByDay[d];
         const isToday = isCurrentMonth && now.getDate() === d;
         const isSelected = isSelectedMonth && selectedCalDate.getDate() === d;
-        html += `<div class="cal-cell ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''} ${hasEvent ? 'has-event' : ''}" data-day="${d}" title="${escapeHtml((eventsByDay[d] || []).join(', '))}">
-            <span>${d}</span>
-          </div>`;
+        html += `<div class="cal-cell ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''} ${hasEvent ? 'has-event' : ''}" data-day="${d}" title="${escapeHtml((eventsByDay[d] || []).join(', '))}"><span>${d}</span></div>`;
       }
       grid.innerHTML = html;
       grid.querySelectorAll('.cal-cell:not(.empty)').forEach(cell => {
         cell.addEventListener('click', () => selectDate(new Date(year, month, Number(cell.dataset.day))));
       });
     }
-
     function selectDate(date) {
       selectedCalDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
       const mm = String(selectedCalDate.getMonth() + 1).padStart(2, '0');
@@ -1027,31 +844,26 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       renderCalendarGrid();
       renderDayDetail(selectedCalDate);
     }
-
     function renderDayDetail(date) {
       const weekdayEl = document.getElementById('dayDetailWeekday');
       const dateEl = document.getElementById('dayDetailDate');
       const todayTag = document.getElementById('dayDetailTodayTag');
       const eventsEl = document.getElementById('dayDetailEvents');
       if (!weekdayEl || !dateEl || !eventsEl) return;
-
       const now = new Date();
       const isToday = now.getFullYear() === date.getFullYear() && now.getMonth() === date.getMonth() && now.getDate() === date.getDate();
       weekdayEl.textContent = fullWeekdayNames[date.getDay()];
       dateEl.childNodes[0].textContent = `${date.getDate()} ${fullMonthNames[date.getMonth()]} ${date.getFullYear()} `;
       todayTag.style.display = isToday ? 'inline-block' : 'none';
-
       const dayEvents = getEventsOnDate(date);
       eventsEl.innerHTML = dayEvents.length === 0 ? `<li class="day-detail-empty">No events on this date</li>` : 
         dayEvents.map(e => `<li class="day-detail-event"><span>${escapeHtml(e.label)}</span><span class="event-badge">${e.recurring === false ? 'one-time' : 'yearly'}</span></li>`).join('');
     }
-
     function shiftSelectedDate(deltaDays) {
       const next = new Date(selectedCalDate);
       next.setDate(next.getDate() + deltaDays);
       selectDate(next);
     }
-
     document.getElementById('dayDetailPrevBtn').addEventListener('click', () => shiftSelectedDate(-1));
     document.getElementById('dayDetailNextBtn').addEventListener('click', () => shiftSelectedDate(1));
     document.getElementById('dayDetailJumpToday').addEventListener('click', () => {
@@ -1059,13 +871,11 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       calViewDate = new Date(t.getFullYear(), t.getMonth(), 1);
       selectDate(t);
     });
-
     function renderCalendar() {
       renderCalendarList();
       renderCalendarGrid();
       renderDayDetail(selectedCalDate);
     }
-
     function updateEventNoteWidget() {
       const widget = document.getElementById('eventNoteWidget');
       const text = document.getElementById('eventNoteText');
@@ -1082,7 +892,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         text.textContent = `📅 ${next.label} is ${next.daysUntil === 1 ? 'tomorrow' : `in ${next.daysUntil} days`}`;
       }
     }
-
     document.getElementById('calPrevBtn').addEventListener('click', () => {
       calViewDate = new Date(calViewDate.getFullYear(), calViewDate.getMonth() - 1, 1);
       renderCalendarGrid();
@@ -1091,7 +900,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       calViewDate = new Date(calViewDate.getFullYear(), calViewDate.getMonth() + 1, 1);
       renderCalendarGrid();
     });
-
     document.getElementById('eventAddBtn').addEventListener('click', async () => {
       const labelInput = document.getElementById('eventLabelInput');
       const dateInput = document.getElementById('eventDateInput');
@@ -1107,15 +915,14 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
     });
 
     // ================================================================
-    // IOI PLAN (Firestore)
+    // IOI PLAN
     // ================================================================
     const ioiPlan = [
       { week: "Week 1 · C++ Fundamentals & First Problems", days: [
         { day: 1,  date: "20 Jul Sun", iso: "2026-07-20", tasks: ["Install Code::Blocks or VS Code + g++", "Write Hello World program", "Data types: int, long long, float, double, char, string", "Input/output: cin, cout", "Practice: read two integers, print sum, difference, product"]},
         { day: 2,  date: "21 Jul Mon", iso: "2026-07-21", tasks: ["Conditionals: if, else if, else, switch", "Loops: for, while, do-while", "Nested loops", "Practice: right-angled triangle of '*'", "Practice: multiplication table"]},
         { day: 3,  date: "22 Jul Tue", iso: "2026-07-22", tasks: ["1D and 2D arrays: indexing, traversal", "Strings: length, indexing, basic manipulation", "Practice: max element in array", "Practice: reverse an array", "Practice: check if string is palindrome"]},
-        { day: 4,  date: "23 Jul Wed", iso: "2026-07-23", tasks: ["Functions: declaration, parameters, return types, void", "Recursion: factorial", "Recursion: nth Fibonacci number", "Practice: function for nCr (combinations)", 
-"Practice: Euclidean GCD"]},
+        { day: 4,  date: "23 Jul Wed", iso: "2026-07-23", tasks: ["Functions: declaration, parameters, return types, void", "Recursion: factorial", "Recursion: nth Fibonacci number", "Practice: function for nCr (combinations)", "Practice: Euclidean GCD"]},
         { day: 5,  date: "24 Jul Thu", iso: "2026-07-24", tasks: ["STL vector: declaration, push_back, pop_back, size, clear", "sort(v.begin(), v.end())", "Practice: 5-8 CF 800 'implementation' problems (4A, 71A, 231A, 158A, 50A)"]},
         { day: 6,  date: "25 Jul Fri", iso: "2026-07-25", tasks: ["STL pair, tuple", "String: substr, find, getline, to_string, stoi", "Practice: 5 CF 800 string problems (112A, 339A, 96A, 118A, 266A)"]},
         { day: 7,  date: "26 Jul Sat", iso: "2026-07-26", tasks: ["Review day: revisit any shaky concept", "Timed mini-contest (2h): 5 CSES Introductory", "Rest after contest"]}
@@ -1153,14 +960,11 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         { day: 31, date: "19 Aug Tue", iso: "2026-08-19", tasks: ["Month-end evaluation contest (4h, 8 problems)", "Grade yourself", "Analyze strengths/weaknesses"]}
       ]}
     ];
-
     let planState = {};
     let planOpenDays = new Set();
     const planStateRef = db.collection("ioiPlan").doc("state");
     let unsubPlan = null;
-
     function planTaskId(day, idx) { return `d${day}-${idx}`; }
-
     function computePlanTotals() {
       let total = 0, done = 0;
       ioiPlan.forEach(w => w.days.forEach(d => {
@@ -1171,27 +975,22 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       }));
       return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
     }
-
     function computeDayTotals(d) {
       let total = d.tasks.length, done = 0;
       d.tasks.forEach((_, i) => { if (planState[planTaskId(d.day, i)]) done++; });
       return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
     }
-
     function todayIso() {
       const n = new Date();
       return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`;
     }
-
     function renderPlan() {
       const container = document.getElementById('planContainer');
       if (!container) return;
       const today = todayIso();
-
       if (planOpenDays.size === 0) {
         ioiPlan.forEach(w => w.days.forEach(d => { if (d.iso === today) planOpenDays.add(d.day); }));
       }
-
       container.innerHTML = ioiPlan.map(w => `
         <div class="plan-week">
           <div class="plan-week-title">${w.week}</div>
@@ -1228,7 +1027,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
           }).join('')}
         </div>
       `).join('');
-
       container.querySelectorAll('.plan-day-header').forEach(h => {
         h.addEventListener('click', () => {
           const dayNum = Number(h.dataset.toggle);
@@ -1236,7 +1034,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
           renderPlan();
         });
       });
-
       container.querySelectorAll('.plan-task').forEach(el => {
         const id = el.dataset.taskid;
         const box = el.querySelector('input[type="checkbox"]');
@@ -1259,7 +1056,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       });
       updatePlanProgressUI(false);
     }
-
     function updatePlanProgressUI(rerenderMeta = true) {
       const { total, done, pct } = computePlanTotals();
       const fill = document.getElementById('planProgressFill');
@@ -1270,7 +1066,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       if (pctEl) pctEl.textContent = pct + '%';
       if (doneEl) doneEl.textContent = done;
       if (totalEl) totalEl.textContent = total;
-
       const ring = document.getElementById('planRingFill');
       const ringTxt = document.getElementById('planPercent');
       const dc = document.getElementById('planDoneCount');
@@ -1280,7 +1075,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       if (ringTxt) ringTxt.textContent = pct + '%';
       if (dc) dc.textContent = done;
       if (tc) tc.textContent = total;
-
       if (rerenderMeta) {
         ioiPlan.forEach(w => w.days.forEach(d => {
           const el = document.querySelector(`.plan-day[data-day="${d.day}"]`);
@@ -1294,7 +1088,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         }));
       }
     }
-
     let planSaveTimer = null;
     function persistPlanState() {
       clearTimeout(planSaveTimer);
@@ -1302,7 +1095,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         planStateRef.set({ state: planState, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }).catch(err => console.error('Plan save failed', err));
       }, 300);
     }
-
     document.getElementById('planProgressWidget').addEventListener('click', () => {
       document.querySelector('.sidebar-btn[data-view="progress"]').click();
     });
@@ -1339,14 +1131,12 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         renderPlan();
       }, err => { console.error('Plan subscribe failed', err); renderPlan(); });
     }
-
     function detachDataListeners() {
       if (unsubTodos) unsubTodos();
       if (unsubCalendar) unsubCalendar();
       if (unsubPlan) unsubPlan();
       unsubTodos = unsubCalendar = unsubPlan = null;
     }
-
     function authenticate() {
       const email = document.getElementById('loginEmail').value.trim();
       const pass = document.getElementById('loginPass').value;
@@ -1359,9 +1149,7 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       }
       btn.disabled = true;
       auth.signInWithEmailAndPassword(email, pass)
-        .then(() => {
-          error.style.display = 'none';
-        })
+        .then(() => { error.style.display = 'none'; })
         .catch(() => {
           error.textContent = 'Incorrect email or password.';
           error.style.display = 'block';
@@ -1369,7 +1157,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         })
         .finally(() => { btn.disabled = false; });
     }
-
     function setupEvents() {
       const btn = document.getElementById('loginBtn');
       const passInput = document.getElementById('loginPass');
@@ -1388,22 +1175,19 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         setTimeout(() => { overlay.style.display = 'none'; }, 300);
         attachDataListeners();
         runDailyCleanup();
-        // Also subscribe to watch history if user exists
+        // start history subscription for screenscape
         subscribeWatchHistory();
-        startAutoSave();
       } else {
         overlay.style.display = 'flex';
         overlay.style.opacity = '1';
         detachDataListeners();
-        // Stop history subscription
         if (unsubHistory) { unsubHistory(); unsubHistory = null; }
         if (historyContainer) historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">Please log in to see watch history.</p>`;
-        stopAutoSave();
       }
     });
 
     // ================================================================
-    // SCREENSCAPE INTEGRATION (with Watch History)
+    // SCREENSCAPE INTEGRATION (SIMPLIFIED)
     // ================================================================
     const ssTitle = document.getElementById('screenscapeTitle');
     const ssId = document.getElementById('screenscapeId');
@@ -1413,13 +1197,10 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
     const ssLang = document.getElementById('screenscapeLang');
     const ssLoadBtn = document.getElementById('screenscapeLoadBtn');
     const ssIframe = document.getElementById('screenscapeIframe');
-    const autoSaveToggle = document.getElementById('autoSaveToggle');
     const manualSaveBtn = document.getElementById('manualSaveBtn');
     const historyContainer = document.getElementById('watchHistoryContainer');
-    const clearHistoryBtn = document.getElementById('clearHistoryBtn');
     const saveStatus = document.getElementById('saveStatus');
 
-    let autoSaveInterval = null;
     let unsubHistory = null;
 
     function buildScreenscapeURL() {
@@ -1427,7 +1208,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       const type = ssType.value;
       const lang = ssLang.value.trim() || 'eng';
       let url = 'https://screenscape.me/embed?';
-
       if (/^\d+$/.test(id)) url += `tmdb=${id}&type=${type}`;
       else if (/^tt\d+$/.test(id)) {
         url += `imdb=${id}`;
@@ -1435,47 +1215,17 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       } else {
         url += `tmdb=${id}&type=${type}`;
       }
-
       if (type === 'tv') {
         url += `&s=${parseInt(ssSeason.value) || 1}&e=${parseInt(ssEpisode.value) || 1}`;
       }
       if (lang) url += `&lan=${encodeURIComponent(lang)}`;
-
       return url;
     }
 
-    function loadScreenscape() {
-      const url = buildScreenscapeURL();
-      ssIframe.src = url;
-      console.log('[Screenscape] Loaded:', url);
-      // Wait for iframe to load before sending messages
-      ssIframe.onload = function() {
-        console.log('[Screenscape] Iframe loaded');
-        setTimeout(() => {
-          sendScreenscapeRequest('SCREENSCAPE_GET_PROGRESS');
-        }, 2000);
-      };
-    }
-
-    function sendScreenscapeRequest(type, requestId = 'req-' + Date.now()) {
-      if (!ssIframe.contentWindow) {
-        console.warn('[Screenscape] Iframe not ready.');
-        return;
-      }
-      try {
-        ssIframe.contentWindow.postMessage({
-          type: type,
-          requestId: requestId
-        }, 'https://screenscape.me');
-        console.log('[Screenscape] Sent:', type, requestId);
-      } catch (err) {
-        console.warn('[Screenscape] postMessage error:', err.message);
-      }
-    }
-
-    async function saveWatchProgress(progressData) {
+    // Save media info to history with optional progress (default 0)
+    async function saveMediaToHistory(progress = 0) {
       if (!saveStatus) return;
-      saveStatus.textContent = '⏳ Saving...';
+      saveStatus.textContent = '⏳ Saving history...';
       saveStatus.style.color = 'var(--text-secondary)';
 
       const user = firebase.auth().currentUser;
@@ -1490,7 +1240,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       const title = ssTitle.value.trim() || 'Untitled';
       const lang = ssLang.value.trim() || 'eng';
       let season = null, episode = null;
-
       if (type === 'tv') {
         season = parseInt(ssSeason.value) || 1;
         episode = parseInt(ssEpisode.value) || 1;
@@ -1509,33 +1258,80 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         season: season,
         episode: episode,
         language: lang,
-        progress: Math.min(100, Math.round(progressData.progress || 0)),
+        progress: Math.min(100, Math.round(progress)),
         lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
       };
 
-      console.log('[WatchHistory] Saving:', payload);
       try {
         await watchHistoryRef.doc(mediaId).set(payload, { merge: true });
         saveStatus.textContent = '✅ Saved!';
         saveStatus.style.color = 'var(--success)';
-        console.log('[WatchHistory] ✅ Saved successfully!');
+        console.log('[WatchHistory] Saved:', mediaId);
       } catch (err) {
-        saveStatus.textContent = `❌ Error: ${err.message}`;
+        saveStatus.textContent = '❌ Error: ' + err.message;
         saveStatus.style.color = 'var(--danger)';
-        console.error('[WatchHistory] ❌ Save error:', err);
+        console.error('[WatchHistory] Save error:', err);
       }
     }
 
+    // Load player and automatically save to history with 0% progress
+    function loadScreenscape() {
+      const url = buildScreenscapeURL();
+      ssIframe.src = url;
+      console.log('[Screenscape] Loaded:', url);
+      saveMediaToHistory(0);
+      // Optional: attempt to get progress after load
+      ssIframe.onload = function() {
+        console.log('[Screenscape] Iframe loaded');
+        // No auto-save; user can use "Save Now" to update progress
+      };
+    }
+
+    // Send progress request manually
+    function sendProgressRequest() {
+      if (!ssIframe.contentWindow) {
+        alert('Player not loaded yet.');
+        return;
+      }
+      try {
+        ssIframe.contentWindow.postMessage({
+          type: 'SCREENSCAPE_GET_PROGRESS',
+          requestId: 'manual-' + Date.now()
+        }, 'https://screenscape.me');
+        saveStatus.textContent = '⏳ Requesting progress...';
+      } catch (err) {
+        saveStatus.textContent = '❌ Cannot reach player: ' + err.message;
+      }
+    }
+
+    // Listen for progress response
+    window.addEventListener('message', (event) => {
+      if (!event.origin.includes('screenscape.me')) return;
+      const data = event.data;
+      if (!data?.type) return;
+      if (data.type === 'SCREENSCAPE_PROGRESS_RESPONSE') {
+        if (data.progress !== undefined) {
+          saveMediaToHistory(data.progress);
+        } else {
+          saveStatus.textContent = '⚠️ Progress not available';
+        }
+      }
+      if (data.type === 'SCREENSCAPE_WATCH_HISTORY_WITH_PROGRESS_RESPONSE') {
+        console.log('[Screenscape] History response:', data);
+      }
+    });
+
+    // Render watch history list
     function renderWatchHistory(snapshot) {
       if (!historyContainer) return;
       if (snapshot.empty) {
-        historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">No watch history yet. Load a video and it will auto-save!</p>`;
+        historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">No watch history yet. Load a video and it will be added!</p>`;
         return;
       }
 
       let html = '<div style="display: flex; flex-direction: column; gap: 0.75rem;">';
       snapshot.forEach(doc => {
-        const data = typeof doc.data === 'function' ? doc.data() : doc; // handle both snapshot and plain obj
+        const data = typeof doc.data === 'function' ? doc.data() : doc;
         const progress = data.progress || 0;
         const isMovie = data.type === 'movie';
         const label = isMovie ? data.title : `${data.title} (S${data.season}E${data.episode})`;
@@ -1552,7 +1348,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
             </div>
             <div style="display: flex; gap: 0.5rem; margin-top: 0.2rem;">
               <button class="resume-btn" data-mediaid="${data.mediaId}" style="background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 0.15rem 0.8rem; font-size: 0.65rem; cursor: pointer;">▶ Resume</button>
-              <button class="delete-history-btn" data-mediaid="${data.mediaId}" style="background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 0.15rem 0.8rem; font-size: 0.65rem; cursor: pointer;">✕</button>
             </div>
           </div>
         `;
@@ -1567,7 +1362,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
           const doc = await watchHistoryRef.doc(mediaId).get();
           if (!doc.exists) return;
           const data = doc.data();
-          
           ssTitle.value = data.title || '';
           if (data.tmdbId) ssId.value = data.tmdbId;
           else if (data.imdbId) ssId.value = data.imdbId;
@@ -1577,28 +1371,18 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
             ssEpisode.value = data.episode || 1;
           }
           ssLang.value = data.language || 'eng';
-
           loadScreenscape();
-          alert(`🎬 Loaded "${data.title}" (${data.progress}% watched).\nPlay and it will auto-save again!`);
-        });
-      });
-
-      // Delete buttons
-      historyContainer.querySelectorAll('.delete-history-btn').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const mediaId = btn.dataset.mediaid;
-          if (confirm('Delete this entry?')) {
-            await watchHistoryRef.doc(mediaId).delete();
-          }
+          alert(`🎬 Loaded "${data.title}" (${data.progress}% watched).`);
         });
       });
     }
 
+    // Subscribe to history (sorted manually to avoid index)
     function subscribeWatchHistory() {
       if (unsubHistory) unsubHistory();
       const user = firebase.auth().currentUser;
       if (!user) {
-        if (historyContainer) historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">Please log in to see watch history.</p>`;
+        historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">Please log in to see watch history.</p>`;
         return;
       }
 
@@ -1622,88 +1406,16 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
           });
         }, err => {
           console.error('[WatchHistory] subscription error:', err);
-          if (historyContainer) historyContainer.innerHTML = `<p style="color: var(--danger);">⚠️ Error loading history: ${err.message}</p>`;
+          historyContainer.innerHTML = `<p style="color: var(--danger);">⚠️ Error loading history: ${err.message}</p>`;
         });
     }
 
-    function startAutoSave() {
-      if (autoSaveInterval) clearInterval(autoSaveInterval);
-      autoSaveInterval = setInterval(() => {
-        if (autoSaveToggle.checked && ssIframe.src) {
-          sendScreenscapeRequest('SCREENSCAPE_GET_PROGRESS');
-        }
-      }, 10000);
-    }
-
-    function stopAutoSave() {
-      if (autoSaveInterval) {
-        clearInterval(autoSaveInterval);
-        autoSaveInterval = null;
-      }
-    }
-
-    // PostMessage listener
-    window.addEventListener('message', (event) => {
-      // Accept messages from screenscape.me (and localhost for testing)
-      if (!event.origin.includes('screenscape.me') && !event.origin.includes('localhost')) {
-        return;
-      }
-      const data = event.data;
-      if (!data?.type) return;
-      console.log('[Screenscape] Received:', data.type, data);
-
-      if (data.type === 'SCREENSCAPE_PROGRESS_RESPONSE') {
-        if (data.progress !== undefined) {
-          saveWatchProgress({ progress: data.progress });
-        } else {
-          console.warn('[Screenscape] Progress response missing progress field.');
-        }
-      }
-      if (data.type === 'SCREENSCAPE_WATCH_HISTORY_WITH_PROGRESS_RESPONSE') {
-        console.log('[Screenscape] History received:', data.watchHistory);
-      }
-    });
-
-    // Manual save
-    manualSaveBtn.addEventListener('click', () => {
-      if (!ssIframe.src) {
-        alert('Load a video first!');
-        return;
-      }
-      sendScreenscapeRequest('SCREENSCAPE_GET_PROGRESS');
-    });
-
-    // Load button
-    ssLoadBtn.addEventListener('click', () => {
-      loadScreenscape();
-      // Also request progress after load
-      setTimeout(() => {
-        sendScreenscapeRequest('SCREENSCAPE_GET_PROGRESS');
-      }, 3000);
-    });
-
-    // Enter key on fields
+    // Event listeners
+    ssLoadBtn.addEventListener('click', loadScreenscape);
     [ssTitle, ssId, ssType, ssSeason, ssEpisode, ssLang].forEach(el => {
       el.addEventListener('keydown', (e) => { if (e.key === 'Enter') ssLoadBtn.click(); });
     });
-
-    // Clear history
-    clearHistoryBtn.addEventListener('click', async () => {
-      if (!confirm('Delete ALL watch history? This cannot be undone.')) return;
-      const user = firebase.auth().currentUser;
-      if (!user) return;
-      const snapshot = await watchHistoryRef.where('userId', '==', user.uid).get();
-      if (snapshot.empty) return;
-      const batch = db.batch();
-      snapshot.forEach(doc => batch.delete(doc.ref));
-      await batch.commit();
-    });
-
-    // Auto-save toggle
-    autoSaveToggle.addEventListener('change', () => {
-      if (autoSaveToggle.checked) startAutoSave();
-      else stopAutoSave();
-    });
+    manualSaveBtn.addEventListener('click', sendProgressRequest);
 
     // ================================================================
     // INIT
@@ -1716,9 +1428,7 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       setInterval(updateDateTime, 1000);
       renderPlan();
       renderDayDetail(selectedCalDate);
-      // If user already logged in, history subscription is triggered by auth state
     }
-
     init();
     setupEvents();
   </script>
