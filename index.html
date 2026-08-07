@@ -55,7 +55,7 @@
     }
     .sidebar-logo { color: #00ff41; font-weight: 900; letter-spacing: 2px; margin-bottom: 2rem; padding: 0 1rem; font-size: 1.4rem; }
     .sidebar-logo::before { content: "root@threnox:~$ "; color: #507050; font-size: 0.7rem; display: block; margin-bottom: 0.2rem; }
-    .sidebar-nav { display: flex; flex-direction: column; gap: 0.3rem; }
+    .sidebar-nav { display: flex; flex-direction: column; gap: 0.3rem; flex: 1; }
     .sidebar-btn {
         background: transparent; color: #709070; border: none; border-left: 2px solid transparent;
         border-radius: 0; padding: 0.8rem 1.2rem; transition: 0.2s; text-align: left; width: 100%;
@@ -64,6 +64,14 @@
     .sidebar-btn:hover { color: #00ff41; background: rgba(0, 255, 65, 0.05); }
     .sidebar-btn.active { color: #00ff41; border-left: 2px solid #00ff41; background: rgba(0, 255, 65, 0.08); }
     .sidebar-btn svg { width: 18px; height: 18px; stroke: currentColor; flex-shrink: 0; }
+
+    .sidebar-footer { border-top: 1px solid var(--border); padding-top: 0.75rem; margin-top: 0.75rem; }
+    .logout-btn {
+        background: transparent; color: #709070; border: 1px solid var(--border);
+        padding: 0.6rem 1rem; width: 100%; cursor: pointer; font-size: 0.75rem;
+        text-transform: uppercase; letter-spacing: 0.5px; transition: 0.2s;
+    }
+    .logout-btn:hover { color: var(--danger); border-color: var(--danger); }
 
     .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; min-width: 0; }
     .top-bar {
@@ -140,6 +148,7 @@
     input:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
     .todo-add-btn, .login-btn { background: #000; color: var(--accent); border: 1px solid var(--accent); cursor: pointer; transition: 0.2s; font-weight: bold; }
     .todo-add-btn:hover, .login-btn:hover { background: rgba(0, 255, 65, 0.1); box-shadow: 0 0 15px rgba(0, 255, 65, 0.3); }
+    .login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
     .stats-container { padding: 1.5rem; max-width: 800px; margin: 0 auto; }
     .plan-header { border: none !important; box-shadow: none !important; padding: 0 0 1.25rem 0; }
@@ -187,7 +196,7 @@
     .login-logo::before { content: "> "; color: #507050; }
     .login-subtitle { color: #507050; margin-bottom: 2rem; font-size: 0.9rem; }
     .login-form { display: flex; flex-direction: column; gap: 1.2rem; }
-    .login-input { width: 100%; text-align: center; letter-spacing: 2px; }
+    .login-input { width: 100%; text-align: center; letter-spacing: 1px; }
     .login-error { color: var(--danger); font-size: 0.8rem; margin-top: 1.5rem; display: none; }
 
     ::-webkit-scrollbar { width: 6px; }
@@ -307,10 +316,11 @@
       <div class="login-logo">THRENOX</div>
       <div class="login-subtitle">Welcome back, Dreamxhava</div>
       <div class="login-form">
-        <input type="password" id="loginPass" class="login-input" placeholder="Enter Password" autofocus>
+        <input type="email" id="loginEmail" class="login-input" placeholder="Email" autocomplete="username">
+        <input type="password" id="loginPass" class="login-input" placeholder="Password" autocomplete="current-password">
         <button id="loginBtn" class="login-btn">Login</button>
       </div>
-      <div id="loginError" class="login-error">Incorrect password. Please try again.</div>
+      <div id="loginError" class="login-error">Incorrect email or password.</div>
     </div>
   </div>
 
@@ -343,6 +353,9 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
         <span class="icon-only">Calendar</span>
       </button>
     </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logoutBtn">Log out</button>
+    </div>
   </aside>
 
   <div class="main" id="mainContent">
@@ -494,6 +507,7 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
 
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
 
   <script>
     const firebaseConfig = {
@@ -507,6 +521,7 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+    const auth = firebase.auth();
 
     const timetable = {
       Monday: [
@@ -727,6 +742,7 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
     });
 
     const todosRef = db.collection("todos");
+    let unsubTodos = null;
     function renderTodos(snapshot) {
       const list = document.getElementById("todoList");
       if (!list) return;
@@ -769,7 +785,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
     document.getElementById("todoInput").addEventListener("keydown", (e) => {
       if (e.key === "Enter") document.getElementById("todoAddBtn").click();
     });
-    todosRef.orderBy("createdAt", "asc").onSnapshot(renderTodos);
 
     const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const fullMonthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -793,6 +808,7 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
     let selectedCalDate = new Date();
     selectedCalDate.setHours(0,0,0,0);
     const calendarRef = db.collection("calendarEvents");
+    let unsubCalendar = null;
 
     function getDaysUntil(e) {
       const now = new Date();
@@ -973,13 +989,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       labelInput.value = ''; dateInput.value = '';
     });
 
-    calendarRef.orderBy("createdAt", "asc").onSnapshot(snapshot => {
-      customEvents = [];
-      snapshot.forEach(doc => customEvents.push({ ...doc.data(), docId: doc.id }));
-      renderCalendar();
-      updateEventNoteWidget();
-    });
-
     const ioiPlan = [
       { week: "Week 1 · C++ Fundamentals & First Problems", days: [
         { day: 1,  date: "20 Jul Sun", iso: "2026-07-20", tasks: ["Install Code::Blocks or VS Code + g++", "Write Hello World program", "Data types: int, long long, float, double, char, string", "Input/output: cin, cout", "Practice: read two integers, print sum, difference, product"]},
@@ -1028,6 +1037,7 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
     let planState = {};
     let planOpenDays = new Set();
     const planStateRef = db.collection("ioiPlan").doc("state");
+    let unsubPlan = null;
 
     function planTaskId(day, idx) { return `d${day}-${idx}`; }
 
@@ -1173,35 +1183,9 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       }, 300);
     }
 
-    planStateRef.onSnapshot(snap => {
-      const data = snap.exists ? snap.data() : null;
-      planState = (data && data.state) || {};
-      renderPlan();
-    }, err => { console.error('Plan subscribe failed', err); renderPlan(); });
-
     document.getElementById('planProgressWidget').addEventListener('click', () => {
       document.querySelector('.sidebar-btn[data-view="progress"]').click();
     });
-
-    const PASS_B64 = "MjAxNjY1MDEyM3NkZg==";
-
-    function checkAuth() {
-      if (sessionStorage.getItem('threnox_access') === 'granted') document.getElementById('loginOverlay').style.display = 'none';
-    }
-
-    function authenticate() {
-      const pass = document.getElementById('loginPass').value;
-      const error = document.getElementById('loginError');
-      if (btoa(pass) === PASS_B64) {
-        sessionStorage.setItem('threnox_access', 'granted');
-        error.style.display = 'none';
-        document.getElementById('loginOverlay').style.opacity = '0';
-        setTimeout(() => { document.getElementById('loginOverlay').style.display = 'none'; }, 300);
-      } else {
-        error.style.display = 'block';
-        document.getElementById('loginPass').value = '';
-      }
-    }
 
     async function runDailyCleanup() {
       try {
@@ -1218,12 +1202,76 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       } catch (e) { console.warn("Cleanup deferred:", e); }
     }
 
+    // ---- Real Firebase Authentication ----
+    function attachDataListeners() {
+      unsubTodos = todosRef.orderBy("createdAt", "asc").onSnapshot(renderTodos);
+      unsubCalendar = calendarRef.orderBy("createdAt", "asc").onSnapshot(snapshot => {
+        customEvents = [];
+        snapshot.forEach(doc => customEvents.push({ ...doc.data(), docId: doc.id }));
+        renderCalendar();
+        updateEventNoteWidget();
+      });
+      unsubPlan = planStateRef.onSnapshot(snap => {
+        const data = snap.exists ? snap.data() : null;
+        planState = (data && data.state) || {};
+        renderPlan();
+      }, err => { console.error('Plan subscribe failed', err); renderPlan(); });
+    }
+
+    function detachDataListeners() {
+      if (unsubTodos) unsubTodos();
+      if (unsubCalendar) unsubCalendar();
+      if (unsubPlan) unsubPlan();
+      unsubTodos = unsubCalendar = unsubPlan = null;
+    }
+
+    function authenticate() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const pass = document.getElementById('loginPass').value;
+      const error = document.getElementById('loginError');
+      const btn = document.getElementById('loginBtn');
+      if (!email || !pass) {
+        error.textContent = 'Enter both email and password.';
+        error.style.display = 'block';
+        return;
+      }
+      btn.disabled = true;
+      auth.signInWithEmailAndPassword(email, pass)
+        .then(() => {
+          error.style.display = 'none';
+        })
+        .catch(() => {
+          error.textContent = 'Incorrect email or password.';
+          error.style.display = 'block';
+          document.getElementById('loginPass').value = '';
+        })
+        .finally(() => { btn.disabled = false; });
+    }
+
     function setupEvents() {
       const btn = document.getElementById('loginBtn');
-      const input = document.getElementById('loginPass');
+      const passInput = document.getElementById('loginPass');
+      const emailInput = document.getElementById('loginEmail');
       if (btn) btn.onclick = authenticate;
-      if (input) input.onkeydown = (e) => { if (e.key === 'Enter') authenticate(); };
+      if (passInput) passInput.onkeydown = (e) => { if (e.key === 'Enter') authenticate(); };
+      if (emailInput) emailInput.onkeydown = (e) => { if (e.key === 'Enter') authenticate(); };
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) logoutBtn.onclick = () => auth.signOut();
     }
+
+    auth.onAuthStateChanged(user => {
+      const overlay = document.getElementById('loginOverlay');
+      if (user) {
+        overlay.style.opacity = '0';
+        setTimeout(() => { overlay.style.display = 'none'; }, 300);
+        attachDataListeners();
+        runDailyCleanup();
+      } else {
+        overlay.style.display = 'flex';
+        overlay.style.opacity = '1';
+        detachDataListeners();
+      }
+    });
 
     function init() {
       const now = new Date();
@@ -1235,8 +1283,6 @@ y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="1
       renderDayDetail(selectedCalDate);
     }
 
-    checkAuth();
-    runDailyCleanup();
     init();
     setupEvents();
   </script>
