@@ -1,6 +1,299 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="google-site-verification" content="lmfbkHDHn_fZR9KmUS8FUDS09pLWoTx8tVWBFkR_sFg" />
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Savindu Damsara</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* extra styles for the hidden trigger & threnox overlay */
+  #secret-trigger {
+    text-align: center;
+    padding: 3rem 2rem;
+    cursor: pointer;
+    border-top: 1px solid #e6dfd4;
+    margin-top: 3rem;
+    background: transparent;
+  }
+  #secret-trigger p {
+    color: #9e9587;
+    font-size: 1rem;
+    max-width: 620px;
+    margin: 0 auto;
+    line-height: 1.8;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+  #secret-trigger:hover p {
+    color: #5e5547;
+  }
+  #threnox-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 10000;
+    display: none;
+    background: #000;
+  }
+  #threnox-overlay iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  #threnox-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    z-index: 10001;
+    background: #000;
+    color: #00ff41;
+    border: 1px solid #00ff41;
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+    font-family: monospace;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+  }
+  #threnox-close:hover {
+    background: #0a0a0a;
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== YOUR PORTFOLIO (unchanged) ========== -->
+<nav>
+  <div class="logo">Savindu Damsara</div>
+  <div class="nav-links">
+    <a href="#about">about</a>
+    <a href="#projects">projects</a>
+    <a href="#hobbies">interests</a>
+    <a href="#connect">connect</a>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-left">
+    <div class="issue-label"></div>
+    <h1 class="hero-name">Savindu<br><em>Damsara</em></h1>
+    <div class="hero-role"><span></span>coder · builder · 16</div>
+    <p class="hero-bio">
+      I write <strong>Python, Bash, and C++</strong> — not because anyone set me a curriculum, but because I genuinely can't stop. I live mostly in the terminal. Right now I'm deep in C++ and Termux, because having a full dev environment in your pocket is just too good.<br><br>
+      I'm fascinated by how things break. Building every day to figure things out.
+    </p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-primary">See my projects</a>
+      <a href="#about" class="btn-text">Read more</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="av-block">
+      <img class="av-img" src="https://avatars.githubusercontent.com/u/156694948?v=4" alt="Savindu Damsara">
+      <p class="av-caption">Savindu</p>
+    </div>
+    <div class="hero-tags">
+      <span class="tag">Python</span>
+      <span class="tag">C++</span>
+      <span class="tag">Bash</span>
+      <span class="tag">HTML</span>
+      <span class="tag">Termux</span>
+      <span class="tag">Linux</span>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="sec-eyebrow">01 · about</div>
+  <div class="sec-title">Who I am</div>
+  <div class="about-layout">
+    <div class="about-copy fade">
+      <p class="drop-cap">I'm Savindu Damsara, a 16-year-old from Sri Lanka who started programming out of pure curiosity and still hasn't stopped. I didn't follow a roadmap. I just started poking at things until they made sense.</p>
+      <p>Most of my time goes into <em>Python, C++, and Bash.</em> Python is where I'm comfortable. C++ is where I'm pushing myself right now — it's hard in the right way. Bash is what I reach for when I want to stop doing the same thing twice.</p>
+      <p>I spend a lot of time in <strong>Termux</strong>, runing a full dev setup off my phone. There's something satisfying about that kind of constraint — you figure things out faster when your environment doesn't do everything for you.</p>
+      <div class="pull-quote">"Understanding how things break is the most honest way to understand how things work."</div>
+      <p>That's why I care about <em>cybersecurity.</em> Not as an identity or a badge — just because it genuinly interests me. I'm still figuring a lot of it out. But I build something every day, and that's how I know I'm moving .</p>
+    </div>
+    <div class="about-sidebar fade">
+      <div class="info-block">
+        <div class="info-label">Right now</div>
+        <ul class="info-list">
+          <li>Going deep on C++</li>
+          <li>Experimenting with Termux</li>
+          <li>Learning cybersecurity</li>
+          <li>Building random things</li>
+        </ul>
+      </div>
+      <div class="info-block">
+        <div class="info-label">Goals</div>
+        <ul class="info-list">
+          <li>Master C++ properly</li>
+          <li>Collaborate on PHP projects</li>
+          <li>Ship something I'm proud of</li>
+          <li>Keep going</li>
+        </ul>
+      </div>
+      <div class="info-block">
+        <div class="info-label">Stack</div>
+        <div class="stack-chips">
+          <span class="chip">Python</span>
+          <span class="chip">C / C++</span>
+          <span class="chip">Bash</span>
+          <span class="chip">HTML</span>
+          <span class="chip">Termux</span>
+          <span class="chip">Linux</span>
+          <span class="chip">Git</span>
+          <span class="chip">Scratch</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="sec-eyebrow">02 · projects</div>
+  <div class="sec-title">Things I've built</div>
+  <div class="proj-list">
+    <a class="prow fade" href="https://github.com/Savindudam/Encrypter" target="_blank">
+      <span class="prow-num">01</span>
+      <div><div class="prow-name">Encrypter</div><div class="prow-desc">My first real dive into cryptography. Encode and decode messages in Python. Built mostly to understand how encryption actually works, not just use it.</div></div>
+      <span class="prow-lang">Python</span>
+      <span class="prow-arr">↗</span>
+    </a>
+    <a class="prow fade" href="https://github.com/Savindudam/Mini-Games-Hub" target="_blank">
+      <span class="prow-num">02</span>
+      <div><div class="prow-name">Mini Games Hub</div><div class="prow-desc">Guess the Number, Rock Paper Scissors, Word Jumble — all in one. Started as a single game and kept growing. A small arcade built from scratch.</div></div>
+      <span class="prow-lang">Python</span>
+      <span class="prow-arr">↗</span>
+    </a>
+    <a class="prow fade" href="https://github.com/Savindudam/Termux-main-package-installer" target="_blank">
+      <span class="prow-num">03</span>
+      <div><div class="prow-name">Termux Installer</div><div class="prow-desc">One script, full Termux setup. Got tired of reinstalling everything manually every time I set up a new environment — so I automated it.</div></div>
+      <span class="prow-lang">Shell</span>
+      <span class="prow-arr">↗</span>
+    </a>
+    <a class="prow fade" href="https://github.com/Savindudam/Guess-my-number.py" target="_blank">
+      <span class="prow-num">04</span>
+      <div><div class="prow-name">Guess My Number</div><div class="prow-desc">Classic number guessing with hints and scoring. Simple and clean — one of the first things I ever shipped and actually felt good about.</div></div>
+      <span class="prow-lang">Python</span>
+      <span class="prow-arr">↗</span>
+    </a>
+    <a class="prow fade" href="https://github.com/Savindudam/word-jumble-game" target="_blank">
+      <span class="prow-num">05</span>
+      <div><div class="prow-name">Word Jumble</div><div class="prow-desc">Scramble a word, unscramble it. A little puzzle that took an afternoon to build. I think it turned out pretty well.</div></div>
+      <span class="prow-lang">Python</span>
+      <span class="prow-arr">↗</span>
+    </a>
+    <a class="prow fade" href="https://github.com/Savindudam/Rock-Paper-Scissor" target="_blank">
+      <span class="prow-num">06</span>
+      <div><div class="prow-name">Rock Paper Scissors</div><div class="prow-desc">You vs the computer. Harder to make interesting than it sounds — it's really about randomness and game logic done cleanly.</div></div>
+      <span class="prow-lang">Python</span>
+      <span class="prow-arr">↗</span>
+    </a>
+  </div>
+</section>
+
+<section id="hobbies">
+  <div class="sec-eyebrow">03 · interests</div>
+  <div class="sec-title">What I'm into</div>
+  <div class="hobbies-layout">
+    <div class="hcard fade">
+      <div class="hcard-num">01</div>
+      <div class="hcard-title">Writing code</div>
+      <div class="hcard-desc">Python scripts, C++ experiments, whatever's interesting that day. The problem doesn't need to be important — just interesting.</div>
+    </div>
+    <div class="hcard fade">
+      <div class="hcard-num">02</div>
+      <div class="hcard-title">The terminal</div>
+      <div class="hcard-desc">Automating boring things, building shell tools, running Termux on my phone. There's something satisfying about a script that just quietly works.</div>
+    </div>
+    <div class="hcard fade">
+      <div class="hcard-num">03</div>
+      <div class="hcard-title">Security tools</div>
+      <div class="hcard-desc">Encrypters, scanners, automation scripts — built to understand how things work, not to break anything. Security through curiosity.</div>
+    </div>
+    <div class="hcard fade">
+      <div class="hcard-num">04</div>
+      <div class="hcard-title">Discord servers</div>
+      <div class="hcard-desc">Setting up bots, permissions, channels, the whole vibe from scratch. I like the design challenge of making a server feel like a real place.</div>
+    </div>
+    <div class="hcard fade">
+      <div class="hcard-num">05</div>
+      <div class="hcard-title">How things break</div>
+      <div class="hcard-desc">Reading about CVEs, playing with exploit tools, watching hacking demos. Not for the reputation — because understanding vulnerabilities is how you really understand systems.</div>
+    </div>
+    <div class="hcard fade">
+      <div class="hcard-num">06</div>
+      <div class="hcard-title">Random experiments</div>
+      <div class="hcard-desc">Games, bots, little utilities, weird ideas. Half of them never get finished. That's fine — the process is what I'm here for.</div>
+    </div>
+  </div>
+</section>
+
+<section id="connect">
+  <div class="sec-eyebrow">04 · connect</div>
+  <div class="sec-title">Say hello</div>
+  <div class="connect-layout">
+    <div class="fade">
+      <p class="connect-intro">I'm always up for talking code, swapping ideas, or building something together.</p>
+      <p class="connect-sub">Don't overthink it — just reach out. I'm on GitHub and Instagram. Either works.</p>
+    </div>
+    <div class="slinks fade">
+      <a class="slink" href="https://github.com/Savindudam" target="_blank">
+        <div class="slink-ic">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3d3830" stroke-width="1.5">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/>
+          </svg>
+        </div>
+        <div class="slink-info">
+          <span class="slink-name">GitHub</span>
+          <span class="slink-handle">github.com/Savindudam</span>
+        </div>
+        <span class="slink-arr">↗</span>
+      </a>
+      <a class="slink" href="https://instagram.com/dreamxhava_2" target="_blank">
+        <div class="slink-ic">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3d3830" stroke-width="1.5">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+        </div>
+        <div class="slink-info">
+          <span class="slink-name">Instagram</span>
+          <span class="slink-handle">@dreamxhava_2</span>
+        </div>
+        <span class="slink-arr">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="ft">Savindu Damsara </span>
+  <div class="ft-dot"><div class="pulse"></div></div>
+</footer>
+
+<!-- ========== HIDDEN TRIGGER (click to open THRENOX) ========== -->
+<section id="secret-trigger">
+  <p>
+    Sometimes, the flow asks for a deeper rhythm. For those who’ve read this far — <em>uncover the Threnox</em> and step into your focus sanctuary.
+  </p>
+</section>
+
+<!-- ========== THRENOX OVERLAY (hidden) ========== -->
+<div id="threnox-overlay">
+  <button id="threnox-close">✕ CLOSE</button>
+  <iframe id="threnox-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals" allow="fullscreen; autoplay; picture-in-picture"></iframe>
+</div>
+
+<!-- ========== THRENOX FULL CODE STORED AS TEMPLATE ========== -->
+<script type="text/template" id="threnox-template">
+<!DOCTYPE html>
+<html lang="en">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>THRENOX – Focus Flow</title>
@@ -1347,5 +1640,34 @@
     init();
     setupEvents();
   </script>
+</body>
+</html>
+</script>
+
+<!-- ========== ORIGINAL PORTFOLIO SCRIPTS ========== -->
+<script>
+(function(){
+  const obs=new IntersectionObserver(e=>{
+    e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in')});
+  },{threshold:0.08});
+  document.querySelectorAll('.fade').forEach(el=>obs.observe(el));
+})();
+</script>
+
+<!-- ========== SCRIPT TO HANDLE THRENOX OPEN/CLOSE ========== -->
+<script>
+  document.getElementById('secret-trigger').addEventListener('click', function() {
+    const overlay = document.getElementById('threnox-overlay');
+    const iframe = overlay.querySelector('iframe');
+    iframe.srcdoc = document.getElementById('threnox-template').textContent;
+    overlay.style.display = 'block';
+  });
+  document.getElementById('threnox-close').addEventListener('click', function() {
+    document.getElementById('threnox-overlay').style.display = 'none';
+    // optionally clear the iframe to stop any running processes
+    // document.getElementById('threnox-frame').srcdoc = '';
+  });
+</script>
+
 </body>
 </html>
