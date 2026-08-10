@@ -1,1014 +1,1351 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Savindu Damsara | Coder & Builder</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-dark: #000000;
-            --secondary-dark: #0a0a0a;
-            --tertiary-dark: #101010;
-            --accent-color: #00eeff;
-            --accent-hover: #00aaff;
-            --accent-color-2: #00ff66;
-            --accent-color-3: #ff00aa;
-            --text-primary: #ffffff;
-            --text-secondary: #e0e0e0;
-            --text-muted: #8b949e;
-            --border-color: #333333;
-            --success-color: #00ff66;
-            --warning-color: #f0e100;
-            --error-color: #ff0055;
-            --font-family: 'Poppins', sans-serif;
-            --fs-xl: 3.5rem;
-            --fs-l: 2.5rem;
-            --fs-m: 1.5rem;
-            --fs-s: 1.125rem;
-            --fs-xs: 0.875rem;
-            --spacing-xs: 0.5rem;
-            --spacing-s: 1rem;
-            --spacing-m: 2rem;
-            --spacing-l: 3rem;
-            --spacing-xl: 5rem;
-            --border-radius: 0.5rem;
-            --transition: all 0.3s ease;
-            --box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.9);
-            --container-max-width: 1200px;
-            --glow-effect: 0 0 10px rgba(0, 238, 255, 0.7);
-        }
-
-        *, *::before, *::after {
-            margin: 0; padding: 0; box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            scrollbar-width: thin;
-            scrollbar-color: var(--accent-color) var(--primary-dark);
-        }
-
-        body {
-            font-family: var(--font-family);
-            background-color: var(--primary-dark);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-            background-image: 
-                linear-gradient(rgba(0, 238, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 238, 255, 0.05) 1px, transparent 1px);
-            background-size: 30px 30px;
-        }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--primary-dark); }
-        ::-webkit-scrollbar-thumb { background-color: var(--accent-color); border-radius: 6px; }
-
-        h1, h2, h3, h4, h5, h6 { margin-bottom: var(--spacing-s); line-height: 1.2; font-weight: 700; }
-        h1 {
-            font-size: var(--fs-xl);
-            background: linear-gradient(45deg, var(--text-primary), var(--accent-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: var(--glow-effect);
-        }
-        h2 { font-size: var(--fs-l); }
-        h3 { font-size: var(--fs-m); }
-        a { color: var(--accent-color); text-decoration: none; transition: var(--transition); }
-        a:hover { color: var(--accent-hover); }
-
-        .container { width: 90%; max-width: var(--container-max-width); margin: 0 auto; padding: var(--spacing-m) 0; }
-        .section-header { text-align: center; margin-bottom: var(--spacing-l); }
-        .underline {
-            height: 4px; width: 80px;
-            background: linear-gradient(90deg, var(--accent-color), var(--accent-color-2));
-            margin: 0 auto; margin-top: -10px; border-radius: 2px;
-            box-shadow: 0 0 10px rgba(0, 238, 255, 0.5);
-        }
-
-        header {
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
-            background-color: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; }
-        .logo a { font-size: var(--fs-m); font-weight: 700; color: var(--text-primary); }
-        .logo span { color: var(--accent-color); }
-        .nav-links { display: flex; gap: 2rem; }
-        .nav-links li { list-style: none; }
-        .nav-links a { color: var(--text-primary); font-weight: 500; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
-        .nav-links a:hover { color: var(--accent-color); }
-
-        .hero { min-height: 100vh; display: flex; align-items: center; padding-top: 80px; }
-        .hero-content { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 4rem; align-items: center; }
-        .hero-text h2 { color: var(--accent-color); font-size: 1.2rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 2px; }
-        .hero-text p { font-size: 1.1rem; color: var(--text-secondary); max-width: 600px; margin-bottom: 2rem; }
-        .cta-buttons { display: flex; gap: 1rem; }
-        .btn { padding: 0.8rem 1.8rem; border-radius: var(--border-radius); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: var(--transition); }
-        .primary-btn { background: var(--accent-color); color: var(--primary-dark); }
-        .primary-btn:hover { transform: translateY(-3px); box-shadow: 0 0 20px rgba(0, 238, 255, 0.6); }
-        .secondary-btn { border: 1px solid var(--accent-color); color: var(--accent-color); background: transparent; }
-        .secondary-btn:hover { background: rgba(0, 238, 255, 0.1); transform: translateY(-3px); }
-
-        .social-icons { display: flex; gap: 1.5rem; margin-top: 2rem; }
-        .social-icons a { font-size: 1.5rem; color: var(--text-muted); }
-        .social-icons a:hover { color: var(--accent-color); transform: translateY(-3px); }
-
-        .hero-image { position: relative; display: flex; justify-content: center; }
-        .security-graphic { width: 300px; height: 300px; position: relative; display: flex; justify-content: center; align-items: center; }
-        .shield { font-size: 8rem; color: var(--accent-color); position: relative; z-index: 2; filter: drop-shadow(0 0 20px rgba(0, 238, 255, 0.5)); animation: float 6s ease-in-out infinite; }
-        .binary { position: absolute; bottom: -40px; font-family: monospace; color: var(--accent-color-2); opacity: 0.5; font-size: 0.8rem; width: 100%; text-align: center; overflow: hidden; white-space: nowrap; }
-
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-
-        .about { background: var(--secondary-dark); padding: var(--spacing-xl) 0; }
-        .about-content { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
-        .about-text p { margin-bottom: 1.5rem; color: var(--text-secondary); }
-        .contact-info { display: flex; flex-direction: column; gap: 1rem; }
-        .contact-item { display: flex; align-items: center; gap: 1rem; }
-        .contact-item i { color: var(--accent-color); width: 20px; }
-
-        .skills { padding: var(--spacing-xl) 0; }
-        .skills-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .skill-category { background: var(--tertiary-dark); padding: 2rem; border-radius: var(--border-radius); border: 1px solid var(--border-color); }
-        .skill-category h3 { color: var(--accent-color); margin-bottom: 1.5rem; font-size: 1.2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
-        .skills-grid { display: flex; flex-wrap: wrap; gap: 0.8rem; }
-        .skill-item { background: rgba(0, 238, 255, 0.05); border: 1px solid var(--border-color); padding: 0.5rem 1rem; border-radius: 4px; font-size: 0.9rem; transition: var(--transition); }
-        .skill-item:hover { border-color: var(--accent-color); background: rgba(0, 238, 255, 0.1); transform: translateY(-2px); }
-
-        .projects { background: var(--secondary-dark); padding: var(--spacing-xl) 0; }
-        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; }
-        .project-card { background: var(--tertiary-dark); border-radius: var(--border-radius); border: 1px solid var(--border-color); padding: 2rem; transition: var(--transition); display: flex; flex-direction: column; }
-        .project-card:hover { transform: translateY(-10px); border-color: var(--accent-color); box-shadow: var(--box-shadow); }
-        .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
-        .project-header h3 { font-size: 1.3rem; margin-bottom: 0; }
-        .project-links a { color: var(--text-muted); font-size: 1.2rem; margin-left: 1rem; }
-        .project-links a:hover { color: var(--accent-color); }
-        .project-description { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.5rem; flex-grow: 1; }
-        .project-tech { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-        .project-tech span { font-size: 0.75rem; color: var(--accent-color-2); background: rgba(0, 255, 102, 0.05); padding: 0.2rem 0.6rem; border-radius: 4px; border: 1px solid rgba(0, 255, 102, 0.2); }
-
-        .interests { padding: var(--spacing-xl) 0; }
-        .interests-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
-        .interest-card { background: var(--tertiary-dark); padding: 1.5rem; border-radius: var(--border-radius); border: 1px solid var(--border-color); transition: var(--transition); }
-        .interest-card:hover { border-color: var(--accent-color-3); transform: scale(1.02); }
-        .interest-card h4 { color: var(--accent-color-3); margin-bottom: 0.5rem; }
-        .interest-card p { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0; }
-
-        .contact { background: var(--secondary-dark); padding: var(--spacing-xl) 0; }
-        .contact-content { text-align: center; max-width: 600px; margin: 0 auto; }
-        .contact-content p { margin-bottom: 2rem; color: var(--text-secondary); }
-
-        footer { padding: 2rem 0; text-align: center; background: var(--primary-dark); border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.9rem; }
-        
-        @media (max-width: 768px) {
-            .hero-content, .about-content { grid-template-columns: 1fr; }
-            .hero-image { order: -1; }
-            .nav-links { display: none; }
-            :root { --fs-xl: 2.5rem; --fs-l: 2rem; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>THRENOX – Focus Flow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap');
+    :root {
+        --bg: #000000;
+        --surface: #030303;
+        --surface-hover: #080808;
+        --text: #d8ffd8;
+        --text-secondary: #6d906d;
+        --accent: #00ff41;
+        --accent-soft: rgba(0, 255, 65, 0.15);
+        --border: #123312;
+        --success: #00ff41;
+        --danger: #ff0033;
+        --shadow: 0 0 25px rgba(0, 255, 65, 0.08);
+        --radius: 0px;
+        --radius-sm: 0px;
+        --sidebar-width: 240px;
+    }
+    * { box-sizing: border-box; font-family: 'JetBrains Mono', monospace !important; }
+    html, body { background: #000; color: var(--text); height: 100vh; overflow: hidden; margin: 0; padding: 0; }
+    body { display: flex; }
+    body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 9999; background: repeating-linear-gradient(0deg, rgba(0, 255, 65, 0.02) 0px, rgba(0, 255, 65, 0.02) 1px, transparent 1px, transparent 3px); }
+    body::after { content: ""; position: fixed; inset: 0; pointer-events: none; background: radial-gradient(circle at center, rgba(0, 255, 65, 0.05) 0%, transparent 70%); z-index: 9998; }
+    h1, h2, h3, h4 { color: #d8ffd8; letter-spacing: 1px; text-transform: uppercase; }
+    h1::after, h2::after { content: "_"; color: #00ff41; animation: blink 1s infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .sidebar { width: var(--sidebar-width); background: #000; border-right: 1px solid var(--border); box-shadow: 10px 0 30px rgba(0, 255, 65, 0.03); display: flex; flex-direction: column; padding: 1.5rem 1rem; flex-shrink: 0; z-index: 100; transition: transform 0.3s ease; }
+    .sidebar-logo { color: #00ff41; font-weight: 900; letter-spacing: 2px; margin-bottom: 2rem; padding: 0 1rem; font-size: 1.4rem; }
+    .sidebar-logo::before { content: "root@threnox:~$ "; color: #507050; font-size: 0.7rem; display: block; margin-bottom: 0.2rem; }
+    .sidebar-nav { display: flex; flex-direction: column; gap: 0.3rem; flex: 1; }
+    .sidebar-btn { background: transparent; color: #709070; border: none; border-left: 2px solid transparent; border-radius: 0; padding: 0.8rem 1.2rem; transition: 0.2s; text-align: left; width: 100%; cursor: pointer; display: flex; align-items: center; gap: 0.8rem; font-size: 0.85rem; }
+    .sidebar-btn:hover { color: #00ff41; background: rgba(0, 255, 65, 0.05); }
+    .sidebar-btn.active { color: #00ff41; border-left: 2px solid #00ff41; background: rgba(0, 255, 65, 0.08); }
+    .sidebar-btn svg { width: 18px; height: 18px; stroke: currentColor; flex-shrink: 0; }
+    .sidebar-footer { border-top: 1px solid var(--border); padding-top: 0.75rem; margin-top: 0.75rem; }
+    .logout-btn { background: transparent; color: #709070; border: 1px solid var(--border); padding: 0.6rem 1rem; width: 100%; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; transition: 0.2s; }
+    .logout-btn:hover { color: var(--danger); border-color: var(--danger); }
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; min-width: 0; }
+    .top-bar { background: #000; border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+    .greeting { font-size: 1.1rem; color: var(--text); }
+    .date-time { display: flex; align-items: center; gap: 1rem; }
+    .date-display { color: var(--text-secondary); font-size: 0.85rem; }
+    .live-clock { background: transparent !important; border: 1px solid var(--accent); color: var(--accent); padding: 0.2rem 0.8rem; font-weight: bold; }
+    .progress-bar-container, .plan-progress-track { background: #050505; border: 1px solid var(--border); height: 6px; flex-shrink: 0; }
+    .progress-bar-fill, .plan-progress-fill { background: linear-gradient(90deg, #003b12, #00ff41); box-shadow: 0 0 10px #00ff41; height: 100%; width: 0%; transition: width 0.4s ease; }
+    .view { display: none; flex: 1; overflow-y: auto; padding: 2rem; }
+    .view.active { display: block; }
+    .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; }
+    .card-widget, .todo-item, .timeline-content, .plan-day, .plan-header, .stats-container { background: #050505 !important; border: 1px solid var(--border) !important; border-radius: 0px !important; box-shadow: var(--shadow) !important; }
+    .card-widget { padding: 1.5rem; }
+    .card-widget:hover { border-color: var(--accent) !important; }
+    .progress-ring-container { display: flex; align-items: center; gap: 1.25rem; }
+    .progress-ring { width: 100px; height: 100px; flex-shrink: 0; transform: rotate(-90deg); }
+    .progress-ring-circle { fill: none; stroke: var(--border); stroke-width: 6; }
+    .progress-ring-fill { fill: none; stroke: var(--accent); stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 0.4s ease; }
+    .progress-ring-text { transform: rotate(90deg); transform-origin: center; fill: var(--accent); font-size: 1.1rem; font-weight: 700; }
+    .current-task-details h3 { margin: 0 0 0.4rem 0; font-size: 1rem; }
+    .current-task-details p { margin: 0; color: var(--text-secondary); font-size: 0.8rem; }
+    .countdown-title { color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
+    .countdown-timer { display: flex; gap: 1.25rem; }
+    .timer-unit { display: flex; flex-direction: column; align-items: center; }
+    .timer-value { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+    .timer-label { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; margin-top: 0.2rem; }
+    .stats-widget { display: flex; flex-direction: column; gap: 0.5rem; }
+    .stat-item { display: flex; justify-content: space-between; align-items: center; }
+    .stat-label { color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-value { color: var(--accent); font-weight: 700; font-size: 1.1rem; }
+    .focus-time { color: var(--accent); font-weight: 700; font-size: 1.4rem; }
+    .timeline { position: relative; max-width: 700px; margin: 0 auto; padding-left: 1.5rem; }
+    .timeline::before { content: ""; position: absolute; left: 5px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+    .timeline-item { position: relative; margin-bottom: 1rem; padding-left: 1.5rem; }
+    .timeline-dot { position: absolute; left: -1.5rem; top: 1.1rem; width: 12px; height: 12px; border-radius: 50%; background: #000; border: 2px solid var(--border); }
+    .timeline-item.current .timeline-dot { background: var(--accent); box-shadow: 0 0 10px var(--accent); border-color: var(--accent); }
+    .timeline-item.completed { opacity: 0.45; }
+    .timeline-content { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; gap: 1rem; }
+    .timeline-time { color: var(--text-secondary); font-size: 0.75rem; margin-bottom: 0.25rem; }
+    .timeline-task { font-size: 0.95rem; }
+    .status-badge { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 0.25rem 0.6rem; font-size: 0.7rem; text-transform: uppercase; white-space: nowrap; }
+    .current .status-badge { border-color: var(--accent); color: var(--accent); }
+    .todo-container { max-width: 650px; margin: 0 auto; }
+    .todo-input-row { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .todo-input { flex: 1; }
+    .todo-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+    .todo-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.9rem 1.1rem; }
+    .todo-item.done .todo-text { text-decoration: line-through; color: var(--text-secondary); }
+    .todo-checkbox { width: 16px; height: 16px; accent-color: var(--accent); flex-shrink: 0; padding: 0; }
+    .todo-text { flex: 1; font-size: 0.9rem; }
+    .todo-delete { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 0.2rem 0.5rem; }
+    .todo-delete:hover { color: var(--danger); }
+    input, button { background: #000; color: var(--accent); border: 1px solid var(--border); padding: 0.6rem 1rem; outline: none; font-size: 0.9rem; }
+    input:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
+    .todo-add-btn, .login-btn { background: #000; color: var(--accent); border: 1px solid var(--accent); cursor: pointer; transition: 0.2s; font-weight: bold; }
+    .todo-add-btn:hover, .login-btn:hover { background: rgba(0, 255, 65, 0.1); box-shadow: 0 0 15px rgba(0, 255, 65, 0.3); }
+    .login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .stats-container { padding: 1.5rem; max-width: 800px; margin: 0 auto; }
+    .plan-header { border: none !important; box-shadow: none !important; padding: 0 0 1.25rem 0; }
+    .plan-header h2 { margin: 0 0 0.4rem 0; font-size: 1.1rem; }
+    .plan-header p { color: var(--text-secondary); font-size: 0.85rem; margin: 0 0 1rem 0; }
+    .plan-progress-label { display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); }
+    .plan-progress-label strong { color: var(--accent); }
+    .plan-week { margin-bottom: 1.5rem; }
+    .plan-week-title { color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
+    .plan-day { margin-bottom: 0.6rem; overflow: hidden; }
+    .plan-day-header { display: flex; justify-content: space-between; align-items: center; padding: 0.9rem 1.1rem; cursor: pointer; }
+    .plan-day.today .plan-day-header { border-left: 2px solid var(--accent); }
+    .plan-day-title { display: flex; align-items: center; gap: 0.6rem; }
+    .plan-day-label { color: var(--accent); font-size: 0.85rem; font-weight: 700; }
+    .plan-day-date { color: var(--text-secondary); font-size: 0.75rem; }
+    .plan-day-meta { display: flex; align-items: center; gap: 0.6rem; font-size: 0.75rem; color: var(--text-secondary); }
+    .plan-day-mini { width: 60px; height: 4px; background: #050505; border: 1px solid var(--border); overflow: hidden; }
+    .plan-day-mini > div { height: 100%; background: var(--accent); box-shadow: 0 0 6px var(--accent); transition: width 0.3s ease; }
+    .plan-chev { transition: transform 0.2s ease; flex-shrink: 0; }
+    .plan-day.open .plan-chev { transform: rotate(90deg); }
+    .plan-day.all-done .plan-day-label { color: var(--success); }
+    .plan-tasks { list-style: none; margin: 0; padding: 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid transparent; }
+    .plan-day.open .plan-tasks { max-height: 600px; border-top: 1px solid var(--border); }
+    .plan-task { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.6rem 1.1rem; font-size: 0.85rem; cursor: pointer; }
+    .plan-task:hover { background: rgba(0, 255, 65, 0.04); }
+    .plan-task input[type="checkbox"] { width: 14px; height: 14px; margin-top: 0.15rem; accent-color: var(--accent); flex-shrink: 0; padding: 0; }
+    .plan-task.done .plan-task-text { text-decoration: line-through; color: var(--text-secondary); }
+    .plan-day-toggle-all { width: 14px; height: 14px; accent-color: var(--accent); flex-shrink: 0; padding: 0; cursor: pointer; }
+    .fab { position: fixed; bottom: 2rem; right: 2rem; width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--accent); background: #000; color: var(--accent); font-size: 1.3rem; cursor: pointer; display: none; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(0, 255, 65, 0.25); z-index: 50; }
+    #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; transition: opacity 0.3s ease; }
+    .login-card { width: 400px; padding: 3rem; border: 1px solid var(--accent); box-shadow: 0 0 40px rgba(0, 255, 65, 0.15); text-align: center; background: #000; }
+    .login-logo { font-size: 2.2rem; color: var(--accent); margin-bottom: 0.5rem; font-weight: 900; }
+    .login-logo::before { content: "> "; color: #507050; }
+    .login-subtitle { color: #507050; margin-bottom: 2rem; font-size: 0.9rem; }
+    .login-form { display: flex; flex-direction: column; gap: 1.2rem; }
+    .login-input { width: 100%; text-align: center; letter-spacing: 1px; }
+    .login-error { color: var(--danger); font-size: 0.8rem; margin-top: 1.5rem; display: none; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #000; }
+    ::-webkit-scrollbar-thumb { background: var(--border); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+    .calendar-page { display: flex; gap: 1.5rem; max-width: 1000px; margin: 0 auto; flex-wrap: wrap; align-items: flex-start; }
+    .calendar-grid-wrap { flex: 1 1 420px; min-width: 320px; }
+    .calendar-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .calendar-month-label { color: var(--accent); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; }
+    .cal-nav-btn { background: #000; border: 1px solid var(--border); color: var(--accent); width: 32px; height: 32px; padding: 0; cursor: pointer; font-size: 1rem; }
+    .cal-nav-btn:hover { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .cal-weekday { text-align: center; font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; padding-bottom: 0.4rem; }
+    .cal-cell { position: relative; aspect-ratio: 1 / 1; background: #050505; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem; }
+    .cal-cell:hover { border-color: var(--accent); }
+    .cal-cell.empty { background: transparent; border: none; cursor: default; }
+    .cal-cell.today { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); color: var(--accent); font-weight: 700; }
+    .cal-cell.selected { border-color: var(--accent); background: rgba(0, 255, 65, 0.12); box-shadow: 0 0 14px rgba(0, 255, 65, 0.3); }
+    .cal-cell.has-event::after { content: ""; position: absolute; bottom: 5px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+    .calendar-container { flex: 1 1 280px; min-width: 260px; margin: 0; }
+    .event-input-row { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+    .event-input-row .event-label-input { flex: 1; min-width: 180px; }
+    .event-type-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .event-type-label { display: flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: var(--text-secondary); cursor: pointer; }
+    .event-type-label input[type="radio"] { width: 13px; height: 13px; accent-color: var(--accent); }
+    .event-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+    .event-item { background: #050505 !important; border: 1px solid var(--border) !important; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.9rem 1.1rem; }
+    .event-item.today { border-color: var(--accent) !important; box-shadow: 0 0 15px rgba(0, 255, 65, 0.15) !important; }
+    .event-main { display: flex; flex-direction: column; gap: 0.15rem; }
+    .event-name { font-size: 0.9rem; }
+    .event-date { font-size: 0.75rem; color: var(--text-secondary); }
+    .event-badge { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 0.25rem 0.6rem; font-size: 0.7rem; text-transform: uppercase; white-space: nowrap; }
+    .event-item.today .event-badge { border-color: var(--accent); color: var(--accent); }
+    .event-delete { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 0.2rem 0.5rem; }
+    .event-delete:hover { color: var(--danger); }
+    .note-widget { display: flex; flex-direction: column; gap: 0.5rem; justify-content: center; }
+    .note-widget .countdown-title { margin-bottom: 0; }
+    .note-widget-text { font-size: 1rem; color: var(--text); }
+    .note-widget.today-highlight { border-color: var(--accent) !important; box-shadow: 0 0 20px rgba(0, 255, 65, 0.25) !important; }
+    .note-widget.today-highlight .note-widget-text { color: var(--accent); font-weight: 700; }
+    .day-detail-panel { padding: 1.1rem 1.25rem; margin-bottom: 1.25rem; }
+    .day-detail-top { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.6rem; }
+    .day-detail-nav-btn { background: #000; border: 1px solid var(--border); color: var(--accent); width: 30px; height: 30px; padding: 0; cursor: pointer; font-size: 0.95rem; flex-shrink: 0; }
+    .day-detail-nav-btn:hover { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
+    .day-detail-heading { text-align: center; flex: 1; }
+    .day-detail-weekday { color: var(--text-secondary); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+    .day-detail-date { color: var(--accent); font-weight: 700; font-size: 1rem; }
+    .day-detail-today-tag { display: inline-block; margin-left: 0.4rem; font-size: 0.65rem; border: 1px solid var(--accent); color: var(--accent); padding: 0.05rem 0.4rem; text-transform: uppercase; vertical-align: middle; }
+    .day-detail-events { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+    .day-detail-event { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; padding: 0.5rem 0.7rem; background: #000; border: 1px solid var(--border); font-size: 0.82rem; }
+    .day-detail-empty { color: var(--text-secondary); font-size: 0.82rem; text-align: center; padding: 0.4rem 0; }
+    .day-detail-jump { display: block; margin: 0.7rem auto 0; background: transparent; border: 1px solid var(--border); color: var(--text-secondary); font-size: 0.72rem; padding: 0.3rem 0.7rem; cursor: pointer; }
+    .day-detail-jump:hover { border-color: var(--accent); color: var(--accent); }
+    @media (max-width: 768px) {
+      .sidebar { position: absolute; transform: translateX(-100%); height: 100vh; }
+      .sidebar.open { transform: translateX(0); }
+      .top-bar { padding: 1rem; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      #menuToggle { display: block !important; }
+    }
+    #menuToggle { display: none; background: #000; border: 1px solid var(--accent); color: var(--accent); padding: 0.5rem; cursor: pointer; margin-right: 1rem; }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">
-                    <a href="#home"><span>&lt;</span> SD <span>/&gt;</span></a>
+  <div id="loginOverlay">
+    <div class="login-card">
+      <div class="login-logo">THRENOX</div>
+      <div class="login-subtitle">Welcome back, Dreamxhava</div>
+      <div class="login-form">
+        <input type="email" id="loginEmail" class="login-input" placeholder="Email" autocomplete="username">
+        <input type="password" id="loginPass" class="login-input" placeholder="Password" autocomplete="current-password">
+        <button id="loginBtn" class="login-btn">Login</button>
+      </div>
+      <div id="loginError" class="login-error">Incorrect email or password.</div>
+    </div>
+  </div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">THRENOX</div>
+    <nav class="sidebar-nav">
+      <button class="sidebar-btn active" data-view="dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span class="icon-only">Dashboard</span>
+      </button>
+      <button class="sidebar-btn" data-view="timetable">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span class="icon-only">Timetable</span>
+      </button>
+      <button class="sidebar-btn" data-view="todo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span class="icon-only">To Do</span>
+      </button>
+      <button class="sidebar-btn" data-view="progress">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+        <span class="icon-only">Progress</span>
+      </button>
+      <button class="sidebar-btn" data-view="calendar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span class="icon-only">Calendar</span>
+      </button>
+      <button class="sidebar-btn" data-view="screenscape">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span class="icon-only">Screenscape</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logoutBtn">Log out</button>
+    </div>
+  </aside>
+
+  <div class="main" id="mainContent">
+    <div class="top-bar">
+      <div style="display: flex; align-items: center;">
+        <button id="menuToggle">☰</button>
+        <div class="greeting" id="greetingMessage">Good Evening, Savindu</div>
+      </div>
+      <div class="date-time">
+        <div class="date-display" id="dateDisplay"></div>
+        <div class="live-clock" id="liveClock"></div>
+      </div>
+    </div>
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" id="progressBarFill"></div>
+    </div>
+
+    <div class="view active" id="dashboardView">
+      <div class="dashboard-grid">
+        <div class="card-widget current-task-widget" id="currentTaskWidget">
+          <div class="progress-ring-container">
+            <svg class="progress-ring" viewBox="0 0 100 100">
+              <circle class="progress-ring-circle" cx="50" cy="50" r="42"/>
+              <circle class="progress-ring-fill" id="progressRingFill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="263.89"/>
+              <text x="50" y="50" text-anchor="middle" dy="7" class="progress-ring-text" id="progressPercent">0%</text>
+            </svg>
+            <div class="current-task-details">
+              <h3 id="currentTaskName">---</h3>
+              <p id="currentTaskTime">--:-- - --:--</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-widget note-widget" id="eventNoteWidget" style="display:none;">
+          <div class="countdown-title">Note</div>
+          <div class="note-widget-text" id="eventNoteText">---</div>
+        </div>
+        <div class="card-widget countdown-widget">
+          <div class="countdown-title">AL 2028 Countdown</div>
+          <div class="countdown-timer" id="alCountdown">
+            <div class="timer-unit"><span class="timer-value" id="al-days">00</span><span class="timer-label">Days</span></div>
+            <div class="timer-unit"><span class="timer-value" id="al-hours">00</span><span class="timer-label">Hrs</span></div>
+            <div class="timer-unit"><span class="timer-value" id="al-mins">00</span><span class="timer-label">Min</span></div>
+          </div>
+        </div>
+        <div class="card-widget countdown-widget">
+          <div class="countdown-title">IOI 2027 Countdown</div>
+          <div class="countdown-timer" id="ioiCountdown">
+            <div class="timer-unit"><span class="timer-value" id="ioi-days">00</span><span class="timer-label">Days</span></div>
+            <div class="timer-unit"><span class="timer-value" id="ioi-hours">00</span><span class="timer-label">Hrs</span></div>
+            <div class="timer-unit"><span class="timer-value" id="ioi-mins">00</span><span class="timer-label">Min</span></div>
+          </div>
+        </div>
+        <div class="card-widget stats-widget" id="statsWidget">
+          <div class="stat-item"><span class="stat-label">Tasks</span><span class="stat-value" id="statTasks">0</span></div>
+          <div class="stat-item"><span class="stat-label">Completed</span><span class="stat-value" id="statCompleted">0</span></div>
+          <div class="stat-item"><span class="stat-label">Remaining</span><span class="stat-value" id="statRemaining">0</span></div>
+          <div style="margin-top: 0.5rem;"><span class="stat-label">Focus Time</span></div>
+          <div class="focus-time" id="focusTime">0h 0m</div>
+        </div>
+        <div class="card-widget current-task-widget" id="planProgressWidget" style="cursor:pointer;">
+          <div class="progress-ring-container">
+            <svg class="progress-ring" viewBox="0 0 100 100">
+              <circle class="progress-ring-circle" cx="50" cy="50" r="42"/>
+              <circle class="progress-ring-fill" id="planRingFill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="263.89" style="stroke: var(--success);"/>
+              <text x="50" y="50" text-anchor="middle" dy="7" class="progress-ring-text" id="planPercent">0%</text>
+            </svg>
+            <div class="current-task-details">
+              <h3 id="planWidgetTitle">IOI 2027 – Full Prep Plan</h3>
+              <p><span id="planDoneCount">0</span> / <span id="planTotalCount">0</span> tasks done · Tap to open</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="view" id="timetableView">
+      <div class="timeline" id="timelineContainer"></div>
+    </div>
+
+    <div class="view" id="todoView">
+      <div class="todo-container">
+        <div class="todo-input-row">
+          <input type="text" class="todo-input" id="todoInput" placeholder="Add a new task...">
+          <button class="todo-add-btn" id="todoAddBtn">Add</button>
+        </div>
+        <ul class="todo-list" id="todoList"></ul>
+      </div>
+    </div>
+
+    <div class="view" id="progressView">
+      <div class="stats-container">
+        <div class="plan-header">
+          <h2 id="planHeaderTitle">IOI 2027 – Full Preparation Plan</h2>
+          <p id="planHeaderSubtitle">Loading…</p>
+          <div class="plan-progress-track"><div class="plan-progress-fill" id="planProgressFill"></div></div>
+          <div class="plan-progress-label">
+            <span><strong id="planProgressPct">0%</strong> complete</span>
+            <span><span id="planProgressDone">0</span> / <span id="planProgressTotal">0</span> tasks</span>
+          </div>
+        </div>
+        <div id="planContainer"></div>
+      </div>
+    </div>
+
+    <div class="view" id="calendarView">
+      <div class="calendar-page">
+        <div class="calendar-grid-wrap">
+          <div class="calendar-nav">
+            <button class="cal-nav-btn" id="calPrevBtn">‹</button>
+            <span class="calendar-month-label" id="calMonthLabel">Month Year</span>
+            <button class="cal-nav-btn" id="calNextBtn">›</button>
+          </div>
+          <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+        <div class="calendar-container">
+          <div class="card-widget day-detail-panel" id="dayDetailPanel">
+            <div class="day-detail-top">
+              <button class="day-detail-nav-btn" id="dayDetailPrevBtn">‹</button>
+              <div class="day-detail-heading">
+                <div class="day-detail-weekday" id="dayDetailWeekday">---</div>
+                <div class="day-detail-date" id="dayDetailDate">-- --- ----<span class="day-detail-today-tag" id="dayDetailTodayTag" style="display:none;">Today</span></div>
+              </div>
+              <button class="day-detail-nav-btn" id="dayDetailNextBtn">›</button>
+            </div>
+            <ul class="day-detail-events" id="dayDetailEvents"></ul>
+            <button class="day-detail-jump" id="dayDetailJumpToday">Jump to Today</button>
+          </div>
+          <div class="event-input-row">
+            <input type="text" class="event-label-input" id="eventLabelInput" placeholder="Name (e.g. Aunt's Birthday)">
+            <input type="date" id="eventDateInput">
+          </div>
+          <div class="event-type-row">
+            <label class="event-type-label"><input type="radio" name="eventType" value="recurring" checked> Every year (birthday)</label>
+            <label class="event-type-label"><input type="radio" name="eventType" value="once"> One day only</label>
+            <button class="todo-add-btn" id="eventAddBtn">Add</button>
+          </div>
+          <ul class="event-list" id="calendarList"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="view" id="screenscapeView">
+      <div style="max-width: 1100px; margin: 0 auto; padding: 0 1rem;">
+        <div class="card-widget" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+          <h3 style="color: var(--accent); margin-top: 0; margin-bottom: 1rem;">Embed Player</h3>
+          <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end;">
+            <div style="flex: 1; min-width: 150px;">
+              <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Title (for log)</label>
+              <input type="text" id="screenscapeTitle" value="Titanic" placeholder="e.g. Titanic, GoT S1E1" style="width: 100%;">
+            </div>
+            <div style="flex: 1; min-width: 140px;">
+              <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">TMDB / IMDB ID</label>
+              <input type="text" id="screenscapeId" value="597" placeholder="e.g. 597 or tt0800369" style="width: 100%;">
+            </div>
+            <div style="min-width: 100px;">
+              <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Type</label>
+              <select id="screenscapeType" style="width: 100%; background: #000; color: var(--accent); border: 1px solid var(--border); padding: 0.6rem 1rem;">
+                <option value="movie">Movie</option>
+                <option value="tv">TV Series</option>
+              </select>
+            </div>
+            <div style="min-width: 80px;">
+              <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Season</label>
+              <input type="number" id="screenscapeSeason" value="1" min="1" style="width: 100%;">
+            </div>
+            <div style="min-width: 80px;">
+              <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Episode</label>
+              <input type="number" id="screenscapeEpisode" value="1" min="1" style="width: 100%;">
+            </div>
+            <div style="min-width: 100px;">
+              <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Language</label>
+              <input type="text" id="screenscapeLang" value="eng" placeholder="eng, hindi..." style="width: 100%;">
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <button id="screenscapeLoadBtn" class="todo-add-btn" style="padding: 0.6rem 1.8rem;">Load</button>
+              <button id="manualSaveBtn" class="todo-add-btn" style="padding: 0.2rem 1rem; font-size: 0.7rem;">Save Now</button>
+            </div>
+          </div>
+          <div style="margin-top: 0.75rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+            <span style="font-size: 0.7rem; color: var(--text-secondary);">Use TMDB ID (e.g. 597) or IMDB ID (e.g. tt0800369).</span>
+          </div>
+          <div id="saveStatus" style="margin-top: 0.75rem; color: var(--text-secondary); font-size: 0.8rem;"></div>
+        </div>
+
+        <div style="position: relative; width: 100%; padding-top: 56.25%; background: #000; border: 1px solid var(--border); margin-bottom: 1.5rem;">
+          <iframe id="screenscapeIframe" src="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="fullscreen; autoplay; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <div class="card-widget" style="padding: 1.5rem; margin-top: 0.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+            <h3 style="color: var(--accent); margin: 0;">Watch History</h3>
+            <span style="font-size: 0.7rem; color: var(--text-secondary);">Click any entry to load it</span>
+          </div>
+          <div id="watchHistoryContainer" style="max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem;">
+            <p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">No watch history yet. Load a video and it will be added!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="fab" id="resetBtn" title="Go to current task">📍</button>
+
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBb3IIg51MeZEeJ5rk-X4vXQitH-ywew0s",
+      authDomain: "timetable-threnox.firebaseapp.com",
+      projectId: "timetable-threnox",
+      storageBucket: "timetable-threnox.appspot.com",
+      messagingSenderId: "327689062744",
+      appId: "1:327689062744:web:65f2f0cf72f4c984f17d2d",
+      measurementId: "G-JSDKVYBPQS"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+    const watchHistoryRef = db.collection("watchHistory");
+
+    const timetable = {
+      Monday: [ ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
+      Tuesday: [ ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
+      Wednesday: [ ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
+      Thursday: [ ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
+      Friday: [ ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
+      Saturday: [ ["04:00","04:30","Exercise"], ["04:30","07:00","IOI Deep Work (C++/Algo)"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Break"], ["09:45","13:00","IOI Mock Contest"], ["13:00","14:00","Lunch"], ["14:00","15:30","AL Hard Subject"], ["15:30","16:00","Break"], ["16:00","17:30","IOI Practice / Editorial Review"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
+      Sunday: [ ["04:00","04:30","Exercise"], ["04:30","07:00","IOI Deep Work (C++/Algo)"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Blitz"], ["09:30","09:45","Break"], ["09:45","12:00","IOI Theory + Practice"], ["12:00","13:00","Lunch"], ["13:00","14:30","AL Review"], ["14:30","15:00","Break"], ["15:00","17:00","IOI Heavy Block"], ["17:00","18:00","Hobby Time"], ["18:00","19:00","Dinner"], ["19:00","20:00","Gaming Time"], ["20:00","20:45","Recap / Review"], ["20:45","21:15","Wind down"], ["21:15","23:59","SLEEP"] ]
+    };
+    const dayOrder = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    let tasks = [];
+    let currentDay = "";
+
+    const dom = {
+      greeting: document.getElementById('greetingMessage'),
+      date: document.getElementById('dateDisplay'),
+      clock: document.getElementById('liveClock'),
+      barFill: document.getElementById('progressBarFill'),
+      currentName: document.getElementById('currentTaskName'),
+      currentTime: document.getElementById('currentTaskTime'),
+      ringFill: document.getElementById('progressRingFill'),
+      percent: document.getElementById('progressPercent'),
+      statTasks: document.getElementById('statTasks'),
+      statDone: document.getElementById('statCompleted'),
+      statRem: document.getElementById('statRemaining'),
+      focusTime: document.getElementById('focusTime'),
+      sidebar: document.getElementById('sidebar'),
+      menuToggle: document.getElementById('menuToggle')
+    };
+
+    function timeToMinutes(str) {
+      const [h,m] = str.split(':').map(Number);
+      return h*60 + m;
+    }
+    function getCurrentTaskIndex() {
+      const now = new Date();
+      const currentMin = now.getHours()*60 + now.getMinutes();
+      const idx = tasks.findIndex(t => currentMin >= t.startMin && currentMin < t.endMin);
+      return idx === -1 ? (tasks.length > 0 ? 0 : -1) : idx;
+    }
+    function renderTimeline() {
+      const container = document.getElementById('timelineContainer');
+      if (!container) return;
+      container.innerHTML = '';
+      const raw = timetable[currentDay] || [];
+      tasks = raw.map(([start, end, text], idx) => ({
+        id: idx,
+        startMin: timeToMinutes(start),
+        endMin: timeToMinutes(end),
+        timeRange: `${start} – ${end}`,
+        text
+      }));
+      const currentIdx = getCurrentTaskIndex();
+      tasks.forEach((task, idx) => {
+        const item = document.createElement('div');
+        item.className = 'timeline-item';
+        if (idx === currentIdx) item.classList.add('current');
+        else if (idx < currentIdx) item.classList.add('completed');
+        let badgeText = 'Upcoming';
+        if (idx < currentIdx) badgeText = 'Done';
+        else if (idx === currentIdx) badgeText = 'Now';
+        item.innerHTML = `
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div style="display:flex; flex-direction:column">
+              <div class="timeline-time">${task.timeRange}</div>
+              <div class="timeline-task">${task.text}</div>
+            </div>
+            <span class="status-badge">${badgeText}</span>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+      setTimeout(() => {
+        const currentEl = document.querySelector('.timeline-item.current');
+        if (currentEl) currentEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
+    function updateDashboard() {
+      if (tasks.length === 0) return;
+      const now = new Date();
+      const currentMin = now.getHours()*60 + now.getMinutes();
+      const currentIdx = getCurrentTaskIndex();
+      if (currentIdx === -1) return;
+      const currentTask = tasks[currentIdx];
+      dom.currentName.textContent = currentTask.text;
+      dom.currentTime.textContent = currentTask.timeRange;
+      const totalTaskMin = currentTask.endMin - currentTask.startMin;
+      const elapsedMin = Math.max(0, currentMin - currentTask.startMin);
+      const percent = totalTaskMin > 0 ? Math.min(100, Math.round((elapsedMin / totalTaskMin)*100)) : 0;
+      const circumference = 2 * Math.PI * 42;
+      dom.ringFill.style.strokeDashoffset = circumference - (percent / 100) * circumference;
+      dom.percent.textContent = percent + '%';
+      const completed = tasks.filter((_,i) => i < currentIdx).length;
+      const remaining = tasks.length - completed - 1;
+      dom.statTasks.textContent = tasks.length;
+      dom.statDone.textContent = completed;
+      dom.statRem.textContent = remaining;
+      const firstStart = tasks[0].startMin;
+      const lastEnd = tasks[tasks.length-1].endMin;
+      const totalDayMin = lastEnd - firstStart;
+      const hours = Math.floor(totalDayMin / 60);
+      const mins = totalDayMin % 60;
+      dom.focusTime.textContent = `${hours}h ${mins}m`;
+      const elapsedDayMin = Math.max(0, currentMin - firstStart);
+      const dayProgress = totalDayMin > 0 ? Math.min(100, (elapsedDayMin / totalDayMin)*100) : 0;
+      dom.barFill.style.width = dayProgress + '%';
+      updateCountdowns();
+    }
+    function updateCountdowns() {
+      const now = new Date().getTime();
+      const alTarget = new Date("August 14, 2028 00:00:00").getTime();
+      const alDist = alTarget - now;
+      if (alDist > 0) {
+        document.getElementById('al-days').textContent = Math.floor(alDist / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+        document.getElementById('al-hours').textContent = Math.floor((alDist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+        document.getElementById('al-mins').textContent = Math.floor((alDist % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+      }
+      const ioiTarget = new Date("September 12, 2027 00:00:00").getTime();
+      const ioiDist = ioiTarget - now;
+      if (ioiDist > 0) {
+        document.getElementById('ioi-days').textContent = Math.floor(ioiDist / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+        document.getElementById('ioi-hours').textContent = Math.floor((ioiDist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+        document.getElementById('ioi-mins').textContent = Math.floor((ioiDist % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+      }
+    }
+    function updateDateTime() {
+      const now = new Date();
+      const dayName = dayOrder[now.getDay()];
+      dom.date.textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      dom.clock.textContent = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const hour = now.getHours();
+      let greeting = "Good Evening";
+      if (hour < 12) greeting = "Good Morning";
+      else if (hour < 18) greeting = "Good Afternoon";
+      dom.greeting.textContent = `${greeting}, Dreamxhava`;
+      if (dayName !== currentDay) {
+        currentDay = dayName;
+        renderTimeline();
+      }
+      updateDashboard();
+      updateEventNoteWidget();
+    }
+    dom.menuToggle.addEventListener('click', () => {
+      dom.sidebar.classList.toggle('open');
+    });
+
+    const sidebarBtns = document.querySelectorAll('.sidebar-btn');
+    const views = {
+      dashboard: document.getElementById('dashboardView'),
+      timetable: document.getElementById('timetableView'),
+      todo: document.getElementById('todoView'),
+      progress: document.getElementById('progressView'),
+      calendar: document.getElementById('calendarView'),
+      screenscape: document.getElementById('screenscapeView')
+    };
+    sidebarBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        sidebarBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const viewName = btn.dataset.view;
+        Object.values(views).forEach(v => v.classList.remove('active'));
+        views[viewName].classList.add('active');
+        document.getElementById('resetBtn').style.display = (viewName === 'timetable') ? 'flex' : 'none';
+        if (viewName === 'timetable') renderTimeline();
+        if (viewName === 'calendar') { renderCalendarGrid(); renderDayDetail(selectedCalDate); }
+        if (viewName === 'screenscape') { if (!ssIframe.src) loadScreenscape(); }
+        if (window.innerWidth <= 768) dom.sidebar.classList.remove('open');
+      });
+    });
+
+    const todosRef = db.collection("todos");
+    let unsubTodos = null;
+    function renderTodos(snapshot) {
+      const list = document.getElementById("todoList");
+      if (!list) return;
+      list.innerHTML = "";
+      if (!snapshot) return;
+      snapshot.forEach(doc => {
+        const todo = doc.data();
+        const li = document.createElement("li");
+        li.className = "todo-item";
+        if (todo.done) li.classList.add("done");
+        li.innerHTML = `
+          <input type="checkbox" class="todo-checkbox" ${todo.done ? "checked" : ""}>
+          <span class="todo-text">${escapeHtml(todo.text)}</span>
+          <button class="todo-delete">✕</button>
+        `;
+        li.querySelector(".todo-checkbox").addEventListener("change", (e) => {
+          todosRef.doc(doc.id).update({ done: e.target.checked });
+        });
+        li.querySelector(".todo-delete").addEventListener("click", () => {
+          todosRef.doc(doc.id).delete();
+        });
+        list.appendChild(li);
+      });
+    }
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+    document.getElementById("todoAddBtn").addEventListener("click", async () => {
+      const input = document.getElementById("todoInput");
+      const text = input.value.trim();
+      if (!text) return;
+      await todosRef.add({ text, done: false, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+      input.value = "";
+    });
+    document.getElementById("todoInput").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") document.getElementById("todoAddBtn").click();
+    });
+
+    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const fullMonthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const weekdayNames = ["S","M","T","W","T","F","S"];
+    const fullWeekdayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const defaultEvents = [
+      { month: 10, day: 25, label: "Your Birthday", recurring: true },
+      { month: 8,  day: 15, label: "Vishaka's Birthday", recurring: true },
+      { month: 6,  day: 12, label: "Amma's Birthday", recurring: true },
+      { month: 10, day: 5,  label: "Thaththa's Birthday", recurring: true },
+      { month: 2,  day: 14, label: "Shalani's Birthday", recurring: true },
+      { month: 10, day: 28, label: "Rayan's Birthday", recurring: true },
+      { month: 10, day: 3,  label: "Dulina's Birthday", recurring: true },
+      { month: 11, day: 13, label: "Vidun's Birthday", recurring: true },
+      { month: 10, day: 13, label: "Abrian's Birthday", recurring: true }
+    ];
+    let customEvents = [];
+    let calViewDate = new Date();
+    let selectedCalDate = new Date();
+    selectedCalDate.setHours(0,0,0,0);
+    const calendarRef = db.collection("calendarEvents");
+    let unsubCalendar = null;
+    function getDaysUntil(e) {
+      const now = new Date();
+      const today0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      if (e.recurring !== false) {
+        let target = new Date(now.getFullYear(), e.month - 1, e.day);
+        if (target < today0) target = new Date(now.getFullYear() + 1, e.month - 1, e.day);
+        return Math.round((target - today0) / 86400000);
+      }
+      const target = new Date(e.year, e.month - 1, e.day);
+      return Math.round((target - today0) / 86400000);
+    }
+    function getAllEvents() {
+      const all = [...defaultEvents.map((e, i) => ({ ...e, id: `default-${i}`, custom: false })), ...customEvents.map(e => ({ ...e, id: e.docId, custom: true }))];
+      all.forEach(e => e.daysUntil = getDaysUntil(e));
+      return all.filter(e => e.recurring !== false || e.daysUntil >= 0).sort((a, b) => a.daysUntil - b.daysUntil);
+    }
+    function getEventsOnDate(date) {
+      const all = [...defaultEvents, ...customEvents];
+      return all.filter(e => {
+        if (e.month !== date.getMonth() + 1 || e.day !== date.getDate()) return false;
+        return e.recurring === false ? e.year === date.getFullYear() : true;
+      });
+    }
+    function renderCalendarList() {
+      const container = document.getElementById('calendarList');
+      if (!container) return;
+      const all = getAllEvents();
+      container.innerHTML = all.map(e => {
+        let badge = `in ${e.daysUntil} days`;
+        if (e.daysUntil === 0) badge = 'Today!';
+        else if (e.daysUntil === 1) badge = 'Tomorrow';
+        return `
+          <li class="event-item ${e.daysUntil === 0 ? 'today' : ''}" data-id="${e.id}">
+            <div class="event-main">
+              <span class="event-name">${escapeHtml(e.label)}${e.recurring === false ? ' (one-time)' : ''}</span>
+              <span class="event-date">${e.day} ${monthNames[e.month - 1]}${e.recurring === false ? ' ' + e.year : ''}</span>
+            </div>
+            <span class="event-badge">${badge}</span>
+            ${e.custom ? '<button class="event-delete" data-id="' + e.id + '">✕</button>' : ''}
+          </li>
+        `;
+      }).join('');
+      container.querySelectorAll('.event-delete').forEach(btn => btn.addEventListener('click', () => calendarRef.doc(btn.dataset.id).delete()));
+    }
+    function renderCalendarGrid() {
+      const grid = document.getElementById('calendarGrid');
+      const label = document.getElementById('calMonthLabel');
+      if (!grid || !label) return;
+      const year = calViewDate.getFullYear();
+      const month = calViewDate.getMonth();
+      label.textContent = calViewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const now = new Date();
+      const isCurrentMonth = now.getFullYear() === year && now.getMonth() === month;
+      const isSelectedMonth = selectedCalDate.getFullYear() === year && selectedCalDate.getMonth() === month;
+      const rawEvents = [...defaultEvents, ...customEvents];
+      const eventsByDay = {};
+      rawEvents.forEach(e => {
+        if (e.month - 1 !== month) return;
+        if (e.recurring === false && e.year !== year) return;
+        if (!eventsByDay[e.day]) eventsByDay[e.day] = [];
+        eventsByDay[e.day].push(e.label);
+      });
+      let html = '';
+      weekdayNames.forEach(w => html += `<div class="cal-weekday">${w}</div>`);
+      for (let i = 0; i < firstDay; i++) html += `<div class="cal-cell empty"></div>`;
+      for (let d = 1; d <= daysInMonth; d++) {
+        const hasEvent = !!eventsByDay[d];
+        const isToday = isCurrentMonth && now.getDate() === d;
+        const isSelected = isSelectedMonth && selectedCalDate.getDate() === d;
+        html += `<div class="cal-cell ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''} ${hasEvent ? 'has-event' : ''}" data-day="${d}" title="${escapeHtml((eventsByDay[d] || []).join(', '))}"><span>${d}</span></div>`;
+      }
+      grid.innerHTML = html;
+      grid.querySelectorAll('.cal-cell:not(.empty)').forEach(cell => {
+        cell.addEventListener('click', () => selectDate(new Date(year, month, Number(cell.dataset.day))));
+      });
+    }
+    function selectDate(date) {
+      selectedCalDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      const mm = String(selectedCalDate.getMonth() + 1).padStart(2, '0');
+      const dd = String(selectedCalDate.getDate()).padStart(2, '0');
+      document.getElementById('eventDateInput').value = `${selectedCalDate.getFullYear()}-${mm}-${dd}`;
+      if (selectedCalDate.getFullYear() !== calViewDate.getFullYear() || selectedCalDate.getMonth() !== calViewDate.getMonth()) {
+        calViewDate = new Date(selectedCalDate.getFullYear(), selectedCalDate.getMonth(), 1);
+      }
+      renderCalendarGrid();
+      renderDayDetail(selectedCalDate);
+    }
+    function renderDayDetail(date) {
+      const weekdayEl = document.getElementById('dayDetailWeekday');
+      const dateEl = document.getElementById('dayDetailDate');
+      const todayTag = document.getElementById('dayDetailTodayTag');
+      const eventsEl = document.getElementById('dayDetailEvents');
+      if (!weekdayEl || !dateEl || !eventsEl) return;
+      const now = new Date();
+      const isToday = now.getFullYear() === date.getFullYear() && now.getMonth() === date.getMonth() && now.getDate() === date.getDate();
+      weekdayEl.textContent = fullWeekdayNames[date.getDay()];
+      dateEl.childNodes[0].textContent = `${date.getDate()} ${fullMonthNames[date.getMonth()]} ${date.getFullYear()} `;
+      todayTag.style.display = isToday ? 'inline-block' : 'none';
+      const dayEvents = getEventsOnDate(date);
+      eventsEl.innerHTML = dayEvents.length === 0 ? `<li class="day-detail-empty">No events on this date</li>` : 
+        dayEvents.map(e => `<li class="day-detail-event"><span>${escapeHtml(e.label)}</span><span class="event-badge">${e.recurring === false ? 'one-time' : 'yearly'}</span></li>`).join('');
+    }
+    function shiftSelectedDate(deltaDays) {
+      const next = new Date(selectedCalDate);
+      next.setDate(next.getDate() + deltaDays);
+      selectDate(next);
+    }
+    document.getElementById('dayDetailPrevBtn').addEventListener('click', () => shiftSelectedDate(-1));
+    document.getElementById('dayDetailNextBtn').addEventListener('click', () => shiftSelectedDate(1));
+    document.getElementById('dayDetailJumpToday').addEventListener('click', () => {
+      const t = new Date(); t.setHours(0,0,0,0);
+      calViewDate = new Date(t.getFullYear(), t.getMonth(), 1);
+      selectDate(t);
+    });
+    function renderCalendar() {
+      renderCalendarList();
+      renderCalendarGrid();
+      renderDayDetail(selectedCalDate);
+    }
+    function updateEventNoteWidget() {
+      const widget = document.getElementById('eventNoteWidget');
+      const text = document.getElementById('eventNoteText');
+      if (!widget || !text) return;
+      const all = getAllEvents();
+      const next = all[0];
+      if (!next || next.daysUntil > 7) { widget.style.display = 'none'; return; }
+      widget.style.display = 'flex';
+      if (next.daysUntil === 0) {
+        widget.classList.add('today-highlight');
+        text.textContent = `Today is ${next.label}!`;
+      } else {
+        widget.classList.remove('today-highlight');
+        text.textContent = `${next.label} is ${next.daysUntil === 1 ? 'tomorrow' : `in ${next.daysUntil} days`}`;
+      }
+    }
+    document.getElementById('calPrevBtn').addEventListener('click', () => {
+      calViewDate = new Date(calViewDate.getFullYear(), calViewDate.getMonth() - 1, 1);
+      renderCalendarGrid();
+    });
+    document.getElementById('calNextBtn').addEventListener('click', () => {
+      calViewDate = new Date(calViewDate.getFullYear(), calViewDate.getMonth() + 1, 1);
+      renderCalendarGrid();
+    });
+    document.getElementById('eventAddBtn').addEventListener('click', async () => {
+      const labelInput = document.getElementById('eventLabelInput');
+      const dateInput = document.getElementById('eventDateInput');
+      const label = labelInput.value.trim();
+      const dateVal = dateInput.value;
+      const recurring = document.querySelector('input[name="eventType"]:checked').value === 'recurring';
+      if (!label || !dateVal) return;
+      const [y, m, d] = dateVal.split('-').map(Number);
+      const payload = { label, month: m, day: d, recurring, createdAt: firebase.firestore.FieldValue.serverTimestamp() };
+      if (!recurring) payload.year = y;
+      await calendarRef.add(payload);
+      labelInput.value = ''; dateInput.value = '';
+    });
+
+    /* ===== IOI Prep Plan ===== */
+    const ioiPlan = [{"week": "Week 1 · C++ Fundamentals & I/O", "days": [{"day": 1, "date": "10 Aug Mon", "iso": "2026-08-10", "tasks": ["Set up g++ / VS Code / online judge accounts (Codeforces, CSES, AtCoder)", "Variables, data types: int, long long, float, double, char, bool, string", "cin/cout, basic I/O formatting", "Practice: 5 CF 800 I/O & arithmetic problems"]}, {"day": 2, "date": "11 Aug Tue", "iso": "2026-08-11", "tasks": ["if / else if / else, switch statements", "Comparison & logical operators", "Practice: grading system, leap year checker", "Practice: 5 CF 800 conditional problems"]}, {"day": 3, "date": "12 Aug Wed", "iso": "2026-08-12", "tasks": ["for, while, do-while loops", "Nested loops, loop control (break/continue)", "Practice: pattern printing (triangles, pyramids)", "Practice: multiplication table generator"]}, {"day": 4, "date": "13 Aug Thu", "iso": "2026-08-13", "tasks": ["Functions: declaration, parameters, return types, void, overloading", "Pass by value vs pass by reference", "Practice: write reusable math utility functions", "Practice: 5 CF 800 function-based problems"]}, {"day": 5, "date": "14 Aug Fri", "iso": "2026-08-14", "tasks": ["Recursion basics: factorial, power, digit sum", "Recursion tree visualization", "Practice: nth Fibonacci (recursive)", "Practice: Euclidean GCD/LCM recursively"]}, {"day": 6, "date": "15 Aug Sat", "iso": "2026-08-15", "tasks": ["1D arrays: declaration, traversal, input/output", "2D arrays: matrices, traversal patterns", "Practice: max/min/sum of array", "Practice: matrix transpose & rotation"]}, {"day": 7, "date": "16 Aug Sun", "iso": "2026-08-16", "tasks": ["Review day: redo any shaky problems from the week", "Timed practice (1.5h): 6 CF 800 mixed problems", "Write a short reflection on mistakes made"]}]}, {"week": "Week 2 · Strings, Recursion & Searching", "days": [{"day": 8, "date": "17 Aug Mon", "iso": "2026-08-17", "tasks": ["String basics: length, indexing, concatenation", "substr, find, getline, to_string, stoi/stoll", "Practice: palindrome checker", "Practice: string reversal & case conversion"]}, {"day": 9, "date": "18 Aug Tue", "iso": "2026-08-18", "tasks": ["Character arrays vs std::string", "ASCII manipulation, character frequency counting", "Practice: anagram checker", "Practice: count vowels/consonants"]}, {"day": 10, "date": "19 Aug Wed", "iso": "2026-08-19", "tasks": ["Recursion deep dive: backtracking basics", "Practice: generate all subsets of a set", "Practice: generate all permutations of a string"]}, {"day": 11, "date": "20 Aug Thu", "iso": "2026-08-20", "tasks": ["Linear search & its complexity", "Binary search on sorted arrays (manual implementation)", "Practice: first/last occurrence of a value", "Practice: search in rotated sorted array"]}, {"day": 12, "date": "21 Aug Fri", "iso": "2026-08-21", "tasks": ["Sorting basics: bubble sort, selection sort, insertion sort (by hand)", "Understanding stability & complexity of each", "Practice: implement and time each sort"]}, {"day": 13, "date": "22 Aug Sat", "iso": "2026-08-22", "tasks": ["std::sort with custom comparators", "Sorting pairs/structs by multiple keys", "Practice: 5 CF 900 sorting-based problems"]}, {"day": 14, "date": "23 Aug Sun", "iso": "2026-08-23", "tasks": ["Weekly mini-contest (2h): 6 CSES Introductory problems", "Review all wrong/slow answers with editorials"]}]}, {"week": "Week 3 · STL Core I — Sequence Containers", "days": [{"day": 15, "date": "24 Aug Mon", "iso": "2026-08-24", "tasks": ["std::vector: push_back, pop_back, size, resize, clear, 2D vectors", "Practice: dynamic array based problems"]}, {"day": 16, "date": "25 Aug Tue", "iso": "2026-08-25", "tasks": ["std::pair and std::tuple", "Structured bindings, make_pair/make_tuple", "Practice: coordinate/point storage problems"]}, {"day": 17, "date": "26 Aug Wed", "iso": "2026-08-26", "tasks": ["std::array vs C-style arrays vs vector", "auto keyword, range-based for loops", "Practice: 5 CF 900 vector-based problems"]}, {"day": 18, "date": "27 Aug Thu", "iso": "2026-08-27", "tasks": ["Iterators: begin/end, reverse iterators", "STL algorithms: min, max, accumulate, count, find", "Practice: use algorithm header on 5 problems"]}, {"day": 19, "date": "28 Aug Fri", "iso": "2026-08-28", "tasks": ["Two-dimensional vectors & vector of vectors (grids/graphs prep)", "Practice: matrix problems using vector<vector<int>>"]}, {"day": 20, "date": "29 Aug Sat", "iso": "2026-08-29", "tasks": ["std::string as STL container: erase, insert, replace", "Practice: 5 CF 900 string manipulation problems"]}, {"day": 21, "date": "30 Aug Sun", "iso": "2026-08-30", "tasks": ["Timed mini-contest (2h): 6 CF 900-1000 problems focused on vectors/strings", "Editorial review of mistakes"]}]}, {"week": "Week 4 · STL Core II — Sets & Maps", "days": [{"day": 22, "date": "31 Aug Mon", "iso": "2026-08-31", "tasks": ["std::set: insert, erase, find, count, ordered iteration", "Practice: unique elements, duplicate removal"]}, {"day": 23, "date": "1 Sep Tue", "iso": "2026-09-01", "tasks": ["std::multiset: handling duplicates, equal_range", "Practice: k-th smallest with duplicates"]}, {"day": 24, "date": "2 Sep Wed", "iso": "2026-09-02", "tasks": ["std::map: key-value pairs, insert, operator[], iteration", "Practice: frequency counting with map"]}, {"day": 25, "date": "3 Sep Thu", "iso": "2026-09-03", "tasks": ["std::unordered_set / std::unordered_map: hash-based O(1) average lookup", "When to use hash vs ordered containers", "Practice: 2 problems where O(1) lookup matters"]}, {"day": 26, "date": "4 Sep Fri", "iso": "2026-09-04", "tasks": ["map/set with custom comparators & pairs as keys", "Practice: coordinate compression using map"]}, {"day": 27, "date": "5 Sep Sat", "iso": "2026-09-05", "tasks": ["Combining set/map with two pointers for frequency problems", "Practice: 5 CF 1000 set/map problems"]}, {"day": 28, "date": "6 Sep Sun", "iso": "2026-09-06", "tasks": ["Weekly mini-contest (2h): 6 problems mixing sets/maps", "Review mistakes & note patterns"]}]}, {"week": "Week 5 · STL Core III — Stacks, Queues & Heaps", "days": [{"day": 29, "date": "7 Sep Mon", "iso": "2026-09-07", "tasks": ["std::stack: push, pop, top, empty", "Practice: balanced brackets/parentheses matching"]}, {"day": 30, "date": "8 Sep Tue", "iso": "2026-09-08", "tasks": ["std::queue & std::deque: push/pop from both ends", "Practice: simulate a queue using two stacks"]}, {"day": 31, "date": "9 Sep Wed", "iso": "2026-09-09", "tasks": ["Monotonic stack technique", "Practice: next greater element, next smaller element"]}, {"day": 32, "date": "10 Sep Thu", "iso": "2026-09-10", "tasks": ["std::priority_queue: max-heap default, min-heap with greater<int>", "Practice: k largest / k smallest elements"]}, {"day": 33, "date": "11 Sep Fri", "iso": "2026-09-11", "tasks": ["Priority queue with pairs/custom structs", "Practice: merge k sorted arrays using a heap"]}, {"day": 34, "date": "12 Sep Sat", "iso": "2026-09-12", "tasks": ["Sliding window maximum using deque", "Practice: 5 CF 1000-1100 stack/queue/heap problems"]}, {"day": 35, "date": "13 Sep Sun", "iso": "2026-09-13", "tasks": ["Timed mini-contest (2.5h): 6 problems mixing stacks/queues/heaps", "Editorial review"]}]}, {"week": "Week 6 · Complexity & Complete Search", "days": [{"day": 36, "date": "14 Sep Mon", "iso": "2026-09-14", "tasks": ["Big-O notation: O(1), O(log n), O(n), O(n log n), O(n^2), O(2^n)", "Practice: estimate complexity of given code snippets"]}, {"day": 37, "date": "15 Sep Tue", "iso": "2026-09-15", "tasks": ["Relating input size (n) to allowed complexity under time limits", "Practice: pick correct approach for given constraints (5 problems)"]}, {"day": 38, "date": "16 Sep Wed", "iso": "2026-09-16", "tasks": ["Complete search / brute force fundamentals", "Generating all subsets via bitmasking", "Practice: subset sum via brute force"]}, {"day": 39, "date": "17 Sep Thu", "iso": "2026-09-17", "tasks": ["Generating permutations via next_permutation / recursion", "Practice: travelling-salesman style brute force on small n"]}, {"day": 40, "date": "18 Sep Fri", "iso": "2026-09-18", "tasks": ["Meet in the middle technique", "Practice: subset sum for n up to ~40"]}, {"day": 41, "date": "19 Sep Sat", "iso": "2026-09-19", "tasks": ["Pruning & backtracking optimization", "Practice: N-Queens, Sudoku-style backtracking problem"]}, {"day": 42, "date": "20 Sep Sun", "iso": "2026-09-20", "tasks": ["Weekly mock (2.5h): 6 complete-search/backtracking problems", "Review & note pruning ideas that worked"]}]}, {"week": "Week 7 · Greedy Algorithms & Binary Search", "days": [{"day": 43, "date": "21 Sep Mon", "iso": "2026-09-21", "tasks": ["Greedy algorithm principles: local optimum vs global optimum", "Practice: activity selection problem"]}, {"day": 44, "date": "22 Sep Tue", "iso": "2026-09-22", "tasks": ["Coin change (greedy case) & interval scheduling", "Practice: 4 CF 900 greedy problems"]}, {"day": 45, "date": "23 Sep Wed", "iso": "2026-09-23", "tasks": ["Proving greedy correctness with exchange argument (conceptual)", "Practice: 4 more greedy-tagged problems"]}, {"day": 46, "date": "24 Sep Thu", "iso": "2026-09-24", "tasks": ["Binary search on sorted arrays: lower_bound, upper_bound (manual + STL)", "Practice: first/last occurrence, count of value"]}, {"day": 47, "date": "25 Sep Fri", "iso": "2026-09-25", "tasks": ["Binary search on the answer (monotonic predicate functions)", "Practice: Aggressive Cows (SPOJ)"]}, {"day": 48, "date": "26 Sep Sat", "iso": "2026-09-26", "tasks": ["Binary search on the answer continued", "Practice: Book Allocation / Painter's Partition problem"]}, {"day": 49, "date": "27 Sep Sun", "iso": "2026-09-27", "tasks": ["Timed mini-contest (2.5h): 3 greedy + 3 binary-search problems", "Editorial review"]}]}, {"week": "Week 8 · Two Pointers, Prefix Sums & Sliding Window", "days": [{"day": 50, "date": "28 Sep Mon", "iso": "2026-09-28", "tasks": ["Two pointers technique on sorted arrays", "Practice: pair sum equals target"]}, {"day": 51, "date": "29 Sep Tue", "iso": "2026-09-29", "tasks": ["Two pointers continued", "Practice: container with most water, 3Sum"]}, {"day": 52, "date": "30 Sep Wed", "iso": "2026-09-30", "tasks": ["Prefix sums (1D): range sum queries in O(1)", "Practice: 4 prefix-sum problems"]}, {"day": 53, "date": "1 Oct Thu", "iso": "2026-10-01", "tasks": ["Prefix sums (2D) for submatrix sums", "Difference arrays for range updates", "Practice: 4 problems using difference arrays"]}, {"day": 54, "date": "2 Oct Fri", "iso": "2026-10-02", "tasks": ["Fixed-size sliding window", "Practice: max sum subarray of size k"]}, {"day": 55, "date": "3 Oct Sat", "iso": "2026-10-03", "tasks": ["Variable-size sliding window", "Practice: longest substring without repeating characters"]}, {"day": 56, "date": "4 Oct Sun", "iso": "2026-10-04", "tasks": ["Weekly mock (2.5h): 6 problems mixing two pointers/prefix sums/sliding window", "Review"]}]}, {"week": "Week 9 · Dynamic Programming I — Foundations", "days": [{"day": 57, "date": "5 Oct Mon", "iso": "2026-10-05", "tasks": ["What is DP: overlapping subproblems & optimal substructure", "Memoization vs tabulation", "Practice: CSES Dice Combinations"]}, {"day": 58, "date": "6 Oct Tue", "iso": "2026-10-06", "tasks": ["1D DP: climbing stairs, house robber style problems", "Practice: CSES Minimizing Coins"]}, {"day": 59, "date": "7 Oct Wed", "iso": "2026-10-07", "tasks": ["Longest Increasing Subsequence (O(n^2) then O(n log n))", "Practice: LIS variants"]}, {"day": 60, "date": "8 Oct Thu", "iso": "2026-10-08", "tasks": ["0/1 Knapsack: recursive + tabulated versions", "Practice: subset sum as knapsack"]}, {"day": 61, "date": "9 Oct Fri", "iso": "2026-10-09", "tasks": ["Unbounded knapsack: coin change (count ways), rod cutting", "Practice: 3 unbounded-knapsack problems"]}, {"day": 62, "date": "10 Oct Sat", "iso": "2026-10-10", "tasks": ["Edit distance & Longest Common Subsequence", "Practice: LCS variants (printing the sequence)"]}, {"day": 63, "date": "11 Oct Sun", "iso": "2026-10-11", "tasks": ["Weekly mock (3h): 6 DP problems from CSES DP section", "Time strictly, self-grade after"]}]}, {"week": "Week 10 · Dynamic Programming II — Advanced Patterns", "days": [{"day": 64, "date": "12 Oct Mon", "iso": "2026-10-12", "tasks": ["2D grid DP: unique paths, minimum path sum", "Practice: 3 grid-DP problems"]}, {"day": 65, "date": "13 Oct Tue", "iso": "2026-10-13", "tasks": ["Interval DP: matrix chain multiplication style problems", "Practice: CSES Removing Digits / interval DP problem"]}, {"day": 66, "date": "14 Oct Wed", "iso": "2026-10-14", "tasks": ["Bitmask DP fundamentals: representing subsets as bits", "Practice: travelling-salesman via bitmask DP (small n)"]}, {"day": 67, "date": "15 Oct Thu", "iso": "2026-10-15", "tasks": ["Bitmask DP continued: assignment problem style", "Practice: 2 more bitmask-DP problems"]}, {"day": 68, "date": "16 Oct Fri", "iso": "2026-10-16", "tasks": ["Digit DP fundamentals: counting numbers with a property", "Practice: 2 digit-DP problems"]}, {"day": 69, "date": "17 Oct Sat", "iso": "2026-10-17", "tasks": ["Tree DP introduction (DP on a rooted tree)", "Practice: max independent set on a tree"]}, {"day": 70, "date": "18 Oct Sun", "iso": "2026-10-18", "tasks": ["Timed mock (3h): 6 mixed DP problems (grid/interval/bitmask)", "Deep review of editorial approaches"]}]}, {"week": "Week 11 · Graphs I — Representation & Traversal", "days": [{"day": 71, "date": "19 Oct Mon", "iso": "2026-10-19", "tasks": ["Graph representations: adjacency list vs adjacency matrix", "Directed vs undirected, weighted vs unweighted", "Practice: build a graph from input, print adjacency list"]}, {"day": 72, "date": "20 Oct Tue", "iso": "2026-10-20", "tasks": ["Breadth-First Search (BFS): implementation & shortest path in unweighted graphs", "Practice: 4 BFS problems"]}, {"day": 73, "date": "21 Oct Wed", "iso": "2026-10-21", "tasks": ["Depth-First Search (DFS): recursive & iterative implementation", "Practice: connected components counting"]}, {"day": 74, "date": "22 Oct Thu", "iso": "2026-10-22", "tasks": ["Bipartite graph checking via BFS/DFS coloring", "Practice: 3 bipartite-check problems"]}, {"day": 75, "date": "23 Oct Fri", "iso": "2026-10-23", "tasks": ["Flood fill / grid BFS-DFS (island counting style problems)", "Practice: number of islands, maze shortest path"]}, {"day": 76, "date": "24 Oct Sat", "iso": "2026-10-24", "tasks": ["Multi-source BFS", "Practice: rotten oranges / nearest source style problem"]}, {"day": 77, "date": "25 Oct Sun", "iso": "2026-10-25", "tasks": ["Weekly mock (2.5h): 6 BFS/DFS problems", "Review approaches for slow solutions"]}]}, {"week": "Week 12 · Graphs II — Ordering & Union-Find", "days": [{"day": 78, "date": "26 Oct Mon", "iso": "2026-10-26", "tasks": ["Topological sort via DFS", "Practice: 3 topological-sort problems"]}, {"day": 79, "date": "27 Oct Tue", "iso": "2026-10-27", "tasks": ["Topological sort via Kahn's algorithm (BFS-based)", "Cycle detection in directed graphs", "Practice: 3 problems"]}, {"day": 80, "date": "28 Oct Wed", "iso": "2026-10-28", "tasks": ["Disjoint Set Union (DSU/Union-Find): union by rank, path compression", "Practice: 4 DSU problems (connectivity queries)"]}, {"day": 81, "date": "29 Oct Thu", "iso": "2026-10-29", "tasks": ["DSU applications: Kruskal's MST algorithm", "Practice: implement Kruskal's on 3 problems"]}, {"day": 82, "date": "30 Oct Fri", "iso": "2026-10-30", "tasks": ["Prim's MST algorithm (with priority_queue)", "Compare Kruskal vs Prim use-cases", "Practice: 2 MST problems"]}, {"day": 83, "date": "31 Oct Sat", "iso": "2026-10-31", "tasks": ["Cycle detection in undirected graphs (DSU & DFS methods)", "Practice: 3 problems"]}, {"day": 84, "date": "1 Nov Sun", "iso": "2026-11-01", "tasks": ["Timed mock (2.5h): 6 problems mixing topo-sort/DSU/MST", "Editorial review"]}]}, {"week": "Week 13 · Graphs III — Shortest Paths", "days": [{"day": 85, "date": "2 Nov Mon", "iso": "2026-11-02", "tasks": ["Dijkstra's algorithm (priority_queue based, O((V+E) log V))", "Practice: 3 Dijkstra problems"]}, {"day": 86, "date": "3 Nov Tue", "iso": "2026-11-03", "tasks": ["Dijkstra edge cases: negative weights, multiple edges, self-loops", "Practice: 2 more Dijkstra problems"]}, {"day": 87, "date": "4 Nov Wed", "iso": "2026-11-04", "tasks": ["Bellman-Ford algorithm: handling negative weights, cycle detection", "Practice: 3 Bellman-Ford problems"]}, {"day": 88, "date": "5 Nov Thu", "iso": "2026-11-05", "tasks": ["Floyd-Warshall algorithm: all-pairs shortest paths", "Practice: 3 Floyd-Warshall problems"]}, {"day": 89, "date": "6 Nov Fri", "iso": "2026-11-06", "tasks": ["0-1 BFS (deque-based shortest path for 0/1 weight edges)", "Practice: 2 problems"]}, {"day": 90, "date": "7 Nov Sat", "iso": "2026-11-07", "tasks": ["Shortest path DAG (using topological order)", "Practice: 2 problems"]}, {"day": 91, "date": "8 Nov Sun", "iso": "2026-11-08", "tasks": ["Weekly mock (3h): 6 shortest-path problems (mixed algorithms)", "Review approach selection reasoning"]}]}, {"week": "Week 14 · Trees & Advanced Data Structures I", "days": [{"day": 92, "date": "9 Nov Mon", "iso": "2026-11-09", "tasks": ["Tree basics: rooted trees, DFS traversal, subtree size computation", "Practice: 3 tree-traversal problems"]}, {"day": 93, "date": "10 Nov Tue", "iso": "2026-11-10", "tasks": ["Diameter of a tree, tree DP recap", "Practice: 2 diameter/tree-DP problems"]}, {"day": 94, "date": "11 Nov Wed", "iso": "2026-11-11", "tasks": ["Segment Tree: build, range query, point update (sum/min/max)", "Practice: implement from scratch, 2 problems"]}, {"day": 95, "date": "12 Nov Thu", "iso": "2026-11-12", "tasks": ["Segment Tree: range update with lazy propagation", "Practice: 2 lazy-propagation problems"]}, {"day": 96, "date": "13 Nov Fri", "iso": "2026-11-13", "tasks": ["Fenwick Tree / Binary Indexed Tree (BIT): point update, prefix query", "Practice: 3 BIT problems"]}, {"day": 97, "date": "14 Nov Sat", "iso": "2026-11-14", "tasks": ["BIT for range update + range query, 2D BIT intro", "Practice: 2 problems"]}, {"day": 98, "date": "15 Nov Sun", "iso": "2026-11-15", "tasks": ["Timed mock (3h): 6 segment-tree/BIT problems", "Editorial deep-dive on any TLE/WA"]}]}, {"week": "Week 15 · Trees & Advanced Data Structures II", "days": [{"day": 99, "date": "16 Nov Mon", "iso": "2026-11-16", "tasks": ["Sparse Table for static range minimum/maximum queries (RMQ)", "Practice: 3 sparse-table problems"]}, {"day": 100, "date": "17 Nov Tue", "iso": "2026-11-17", "tasks": ["Binary lifting for kth ancestor queries", "Practice: 2 binary-lifting problems"]}, {"day": 101, "date": "18 Nov Wed", "iso": "2026-11-18", "tasks": ["Lowest Common Ancestor (LCA) via binary lifting", "Practice: 3 LCA problems"]}, {"day": 102, "date": "19 Nov Thu", "iso": "2026-11-19", "tasks": ["Euler tour technique for subtree queries", "Practice: 2 Euler-tour problems"]}, {"day": 103, "date": "20 Nov Fri", "iso": "2026-11-20", "tasks": ["sqrt decomposition basics for range queries", "Practice: 2 problems"]}, {"day": 104, "date": "21 Nov Sat", "iso": "2026-11-21", "tasks": ["Combining segment tree + DFS order for subtree/path updates", "Practice: 2 combined problems"]}, {"day": 105, "date": "22 Nov Sun", "iso": "2026-11-22", "tasks": ["Weekly mock (3h): 6 advanced-data-structure problems", "Review + list recurring mistakes"]}]}, {"week": "Week 16 · String Algorithms & Number Theory", "days": [{"day": 106, "date": "23 Nov Mon", "iso": "2026-11-23", "tasks": ["String hashing (polynomial rolling hash), collision avoidance", "Practice: 3 string-hashing problems"]}, {"day": 107, "date": "24 Nov Tue", "iso": "2026-11-24", "tasks": ["KMP (Knuth-Morris-Pratt) pattern matching, failure function", "Practice: 3 KMP problems"]}, {"day": 108, "date": "25 Nov Wed", "iso": "2026-11-25", "tasks": ["Z-function and its applications", "Practice: 3 Z-function problems"]}, {"day": 109, "date": "26 Nov Thu", "iso": "2026-11-26", "tasks": ["Trie data structure: insert, search, prefix queries", "Practice: 3 Trie problems"]}, {"day": 110, "date": "27 Nov Fri", "iso": "2026-11-27", "tasks": ["Number theory: sieve of Eratosthenes, primality testing, factorization", "Practice: 3 problems"]}, {"day": 111, "date": "28 Nov Sat", "iso": "2026-11-28", "tasks": ["Modular arithmetic, modular exponentiation, modular inverse", "Extended Euclidean algorithm", "Practice: 3 problems"]}, {"day": 112, "date": "29 Nov Sun", "iso": "2026-11-29", "tasks": ["Combinatorics basics: nCr with mod, Pascal's triangle, factorial precompute", "Weekly mock (2.5h): 5 mixed string/number-theory problems"]}]}, {"week": "Week 17 · Advanced Graphs & Contest Techniques", "days": [{"day": 113, "date": "30 Nov Mon", "iso": "2026-11-30", "tasks": ["Bridges and articulation points (Tarjan's algorithm)", "Practice: 3 problems"]}, {"day": 114, "date": "1 Dec Tue", "iso": "2026-12-01", "tasks": ["Strongly Connected Components (Kosaraju's / Tarjan's SCC)", "Practice: 2 SCC problems"]}, {"day": 115, "date": "2 Dec Wed", "iso": "2026-12-02", "tasks": ["Introduction to max flow (Ford-Fulkerson / Edmonds-Karp concept)", "Practice: 2 basic flow problems"]}, {"day": 116, "date": "3 Dec Thu", "iso": "2026-12-03", "tasks": ["Heavy-Light Decomposition concept (path queries on trees)", "Practice: 1-2 HLD-flavored problems (as far as time allows)"]}, {"day": 117, "date": "4 Dec Fri", "iso": "2026-12-04", "tasks": ["DP optimization tricks: DP on trees with rerooting, convex hull trick intro (conceptual)", "Practice: 2 problems"]}, {"day": 118, "date": "5 Dec Sat", "iso": "2026-12-05", "tasks": ["Geometry basics: cross product, point-in-polygon, distance formulas", "Practice: 3 geometry problems"]}, {"day": 119, "date": "6 Dec Sun", "iso": "2026-12-06", "tasks": ["Weekly mock (3h): 6 advanced/mixed problems", "Deep editorial review"]}]}, {"week": "Week 18 · Full Review & Contest Simulation", "days": [{"day": 120, "date": "7 Dec Mon", "iso": "2026-12-07", "tasks": ["Solve 12 mixed CF 900-1200 problems fast, aim 8-12 min each", "Log which topics slow you down"]}, {"day": 121, "date": "8 Dec Tue", "iso": "2026-12-08", "tasks": ["Deep review: re-solve every problem you've gotten wrong across all 17 weeks", "Update a personal 'weak topics' list"]}, {"day": 122, "date": "9 Dec Wed", "iso": "2026-12-09", "tasks": ["Full 3-hour IOI-style mock contest (CSES/CF, 5-6 problems, partial scoring mindset)", "Self-grade against time limits"]}, {"day": 123, "date": "10 Dec Thu", "iso": "2026-12-10", "tasks": ["Stress testing: write a random test generator + brute-force checker for a past problem", "Apply it to 2 previous solutions"]}, {"day": 124, "date": "11 Dec Fri", "iso": "2026-12-11", "tasks": ["Full 4-hour IOI-style mock contest (simulate real exam conditions, no distractions)", "Review immediately after"]}, {"day": 125, "date": "12 Dec Sat", "iso": "2026-12-12", "tasks": ["Active recovery: watch 2-3 editorial/solution walkthrough videos on your weakest topic", "No coding — just absorb and take notes"]}, {"day": 126, "date": "13 Dec Sun", "iso": "2026-12-13", "tasks": ["Month recap: write down every mastered topic and every remaining weak spot", "Plan the next study cycle's focus areas"]}]}];
+    let planState = {};
+    let planOpenDays = new Set();
+    const planStateRef = db.collection("ioiPlan").doc("state");
+    let unsubPlan = null;
+    function planTaskId(day, idx) { return `d${day}-${idx}`; }
+    function findDayByNumber(dayNum) {
+      for (const w of ioiPlan) { for (const d of w.days) { if (d.day === dayNum) return d; } }
+      return null;
+    }
+    function computePlanTotals() {
+      let total = 0, done = 0;
+      ioiPlan.forEach(w => w.days.forEach(d => {
+        d.tasks.forEach((_, i) => {
+          total++;
+          if (planState[planTaskId(d.day, i)]) done++;
+        });
+      }));
+      return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
+    }
+    function computeDayTotals(d) {
+      let total = d.tasks.length, done = 0;
+      d.tasks.forEach((_, i) => { if (planState[planTaskId(d.day, i)]) done++; });
+      return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
+    }
+    function todayIso() {
+      const n = new Date();
+      return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`;
+    }
+    function updatePlanHeader() {
+      const totalDays = ioiPlan.reduce((sum, w) => sum + w.days.length, 0);
+      const firstIso = ioiPlan[0]?.days[0]?.iso;
+      const lastWeek = ioiPlan[ioiPlan.length - 1];
+      const lastIso = lastWeek?.days[lastWeek.days.length - 1]?.iso;
+      const sub = document.getElementById('planHeaderSubtitle');
+      if (sub && firstIso && lastIso) {
+        const fmt = (iso) => { const [y,m,d] = iso.split('-').map(Number); return `${d} ${monthNames[m-1]} ${y}`; };
+        sub.textContent = `${fmt(firstIso)} – ${fmt(lastIso)} · ${totalDays} days · Full C++/algorithms syllabus for IOI 2027`;
+      }
+    }
+    function renderPlan() {
+      const container = document.getElementById('planContainer');
+      if (!container) return;
+      const today = todayIso();
+      if (planOpenDays.size === 0) {
+        ioiPlan.forEach(w => w.days.forEach(d => { if (d.iso === today) planOpenDays.add(d.day); }));
+      }
+      container.innerHTML = ioiPlan.map(w => `
+        <div class="plan-week">
+          <div class="plan-week-title">${w.week}</div>
+          ${w.days.map(d => {
+            const t = computeDayTotals(d);
+            const isToday = d.iso === today;
+            const isOpen = planOpenDays.has(d.day);
+            const allDone = t.total > 0 && t.done === t.total;
+            return `
+              <div class="plan-day ${isToday ? 'today' : ''} ${isOpen ? 'open' : ''} ${allDone ? 'all-done' : ''}" data-day="${d.day}">
+                <div class="plan-day-header" data-toggle="${d.day}">
+                  <div class="plan-day-title">
+                    <input type="checkbox" class="plan-day-toggle-all" data-toggleall="${d.day}" ${allDone ? 'checked' : ''} title="Mark all tasks in this day">
+                    <span class="plan-day-label">Day ${d.day}</span>
+                    <span class="plan-day-date">${d.date}</span>
+                  </div>
+                  <div class="plan-day-meta">
+                    <span>${t.done}/${t.total}</span>
+                    <div class="plan-day-mini"><div style="width:${t.pct}%"></div></div>
+                    <svg class="plan-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                  </div>
                 </div>
-                <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#skills">Skills</a></li>
-                    <li><a href="#projects">Projects</a></li>
-                    <li><a href="#interests">Interests</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                <ul class="plan-tasks">
+                  ${d.tasks.map((task, i) => {
+                    const id = planTaskId(d.day, i);
+                    const checked = !!planState[id];
+                    return `<li class="plan-task ${checked ? 'done' : ''}" data-taskid="${id}">
+                        <input type="checkbox" ${checked ? 'checked' : ''}>
+                        <span class="plan-task-text">${escapeHtml(task)}</span>
+                      </li>`;
+                  }).join('')}
                 </ul>
-            </nav>
-        </div>
-    </header>
-
-    <section id="home" class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <h2>coder · builder · 16</h2>
-                    <h1>Savindu Damsara</h1>
-                    <p>I write Python, Bash, and C++ — not because anyone set me a curriculum, but because I genuinely can't stop. I live mostly in the terminal, building and breaking things every day.</p>
-                    <div class="cta-buttons">
-                        <a href="#contact" class="btn primary-btn">Get In Touch</a>
-                        <a href="#projects" class="btn secondary-btn">View Projects</a>
-                    </div>
-                    <div class="social-icons">
-                        <a href="https://github.com/Savindudam" target="_blank"><i class="fab fa-github"></i></a>
-                        <a href="https://instagram.com/dreamxhava_2" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fas fa-shield-alt"></i></a>
-                    </div>
-                </div>
-                <div class="hero-image">
-                    <div class="security-graphic">
-                        <div class="shield">
-                            <i class="fas fa-terminal"></i>
-                        </div>
-                        <div class="binary">01110011011000010111011001101001011011100110010001110101</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="about" class="about">
-        <div class="container">
-            <div class="section-header">
-                <h2>About Me</h2>
-                <div class="underline"></div>
-            </div>
-            <div class="about-content">
-                <div class="about-text">
-                    <p>I'm Savindu Damsara, a 16-year-old from Sri Lanka who started programming out of pure curiosity. I didn't follow a roadmap; I just started poking at things until they made sense.</p>
-                    <p>I spend a lot of time in <strong>Termux</strong>, running a full dev setup off my phone. There's something satisfying about that kind of constraint — you figure things out faster when your environment doesn't do everything for you.</p>
-                    <p>"Understanding how things break is the most honest way to understand how things work." That's why I care about cybersecurity.</p>
-                </div>
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
-                        <span>savindudamsara@email.com</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Sri Lanka</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-code"></i>
-                        <span>Deep diving into C++ & Linux</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="skills" class="skills">
-        <div class="container">
-            <div class="section-header">
-                <h2>My Skills</h2>
-                <div class="underline"></div>
-            </div>
-            <div class="skills-container">
-                <div class="skill-category">
-                    <h3>Security</h3>
-                    <div class="skills-grid">
-                        <div class="skill-item"><span>Cybersecurity</span></div>
-                        <div class="skill-item"><span>VAPT</span></div>
-                        <div class="skill-item"><span>Ethical Hacking</span></div>
-                        <div class="skill-item"><span>Cryptography</span></div>
-                        <div class="skill-item"><span>Network Security</span></div>
-                    </div>
-                </div>
-                <div class="skill-category">
-                    <h3>Programming</h3>
-                    <div class="skills-grid">
-                        <div class="skill-item"><span>Python</span></div>
-                        <div class="skill-item"><span>C / C++</span></div>
-                        <div class="skill-item"><span>Bash</span></div>
-                        <div class="skill-item"><span>HTML</span></div>
-                    </div>
-                </div>
-                <div class="skill-category">
-                    <h3>Tools</h3>
-                    <div class="skills-grid">
-                        <div class="skill-item"><span>Termux</span></div>
-                        <div class="skill-item"><span>Linux</span></div>
-                        <div class="skill-item"><span>Git</span></div>
-                        <div class="skill-item"><span>Scratch</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="projects" class="projects">
-        <div class="container">
-            <div class="section-header">
-                <h2>Projects</h2>
-                <div class="underline"></div>
-            </div>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-header">
-                        <h3>Encrypter</h3>
-                        <div class="project-links">
-                            <a href="https://github.com/Savindudam/Encrypter" target="_blank"><i class="fab fa-github"></i></a>
-                        </div>
-                    </div>
-                    <p class="project-description">My first real dive into cryptography. Encode and decode messages in Python. Built mostly to understand how encryption actually works, not just use it.</p>
-                    <div class="project-tech">
-                        <span>Python</span>
-                        <span>Cryptography</span>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-header">
-                        <h3>Termux Installer</h3>
-                        <div class="project-links">
-                            <a href="https://github.com/Savindudam/Termux-main-package-installer" target="_blank"><i class="fab fa-github"></i></a>
-                        </div>
-                    </div>
-                    <p class="project-description">One script, full Termux setup. Got tired of reinstalling everything manually every time I set up a new environment — so I automated it.</p>
-                    <div class="project-tech">
-                        <span>Shell</span>
-                        <span>Automation</span>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-header">
-                        <h3>Mini Games Hub</h3>
-                        <div class="project-links">
-                            <a href="https://github.com/Savindudam/Mini-Games-Hub" target="_blank"><i class="fab fa-github"></i></a>
-                        </div>
-                    </div>
-                    <p class="project-description">Guess the Number, Rock Paper Scissors, Word Jumble — all in one. Started as a single game and kept growing. A small arcade built from scratch.</p>
-                    <div class="project-tech">
-                        <span>Python</span>
-                        <span>Game Dev</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="interests" class="interests">
-        <div class="container">
-            <div class="section-header">
-                <h2>Interests</h2>
-                <div class="underline"></div>
-            </div>
-            <div class="interests-grid">
-                <div class="interest-card">
-                    <h4>Writing Code</h4>
-                    <p>Python scripts, C++ experiments, whatever's interesting that day.</p>
-                </div>
-                <div class="interest-card">
-                    <h4>The Terminal</h4>
-                    <p>Automating boring things, building shell tools, running Termux.</p>
-                </div>
-                <div class="interest-card">
-                    <h4>Security Tools</h4>
-                    <p>Encrypters, scanners, automation scripts built to understand how things work.</p>
-                </div>
-                <div class="interest-card">
-                    <h4>How Things Break</h4>
-                    <p>Reading about CVEs, playing with exploit tools, watching hacking demos.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="contact">
-        <div class="container">
-            <div class="section-header">
-                <h2>Say Hello</h2>
-                <div class="underline"></div>
-            </div>
-            <div class="contact-content">
-                <p>I'm always up for talking code, swapping ideas, or building something together. Don't overthink it — just reach out.</p>
-                <a href="mailto:savindudamsara@email.com" class="btn primary-btn">Email Me</a>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2026 Savindu Damsara. Built with curiosity.</p>
-        </div>
-    </footer>
-
-    <!-- Hidden trigger to open THRENOX -->
-    <div id="secret-trigger" style="text-align: center; padding: 2rem; cursor: pointer; opacity: 0.3; transition: opacity 0.3s;">
-        <p style="font-size: 0.8rem; font-family: monospace;">[ UNCOVER THE THRENOX ]</p>
-    </div>
-
-    <!-- THRENOX overlay -->
-    <div id="threnox-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; display: none; background: #000;">
-        <button id="threnox-close" style="position: absolute; top: 20px; right: 30px; z-index: 10001; background: #000; color: #00ff41; border: 1px solid #00ff41; padding: 0.5rem 1.2rem; cursor: pointer; font-family: monospace;">✕ CLOSE</button>
-        <iframe id="threnox-frame" style="width: 100%; height: 100%; border: none;" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals" allow="fullscreen; autoplay; picture-in-picture"></iframe>
-    </div>
-
-    <!-- THRENOX FULL CODE (with updated holiday timetable) -->
-    <script type="text/template" id="threnox-template">
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-          <title>THRENOX – Holiday Focus</title>
-          <style>
-            @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap');
-            :root {
-                --bg: #000000;
-                --surface: #030303;
-                --surface-hover: #080808;
-                --text: #d8ffd8;
-                --text-secondary: #6d906d;
-                --accent: #00ff41;
-                --accent-soft: rgba(0, 255, 65, 0.15);
-                --border: #123312;
-                --success: #00ff41;
-                --danger: #ff0033;
-                --shadow: 0 0 25px rgba(0, 255, 65, 0.08);
-                --radius: 0px;
-                --radius-sm: 0px;
-                --sidebar-width: 240px;
-            }
-            * { box-sizing: border-box; font-family: 'JetBrains Mono', monospace !important; }
-            html, body { background: #000; color: var(--text); height: 100vh; overflow: hidden; margin: 0; padding: 0; }
-            body { display: flex; }
-            body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 9999; background: repeating-linear-gradient(0deg, rgba(0, 255, 65, 0.02) 0px, rgba(0, 255, 65, 0.02) 1px, transparent 1px, transparent 3px); }
-            body::after { content: ""; position: fixed; inset: 0; pointer-events: none; background: radial-gradient(circle at center, rgba(0, 255, 65, 0.05) 0%, transparent 70%); z-index: 9998; }
-            h1, h2, h3, h4 { color: #d8ffd8; letter-spacing: 1px; text-transform: uppercase; }
-            h1::after, h2::after { content: "_"; color: #00ff41; animation: blink 1s infinite; }
-            @keyframes blink { 50% { opacity: 0; } }
-            .sidebar { width: var(--sidebar-width); background: #000; border-right: 1px solid var(--border); box-shadow: 10px 0 30px rgba(0, 255, 65, 0.03); display: flex; flex-direction: column; padding: 1.5rem 1rem; flex-shrink: 0; z-index: 100; transition: transform 0.3s ease; }
-            .sidebar-logo { color: #00ff41; font-weight: 900; letter-spacing: 2px; margin-bottom: 2rem; padding: 0 1rem; font-size: 1.4rem; }
-            .sidebar-logo::before { content: "root@threnox:~$ "; color: #507050; font-size: 0.7rem; display: block; margin-bottom: 0.2rem; }
-            .sidebar-nav { display: flex; flex-direction: column; gap: 0.3rem; flex: 1; }
-            .sidebar-btn { background: transparent; color: #709070; border: none; border-left: 2px solid transparent; border-radius: 0; padding: 0.8rem 1.2rem; transition: 0.2s; text-align: left; width: 100%; cursor: pointer; display: flex; align-items: center; gap: 0.8rem; font-size: 0.85rem; }
-            .sidebar-btn:hover { color: #00ff41; background: rgba(0, 255, 65, 0.05); }
-            .sidebar-btn.active { color: #00ff41; border-left: 2px solid #00ff41; background: rgba(0, 255, 65, 0.08); }
-            .sidebar-btn svg { width: 18px; height: 18px; stroke: currentColor; flex-shrink: 0; }
-            .sidebar-footer { border-top: 1px solid var(--border); padding-top: 0.75rem; margin-top: 0.75rem; }
-            .logout-btn { background: transparent; color: #709070; border: 1px solid var(--border); padding: 0.6rem 1rem; width: 100%; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; transition: 0.2s; }
-            .logout-btn:hover { color: var(--danger); border-color: var(--danger); }
-            .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; min-width: 0; }
-            .top-bar { background: #000; border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
-            .greeting { font-size: 1.1rem; color: var(--text); }
-            .date-time { display: flex; align-items: center; gap: 1rem; }
-            .date-display { color: var(--text-secondary); font-size: 0.85rem; }
-            .live-clock { background: transparent !important; border: 1px solid var(--accent); color: var(--accent); padding: 0.2rem 0.8rem; font-weight: bold; }
-            .progress-bar-container, .plan-progress-track { background: #050505; border: 1px solid var(--border); height: 6px; flex-shrink: 0; }
-            .progress-bar-fill, .plan-progress-fill { background: linear-gradient(90deg, #003b12, #00ff41); box-shadow: 0 0 10px #00ff41; height: 100%; width: 0%; transition: width 0.4s ease; }
-            .view { display: none; flex: 1; overflow-y: auto; padding: 2rem; }
-            .view.active { display: block; }
-            .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; }
-            .card-widget, .todo-item, .timeline-content, .plan-day, .plan-header, .stats-container { background: #050505 !important; border: 1px solid var(--border) !important; border-radius: 0px !important; box-shadow: var(--shadow) !important; }
-            .card-widget { padding: 1.5rem; }
-            .card-widget:hover { border-color: var(--accent) !important; }
-            .progress-ring-container { display: flex; align-items: center; gap: 1.25rem; }
-            .progress-ring { width: 100px; height: 100px; flex-shrink: 0; transform: rotate(-90deg); }
-            .progress-ring-circle { fill: none; stroke: var(--border); stroke-width: 6; }
-            .progress-ring-fill { fill: none; stroke: var(--accent); stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 0.4s ease; }
-            .progress-ring-text { transform: rotate(90deg); transform-origin: center; fill: var(--accent); font-size: 1.1rem; font-weight: 700; }
-            .current-task-details h3 { margin: 0 0 0.4rem 0; font-size: 1rem; }
-            .current-task-details p { margin: 0; color: var(--text-secondary); font-size: 0.8rem; }
-            .countdown-title { color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
-            .countdown-timer { display: flex; gap: 1.25rem; }
-            .timer-unit { display: flex; flex-direction: column; align-items: center; }
-            .timer-value { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
-            .timer-label { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; margin-top: 0.2rem; }
-            .stats-widget { display: flex; flex-direction: column; gap: 0.5rem; }
-            .stat-item { display: flex; justify-content: space-between; align-items: center; }
-            .stat-label { color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
-            .stat-value { color: var(--accent); font-weight: 700; font-size: 1.1rem; }
-            .focus-time { color: var(--accent); font-weight: 700; font-size: 1.4rem; }
-            .timeline { position: relative; max-width: 700px; margin: 0 auto; padding-left: 1.5rem; }
-            .timeline::before { content: ""; position: absolute; left: 5px; top: 0; bottom: 0; width: 2px; background: var(--border); }
-            .timeline-item { position: relative; margin-bottom: 1rem; padding-left: 1.5rem; }
-            .timeline-dot { position: absolute; left: -1.5rem; top: 1.1rem; width: 12px; height: 12px; border-radius: 50%; background: #000; border: 2px solid var(--border); }
-            .timeline-item.current .timeline-dot { background: var(--accent); box-shadow: 0 0 10px var(--accent); border-color: var(--accent); }
-            .timeline-item.completed { opacity: 0.45; }
-            .timeline-content { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; gap: 1rem; }
-            .timeline-time { color: var(--text-secondary); font-size: 0.75rem; margin-bottom: 0.25rem; }
-            .timeline-task { font-size: 0.95rem; }
-            .status-badge { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 0.25rem 0.6rem; font-size: 0.7rem; text-transform: uppercase; white-space: nowrap; }
-            .current .status-badge { border-color: var(--accent); color: var(--accent); }
-            .todo-container { max-width: 650px; margin: 0 auto; }
-            .todo-input-row { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
-            .todo-input { flex: 1; }
-            .todo-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
-            .todo-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.9rem 1.1rem; }
-            .todo-item.done .todo-text { text-decoration: line-through; color: var(--text-secondary); }
-            .todo-checkbox { width: 16px; height: 16px; accent-color: var(--accent); flex-shrink: 0; padding: 0; }
-            .todo-text { flex: 1; font-size: 0.9rem; }
-            .todo-delete { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 0.2rem 0.5rem; }
-            .todo-delete:hover { color: var(--danger); }
-            input, button { background: #000; color: var(--accent); border: 1px solid var(--border); padding: 0.6rem 1rem; outline: none; font-size: 0.9rem; }
-            input:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
-            .todo-add-btn, .login-btn { background: #000; color: var(--accent); border: 1px solid var(--accent); cursor: pointer; transition: 0.2s; font-weight: bold; }
-            .todo-add-btn:hover, .login-btn:hover { background: rgba(0, 255, 65, 0.1); box-shadow: 0 0 15px rgba(0, 255, 65, 0.3); }
-            .login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-            .stats-container { padding: 1.5rem; max-width: 800px; margin: 0 auto; }
-            .plan-header { border: none !important; box-shadow: none !important; padding: 0 0 1.25rem 0; }
-            .plan-header h2 { margin: 0 0 0.4rem 0; font-size: 1.1rem; }
-            .plan-header p { color: var(--text-secondary); font-size: 0.85rem; margin: 0 0 1rem 0; }
-            .plan-progress-label { display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); }
-            .plan-progress-label strong { color: var(--accent); }
-            .plan-week { margin-bottom: 1.5rem; }
-            .plan-week-title { color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
-            .plan-day { margin-bottom: 0.6rem; overflow: hidden; }
-            .plan-day-header { display: flex; justify-content: space-between; align-items: center; padding: 0.9rem 1.1rem; cursor: pointer; }
-            .plan-day.today .plan-day-header { border-left: 2px solid var(--accent); }
-            .plan-day-title { display: flex; align-items: center; gap: 0.6rem; }
-            .plan-day-label { color: var(--accent); font-size: 0.85rem; font-weight: 700; }
-            .plan-day-date { color: var(--text-secondary); font-size: 0.75rem; }
-            .plan-day-meta { display: flex; align-items: center; gap: 0.6rem; font-size: 0.75rem; color: var(--text-secondary); }
-            .plan-day-mini { width: 60px; height: 4px; background: #050505; border: 1px solid var(--border); overflow: hidden; }
-            .plan-day-mini > div { height: 100%; background: var(--accent); box-shadow: 0 0 6px var(--accent); transition: width 0.3s ease; }
-            .plan-chev { transition: transform 0.2s ease; flex-shrink: 0; }
-            .plan-day.open .plan-chev { transform: rotate(90deg); }
-            .plan-day.all-done .plan-day-label { color: var(--success); }
-            .plan-tasks { list-style: none; margin: 0; padding: 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid transparent; }
-            .plan-day.open .plan-tasks { max-height: 600px; border-top: 1px solid var(--border); }
-            .plan-task { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.6rem 1.1rem; font-size: 0.85rem; cursor: pointer; }
-            .plan-task:hover { background: rgba(0, 255, 65, 0.04); }
-            .plan-task input[type="checkbox"] { width: 14px; height: 14px; margin-top: 0.15rem; accent-color: var(--accent); flex-shrink: 0; padding: 0; }
-            .plan-task.done .plan-task-text { text-decoration: line-through; color: var(--text-secondary); }
-            .plan-day-toggle-all { width: 14px; height: 14px; accent-color: var(--accent); flex-shrink: 0; padding: 0; cursor: pointer; }
-            .fab { position: fixed; bottom: 2rem; right: 2rem; width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--accent); background: #000; color: var(--accent); font-size: 1.3rem; cursor: pointer; display: none; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(0, 255, 65, 0.25); z-index: 50; }
-            #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; transition: opacity 0.3s ease; }
-            .login-card { width: 400px; padding: 3rem; border: 1px solid var(--accent); box-shadow: 0 0 40px rgba(0, 255, 65, 0.15); text-align: center; background: #000; }
-            .login-logo { font-size: 2.2rem; color: var(--accent); margin-bottom: 0.5rem; font-weight: 900; }
-            .login-logo::before { content: "> "; color: #507050; }
-            .login-subtitle { color: #507050; margin-bottom: 2rem; font-size: 0.9rem; }
-            .login-form { display: flex; flex-direction: column; gap: 1.2rem; }
-            .login-input { width: 100%; text-align: center; letter-spacing: 1px; }
-            .login-error { color: var(--danger); font-size: 0.8rem; margin-top: 1.5rem; display: none; }
-            ::-webkit-scrollbar { width: 6px; }
-            ::-webkit-scrollbar-track { background: #000; }
-            ::-webkit-scrollbar-thumb { background: var(--border); }
-            ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-            .calendar-page { display: flex; gap: 1.5rem; max-width: 1000px; margin: 0 auto; flex-wrap: wrap; align-items: flex-start; }
-            .calendar-grid-wrap { flex: 1 1 420px; min-width: 320px; }
-            .calendar-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
-            .calendar-month-label { color: var(--accent); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; }
-            .cal-nav-btn { background: #000; border: 1px solid var(--border); color: var(--accent); width: 32px; height: 32px; padding: 0; cursor: pointer; font-size: 1rem; }
-            .cal-nav-btn:hover { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
-            .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-            .cal-weekday { text-align: center; font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; padding-bottom: 0.4rem; }
-            .cal-cell { position: relative; aspect-ratio: 1 / 1; background: #050505; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem; }
-            .cal-cell:hover { border-color: var(--accent); }
-            .cal-cell.empty { background: transparent; border: none; cursor: default; }
-            .cal-cell.today { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); color: var(--accent); font-weight: 700; }
-            .cal-cell.selected { border-color: var(--accent); background: rgba(0, 255, 65, 0.12); box-shadow: 0 0 14px rgba(0, 255, 65, 0.3); }
-            .cal-cell.has-event::after { content: ""; position: absolute; bottom: 5px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 6px var(--accent); }
-            .calendar-container { flex: 1 1 280px; min-width: 260px; margin: 0; }
-            .event-input-row { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
-            .event-input-row .event-label-input { flex: 1; min-width: 180px; }
-            .event-type-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-            .event-type-label { display: flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: var(--text-secondary); cursor: pointer; }
-            .event-type-label input[type="radio"] { width: 13px; height: 13px; accent-color: var(--accent); }
-            .event-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
-            .event-item { background: #050505 !important; border: 1px solid var(--border) !important; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.9rem 1.1rem; }
-            .event-item.today { border-color: var(--accent) !important; box-shadow: 0 0 15px rgba(0, 255, 65, 0.15) !important; }
-            .event-main { display: flex; flex-direction: column; gap: 0.15rem; }
-            .event-name { font-size: 0.9rem; }
-            .event-date { font-size: 0.75rem; color: var(--text-secondary); }
-            .event-badge { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 0.25rem 0.6rem; font-size: 0.7rem; text-transform: uppercase; white-space: nowrap; }
-            .event-item.today .event-badge { border-color: var(--accent); color: var(--accent); }
-            .event-delete { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 0.2rem 0.5rem; }
-            .event-delete:hover { color: var(--danger); }
-            .note-widget { display: flex; flex-direction: column; gap: 0.5rem; justify-content: center; }
-            .note-widget .countdown-title { margin-bottom: 0; }
-            .note-widget-text { font-size: 1rem; color: var(--text); }
-            .note-widget.today-highlight { border-color: var(--accent) !important; box-shadow: 0 0 20px rgba(0, 255, 65, 0.25) !important; }
-            .note-widget.today-highlight .note-widget-text { color: var(--accent); font-weight: 700; }
-            .day-detail-panel { padding: 1.1rem 1.25rem; margin-bottom: 1.25rem; }
-            .day-detail-top { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.6rem; }
-            .day-detail-nav-btn { background: #000; border: 1px solid var(--border); color: var(--accent); width: 30px; height: 30px; padding: 0; cursor: pointer; font-size: 0.95rem; flex-shrink: 0; }
-            .day-detail-nav-btn:hover { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
-            .day-detail-heading { text-align: center; flex: 1; }
-            .day-detail-weekday { color: var(--text-secondary); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
-            .day-detail-date { color: var(--accent); font-weight: 700; font-size: 1rem; }
-            .day-detail-today-tag { display: inline-block; margin-left: 0.4rem; font-size: 0.65rem; border: 1px solid var(--accent); color: var(--accent); padding: 0.05rem 0.4rem; text-transform: uppercase; vertical-align: middle; }
-            .day-detail-events { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.4rem; }
-            .day-detail-event { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; padding: 0.5rem 0.7rem; background: #000; border: 1px solid var(--border); font-size: 0.82rem; }
-            .day-detail-empty { color: var(--text-secondary); font-size: 0.82rem; text-align: center; padding: 0.4rem 0; }
-            .day-detail-jump { display: block; margin: 0.7rem auto 0; background: transparent; border: 1px solid var(--border); color: var(--text-secondary); font-size: 0.72rem; padding: 0.3rem 0.7rem; cursor: pointer; }
-            .day-detail-jump:hover { border-color: var(--accent); color: var(--accent); }
-            @media (max-width: 768px) {
-              .sidebar { position: absolute; transform: translateX(-100%); height: 100vh; }
-              .sidebar.open { transform: translateX(0); }
-              .top-bar { padding: 1rem; }
-              .dashboard-grid { grid-template-columns: 1fr; }
-              #menuToggle { display: block !important; }
-            }
-            #menuToggle { display: none; background: #000; border: 1px solid var(--accent); color: var(--accent); padding: 0.5rem; cursor: pointer; margin-right: 1rem; }
-          </style>
-        </head>
-        <body>
-          <div id="loginOverlay">
-            <div class="login-card">
-              <div class="login-logo">THRENOX</div>
-              <div class="login-subtitle">Welcome back, Dreamxhava</div>
-              <div class="login-form">
-                <input type="email" id="loginEmail" class="login-input" placeholder="Email" autocomplete="username">
-                <input type="password" id="loginPass" class="login-input" placeholder="Password" autocomplete="current-password">
-                <button id="loginBtn" class="login-btn">Login</button>
               </div>
-              <div id="loginError" class="login-error">Incorrect email or password.</div>
+            `;
+          }).join('')}
+        </div>
+      `).join('');
+      container.querySelectorAll('.plan-day-header').forEach(h => {
+        h.addEventListener('click', (e) => {
+          if (e.target.classList.contains('plan-day-toggle-all')) return;
+          const dayNum = Number(h.dataset.toggle);
+          planOpenDays.has(dayNum) ? planOpenDays.delete(dayNum) : planOpenDays.add(dayNum);
+          renderPlan();
+        });
+      });
+      container.querySelectorAll('.plan-day-toggle-all').forEach(cb => {
+        cb.addEventListener('click', (e) => e.stopPropagation());
+        cb.addEventListener('change', (e) => {
+          e.stopPropagation();
+          const dayNum = Number(cb.dataset.toggleall);
+          const day = findDayByNumber(dayNum);
+          if (!day) return;
+          const newVal = cb.checked;
+          day.tasks.forEach((_, i) => { planState[planTaskId(dayNum, i)] = newVal; });
+          persistPlanState();
+          renderPlan();
+        });
+      });
+      container.querySelectorAll('.plan-task').forEach(el => {
+        const id = el.dataset.taskid;
+        const box = el.querySelector('input[type="checkbox"]');
+        const toggle = (e) => {
+          e.stopPropagation();
+          const newVal = !planState[id];
+          planState[id] = newVal;
+          box.checked = newVal;
+          el.classList.toggle('done', newVal);
+          persistPlanState();
+          updatePlanProgressUI();
+        };
+        el.addEventListener('click', (e) => { if (e.target.tagName !== 'INPUT') toggle(e); });
+        box.addEventListener('change', () => {
+          planState[id] = box.checked;
+          el.classList.toggle('done', box.checked);
+          persistPlanState();
+          updatePlanProgressUI();
+        });
+      });
+      updatePlanProgressUI(false);
+    }
+    function updatePlanProgressUI(rerenderMeta = true) {
+      const { total, done, pct } = computePlanTotals();
+      const fill = document.getElementById('planProgressFill');
+      const pctEl = document.getElementById('planProgressPct');
+      const doneEl = document.getElementById('planProgressDone');
+      const totalEl = document.getElementById('planProgressTotal');
+      if (fill) fill.style.width = pct + '%';
+      if (pctEl) pctEl.textContent = pct + '%';
+      if (doneEl) doneEl.textContent = done;
+      if (totalEl) totalEl.textContent = total;
+      const ring = document.getElementById('planRingFill');
+      const ringTxt = document.getElementById('planPercent');
+      const dc = document.getElementById('planDoneCount');
+      const tc = document.getElementById('planTotalCount');
+      const circumference = 2 * Math.PI * 42;
+      if (ring) ring.style.strokeDashoffset = circumference - (pct / 100) * circumference;
+      if (ringTxt) ringTxt.textContent = pct + '%';
+      if (dc) dc.textContent = done;
+      if (tc) tc.textContent = total;
+      if (rerenderMeta) {
+        ioiPlan.forEach(w => w.days.forEach(d => {
+          const el = document.querySelector(`.plan-day[data-day="${d.day}"]`);
+          if (!el) return;
+          const t = computeDayTotals(d);
+          const meta = el.querySelector('.plan-day-meta span');
+          const mini = el.querySelector('.plan-day-mini > div');
+          const toggleAll = el.querySelector('.plan-day-toggle-all');
+          if (meta) meta.textContent = `${t.done}/${t.total}`;
+          if (mini) mini.style.width = t.pct + '%';
+          const allDone = t.total > 0 && t.done === t.total;
+          if (toggleAll) toggleAll.checked = allDone;
+          el.classList.toggle('all-done', allDone);
+        }));
+      }
+    }
+    let planSaveTimer = null;
+    function persistPlanState() {
+      clearTimeout(planSaveTimer);
+      planSaveTimer = setTimeout(() => {
+        planStateRef.set({ state: planState, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }).catch(err => console.error('Plan save failed', err));
+      }, 300);
+    }
+    document.getElementById('planProgressWidget').addEventListener('click', () => {
+      document.querySelector('.sidebar-btn[data-view="progress"]').click();
+    });
+    async function runDailyCleanup() {
+      try {
+        const today = new Date().toDateString();
+        if (localStorage.getItem('threnox_cleanup_date') !== today) {
+          const snapshot = await db.collection("todos").where("done", "==", true).get();
+          if (!snapshot.empty) {
+            const batch = db.batch();
+            snapshot.forEach(doc => batch.delete(doc.ref));
+            await batch.commit();
+          }
+          localStorage.setItem('threnox_cleanup_date', today);
+        }
+      } catch (e) { console.warn("Cleanup deferred:", e); }
+    }
+
+    function attachDataListeners() {
+      unsubTodos = todosRef.orderBy("createdAt", "asc").onSnapshot(renderTodos);
+      unsubCalendar = calendarRef.orderBy("createdAt", "asc").onSnapshot(snapshot => {
+        customEvents = [];
+        snapshot.forEach(doc => customEvents.push({ ...doc.data(), docId: doc.id }));
+        renderCalendar();
+        updateEventNoteWidget();
+      });
+      unsubPlan = planStateRef.onSnapshot(snap => {
+        const data = snap.exists ? snap.data() : null;
+        planState = (data && data.state) || {};
+        renderPlan();
+      }, err => { console.error('Plan subscribe failed', err); renderPlan(); });
+    }
+    function detachDataListeners() {
+      if (unsubTodos) unsubTodos();
+      if (unsubCalendar) unsubCalendar();
+      if (unsubPlan) unsubPlan();
+      unsubTodos = unsubCalendar = unsubPlan = null;
+    }
+    function authenticate() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const pass = document.getElementById('loginPass').value;
+      const error = document.getElementById('loginError');
+      const btn = document.getElementById('loginBtn');
+      if (!email || !pass) {
+        error.textContent = 'Enter both email and password.';
+        error.style.display = 'block';
+        return;
+      }
+      btn.disabled = true;
+      auth.signInWithEmailAndPassword(email, pass)
+        .then(() => { error.style.display = 'none'; })
+        .catch(() => {
+          error.textContent = 'Incorrect email or password.';
+          error.style.display = 'block';
+          document.getElementById('loginPass').value = '';
+        })
+        .finally(() => { btn.disabled = false; });
+    }
+    function setupEvents() {
+      const btn = document.getElementById('loginBtn');
+      const passInput = document.getElementById('loginPass');
+      const emailInput = document.getElementById('loginEmail');
+      if (btn) btn.onclick = authenticate;
+      if (passInput) passInput.onkeydown = (e) => { if (e.key === 'Enter') authenticate(); };
+      if (emailInput) emailInput.onkeydown = (e) => { if (e.key === 'Enter') authenticate(); };
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) logoutBtn.onclick = () => auth.signOut();
+    }
+
+    auth.onAuthStateChanged(user => {
+      const overlay = document.getElementById('loginOverlay');
+      if (user) {
+        overlay.style.opacity = '0';
+        setTimeout(() => { overlay.style.display = 'none'; }, 300);
+        attachDataListeners();
+        runDailyCleanup();
+        subscribeWatchHistory();
+      } else {
+        overlay.style.display = 'flex';
+        overlay.style.opacity = '1';
+        detachDataListeners();
+        if (unsubHistory) { unsubHistory(); unsubHistory = null; }
+        if (historyContainer) historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">Please log in to see watch history.</p>`;
+      }
+    });
+
+    const ssTitle = document.getElementById('screenscapeTitle');
+    const ssId = document.getElementById('screenscapeId');
+    const ssType = document.getElementById('screenscapeType');
+    const ssSeason = document.getElementById('screenscapeSeason');
+    const ssEpisode = document.getElementById('screenscapeEpisode');
+    const ssLang = document.getElementById('screenscapeLang');
+    const ssLoadBtn = document.getElementById('screenscapeLoadBtn');
+    const ssIframe = document.getElementById('screenscapeIframe');
+    const manualSaveBtn = document.getElementById('manualSaveBtn');
+    const historyContainer = document.getElementById('watchHistoryContainer');
+    const saveStatus = document.getElementById('saveStatus');
+
+    let unsubHistory = null;
+    let latestDocId = null;
+
+    function buildScreenscapeURL() {
+      let id = ssId.value.trim();
+      const type = ssType.value;
+      const lang = ssLang.value.trim() || 'eng';
+      let url = 'https://screenscape.me/embed?';
+      if (/^\d+$/.test(id)) url += `tmdb=${id}&type=${type}`;
+      else if (/^tt\d+$/.test(id)) {
+        url += `imdb=${id}`;
+        if (type === 'tv') url += `&type=tv`;
+      } else {
+        url += `tmdb=${id}&type=${type}`;
+      }
+      if (type === 'tv') {
+        url += `&s=${parseInt(ssSeason.value) || 1}&e=${parseInt(ssEpisode.value) || 1}`;
+      }
+      if (lang) url += `&lan=${encodeURIComponent(lang)}`;
+      return url;
+    }
+
+    async function saveMediaToHistory() {
+      if (!saveStatus) return;
+      saveStatus.textContent = 'Saving history...';
+      saveStatus.style.color = 'var(--text-secondary)';
+      const user = firebase.auth().currentUser;
+      if (!user) {
+        saveStatus.textContent = 'Not logged in!';
+        saveStatus.style.color = 'var(--danger)';
+        return;
+      }
+      const id = ssId.value.trim();
+      const type = ssType.value;
+      const title = ssTitle.value.trim() || 'Untitled';
+      const lang = ssLang.value.trim() || 'eng';
+      let season = null, episode = null;
+      if (type === 'tv') {
+        season = parseInt(ssSeason.value) || 1;
+        episode = parseInt(ssEpisode.value) || 1;
+      }
+      let mediaId = id;
+      if (type === 'tv') mediaId += `_S${season}E${episode}`;
+      const payload = {
+        userId: user.uid,
+        mediaId: mediaId,
+        tmdbId: /^\d+$/.test(id) ? id : null,
+        imdbId: /^tt\d+$/.test(id) ? id : null,
+        title: title,
+        type: type,
+        season: season,
+        episode: episode,
+        language: lang,
+        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      try {
+        await watchHistoryRef.doc(mediaId).set(payload, { merge: true });
+        saveStatus.textContent = 'Saved!';
+        saveStatus.style.color = 'var(--success)';
+        latestDocId = mediaId;
+      } catch (err) {
+        saveStatus.textContent = 'Error: ' + err.message;
+        saveStatus.style.color = 'var(--danger)';
+      }
+    }
+
+    function loadScreenscape() {
+      const url = buildScreenscapeURL();
+      ssIframe.src = url;
+      saveMediaToHistory();
+    }
+
+    function sendProgressRequest() {
+      if (!ssIframe.contentWindow) {
+        alert('Player not loaded yet.');
+        return;
+      }
+      try {
+        ssIframe.contentWindow.postMessage({
+          type: 'SCREENSCAPE_GET_PROGRESS',
+          requestId: 'manual-' + Date.now()
+        }, 'https://screenscape.me');
+        saveStatus.textContent = 'Requesting progress...';
+      } catch (err) {
+        saveStatus.textContent = 'Cannot reach player: ' + err.message;
+      }
+    }
+
+    window.addEventListener('message', (event) => {
+      if (!event.origin.includes('screenscape.me')) return;
+      const data = event.data;
+      if (!data?.type) return;
+      if (data.type === 'SCREENSCAPE_PROGRESS_RESPONSE') {
+        if (data.progress !== undefined) {
+          saveStatus.textContent = 'Progress: ' + data.progress + '%';
+        } else {
+          saveStatus.textContent = 'Progress not available';
+        }
+      }
+    });
+
+    function renderWatchHistory(snapshot) {
+      if (!historyContainer) return;
+      if (snapshot.empty) {
+        historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">No watch history yet. Load a video and it will be added!</p>`;
+        return;
+      }
+      let html = '';
+      snapshot.forEach(doc => {
+        const data = typeof doc.data === 'function' ? doc.data() : doc;
+        const isMovie = data.type === 'movie';
+        let label = data.title;
+        if (!isMovie && data.season && data.episode) {
+          label += ` (S${data.season}E${data.episode})`;
+        }
+        html += `
+          <div class="history-item" data-mediaid="${data.mediaId}" style="background: #050505; border: 1px solid var(--border); padding: 0.6rem 1rem; cursor: pointer; transition: background 0.2s;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+              <span style="font-size: 0.9rem; color: var(--text);">${escapeHtml(label)}</span>
+              <span style="font-size: 0.65rem; color: var(--text-secondary);">${isMovie ? 'Movie' : `S${data.season}E${data.episode}`}</span>
             </div>
           </div>
-
-          <aside class="sidebar" id="sidebar">
-            <div class="sidebar-logo">THRENOX</div>
-            <nav class="sidebar-nav">
-              <button class="sidebar-btn active" data-view="dashboard">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                <span class="icon-only">Dashboard</span>
-              </button>
-              <button class="sidebar-btn" data-view="timetable">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                <span class="icon-only">Timetable</span>
-              </button>
-              <button class="sidebar-btn" data-view="todo">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-                <span class="icon-only">To Do</span>
-              </button>
-              <button class="sidebar-btn" data-view="progress">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
-                <span class="icon-only">Progress</span>
-              </button>
-              <button class="sidebar-btn" data-view="calendar">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <span class="icon-only">Calendar</span>
-              </button>
-              <button class="sidebar-btn" data-view="screenscape">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                <span class="icon-only">Screenscape</span>
-              </button>
-            </nav>
-            <div class="sidebar-footer">
-              <button class="logout-btn" id="logoutBtn">Log out</button>
-            </div>
-          </aside>
-
-          <div class="main" id="mainContent">
-            <div class="top-bar">
-              <div style="display: flex; align-items: center;">
-                <button id="menuToggle">☰</button>
-                <div class="greeting" id="greetingMessage">Good Evening, Savindu</div>
-              </div>
-              <div class="date-time">
-                <div class="date-display" id="dateDisplay"></div>
-                <div class="live-clock" id="liveClock"></div>
-              </div>
-            </div>
-            <div class="progress-bar-container">
-              <div class="progress-bar-fill" id="progressBarFill"></div>
-            </div>
-
-            <div class="view active" id="dashboardView">
-              <div class="dashboard-grid">
-                <div class="card-widget current-task-widget" id="currentTaskWidget">
-                  <div class="progress-ring-container">
-                    <svg class="progress-ring" viewBox="0 0 100 100">
-                      <circle class="progress-ring-circle" cx="50" cy="50" r="42"/>
-                      <circle class="progress-ring-fill" id="progressRingFill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="263.89"/>
-                      <text x="50" y="50" text-anchor="middle" dy="7" class="progress-ring-text" id="progressPercent">0%</text>
-                    </svg>
-                    <div class="current-task-details">
-                      <h3 id="currentTaskName">---</h3>
-                      <p id="currentTaskTime">--:-- - --:--</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="card-widget note-widget" id="eventNoteWidget" style="display:none;">
-                  <div class="countdown-title">Note</div>
-                  <div class="note-widget-text" id="eventNoteText">---</div>
-                </div>
-                <div class="card-widget countdown-widget">
-                  <div class="countdown-title">AL 2028 Countdown</div>
-                  <div class="countdown-timer" id="alCountdown">
-                    <div class="timer-unit"><span class="timer-value" id="al-days">00</span><span class="timer-label">Days</span></div>
-                    <div class="timer-unit"><span class="timer-value" id="al-hours">00</span><span class="timer-label">Hrs</span></div>
-                    <div class="timer-unit"><span class="timer-value" id="al-mins">00</span><span class="timer-label">Min</span></div>
-                  </div>
-                </div>
-                <div class="card-widget countdown-widget">
-                  <div class="countdown-title">IOI 2027 Countdown</div>
-                  <div class="countdown-timer" id="ioiCountdown">
-                    <div class="timer-unit"><span class="timer-value" id="ioi-days">00</span><span class="timer-label">Days</span></div>
-                    <div class="timer-unit"><span class="timer-value" id="ioi-hours">00</span><span class="timer-label">Hrs</span></div>
-                    <div class="timer-unit"><span class="timer-value" id="ioi-mins">00</span><span class="timer-label">Min</span></div>
-                  </div>
-                </div>
-                <div class="card-widget stats-widget" id="statsWidget">
-                  <div class="stat-item"><span class="stat-label">Tasks</span><span class="stat-value" id="statTasks">0</span></div>
-                  <div class="stat-item"><span class="stat-label">Completed</span><span class="stat-value" id="statCompleted">0</span></div>
-                  <div class="stat-item"><span class="stat-label">Remaining</span><span class="stat-value" id="statRemaining">0</span></div>
-                  <div style="margin-top: 0.5rem;"><span class="stat-label">Focus Time</span></div>
-                  <div class="focus-time" id="focusTime">0h 0m</div>
-                </div>
-                <div class="card-widget current-task-widget" id="planProgressWidget" style="cursor:pointer;">
-                  <div class="progress-ring-container">
-                    <svg class="progress-ring" viewBox="0 0 100 100">
-                      <circle class="progress-ring-circle" cx="50" cy="50" r="42"/>
-                      <circle class="progress-ring-fill" id="planRingFill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="263.89" style="stroke: var(--success);"/>
-                      <text x="50" y="50" text-anchor="middle" dy="7" class="progress-ring-text" id="planPercent">0%</text>
-                    </svg>
-                    <div class="current-task-details">
-                      <h3 id="planWidgetTitle">IOI 2027 – Full Prep Plan</h3>
-                      <p><span id="planDoneCount">0</span> / <span id="planTotalCount">0</span> tasks done · Tap to open</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="view" id="timetableView">
-              <div class="timeline" id="timelineContainer"></div>
-            </div>
-
-            <div class="view" id="todoView">
-              <div class="todo-container">
-                <div class="todo-input-row">
-                  <input type="text" class="todo-input" id="todoInput" placeholder="Add a new task...">
-                  <button class="todo-add-btn" id="todoAddBtn">Add</button>
-                </div>
-                <ul class="todo-list" id="todoList"></ul>
-              </div>
-            </div>
-
-            <div class="view" id="progressView">
-              <div class="stats-container">
-                <div class="plan-header">
-                  <h2 id="planHeaderTitle">IOI 2027 – Full Preparation Plan</h2>
-                  <p id="planHeaderSubtitle">Loading…</p>
-                  <div class="plan-progress-track"><div class="plan-progress-fill" id="planProgressFill"></div></div>
-                  <div class="plan-progress-label">
-                    <span><strong id="planProgressPct">0%</strong> complete</span>
-                    <span><span id="planProgressDone">0</span> / <span id="planProgressTotal">0</span> tasks</span>
-                  </div>
-                </div>
-                <div id="planContainer"></div>
-              </div>
-            </div>
-
-            <div class="view" id="calendarView">
-              <div class="calendar-page">
-                <div class="calendar-grid-wrap">
-                  <div class="calendar-nav">
-                    <button class="cal-nav-btn" id="calPrevBtn">‹</button>
-                    <span class="calendar-month-label" id="calMonthLabel">Month Year</span>
-                    <button class="cal-nav-btn" id="calNextBtn">›</button>
-                  </div>
-                  <div class="calendar-grid" id="calendarGrid"></div>
-                </div>
-                <div class="calendar-container">
-                  <div class="card-widget day-detail-panel" id="dayDetailPanel">
-                    <div class="day-detail-top">
-                      <button class="day-detail-nav-btn" id="dayDetailPrevBtn">‹</button>
-                      <div class="day-detail-heading">
-                        <div class="day-detail-weekday" id="dayDetailWeekday">---</div>
-                        <div class="day-detail-date" id="dayDetailDate">-- --- ----<span class="day-detail-today-tag" id="dayDetailTodayTag" style="display:none;">Today</span></div>
-                      </div>
-                      <button class="day-detail-nav-btn" id="dayDetailNextBtn">›</button>
-                    </div>
-                    <ul class="day-detail-events" id="dayDetailEvents"></ul>
-                    <button class="day-detail-jump" id="dayDetailJumpToday">Jump to Today</button>
-                  </div>
-                  <div class="event-input-row">
-                    <input type="text" class="event-label-input" id="eventLabelInput" placeholder="Name (e.g. Aunt's Birthday)">
-                    <input type="date" id="eventDateInput">
-                  </div>
-                  <div class="event-type-row">
-                    <label class="event-type-label"><input type="radio" name="eventType" value="recurring" checked> Every year (birthday)</label>
-                    <label class="event-type-label"><input type="radio" name="eventType" value="once"> One day only</label>
-                    <button class="todo-add-btn" id="eventAddBtn">Add</button>
-                  </div>
-                  <ul class="event-list" id="calendarList"></ul>
-                </div>
-              </div>
-            </div>
-
-            <div class="view" id="screenscapeView">
-              <div style="max-width: 1100px; margin: 0 auto; padding: 0 1rem;">
-                <div class="card-widget" style="padding: 1.5rem; margin-bottom: 1.5rem;">
-                  <h3 style="color: var(--accent); margin-top: 0; margin-bottom: 1rem;">Embed Player</h3>
-                  <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end;">
-                    <div style="flex: 1; min-width: 150px;">
-                      <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Title (for log)</label>
-                      <input type="text" id="screenscapeTitle" value="Titanic" placeholder="e.g. Titanic, GoT S1E1" style="width: 100%;">
-                    </div>
-                    <div style="flex: 1; min-width: 140px;">
-                      <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">TMDB / IMDB ID</label>
-                      <input type="text" id="screenscapeId" value="597" placeholder="e.g. 597 or tt0800369" style="width: 100%;">
-                    </div>
-                    <div style="min-width: 100px;">
-                      <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Type</label>
-                      <select id="screenscapeType" style="width: 100%; background: #000; color: var(--accent); border: 1px solid var(--border); padding: 0.6rem 1rem;">
-                        <option value="movie">Movie</option>
-                        <option value="tv">TV Series</option>
-                      </select>
-                    </div>
-                    <div style="min-width: 80px;">
-                      <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Season</label>
-                      <input type="number" id="screenscapeSeason" value="1" min="1" style="width: 100%;">
-                    </div>
-                    <div style="min-width: 80px;">
-                      <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Episode</label>
-                      <input type="number" id="screenscapeEpisode" value="1" min="1" style="width: 100%;">
-                    </div>
-                    <div style="min-width: 100px;">
-                      <label style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Language</label>
-                      <input type="text" id="screenscapeLang" value="eng" placeholder="eng, hindi..." style="width: 100%;">
-                    </div>
-                    <div style="display: flex; gap: 0.5rem;">
-                      <button id="screenscapeLoadBtn" class="todo-add-btn" style="padding: 0.6rem 1.8rem;">Load</button>
-                      <button id="manualSaveBtn" class="todo-add-btn" style="padding: 0.2rem 1rem; font-size: 0.7rem;">Save Now</button>
-                    </div>
-                  </div>
-                  <div style="margin-top: 0.75rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
-                    <span style="font-size: 0.7rem; color: var(--text-secondary);">Use TMDB ID (e.g. 597) or IMDB ID (e.g. tt0800369).</span>
-                  </div>
-                  <div id="saveStatus" style="margin-top: 0.75rem; color: var(--text-secondary); font-size: 0.8rem;"></div>
-                </div>
-
-                <div style="position: relative; width: 100%; padding-top: 56.25%; background: #000; border: 1px solid var(--border); margin-bottom: 1.5rem;">
-                  <iframe id="screenscapeIframe" src="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="fullscreen; autoplay; picture-in-picture" allowfullscreen></iframe>
-                </div>
-
-                <div class="card-widget" style="padding: 1.5rem; margin-top: 0.5rem;">
-                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
-                    <h3 style="color: var(--accent); margin: 0;">Watch History</h3>
-                    <span style="font-size: 0.7rem; color: var(--text-secondary);">Click any entry to load it</span>
-                  </div>
-                  <div id="watchHistoryContainer" style="max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem;">
-                    <p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">No watch history yet. Load a video and it will be added!</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <button class="fab" id="resetBtn" title="Go to current task">📍</button>
-
-          <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
-          <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
-          <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
-
-          <script>
-            const firebaseConfig = {
-              apiKey: "AIzaSyBb3IIg51MeZEeJ5rk-X4vXQitH-ywew0s",
-              authDomain: "timetable-threnox.firebaseapp.com",
-              projectId: "timetable-threnox",
-              storageBucket: "timetable-threnox.appspot.com",
-              messagingSenderId: "327689062744",
-              appId: "1:327689062744:web:65f2f0cf72f4c984f17d2d",
-              measurementId: "G-JSDKVYBPQS"
-            };
-            firebase.initializeApp(firebaseConfig);
-            const db = firebase.firestore();
-            const auth = firebase.auth();
-            const watchHistoryRef = db.collection("watchHistory");
-
-            // ----- Holiday Timetable (Aug 10 – Sep 9) -----
-            const holidayStart = new Date(2026, 7, 10); // Aug 10
-            const holidayEnd = new Date(2026, 8, 9);   // Sep 9
-
-            // Build schedule array: day number -> {date, io task, ctf task}
-            const holidaySchedule = [
-              { day: 1,  date: "10 Aug", io: "Time & space complexity, Big-O basics", ctf: "Set up: create TryHackMe account, start Pre Security path intro" },
-              { day: 2,  date: "11 Aug", io: "Arrays & strings — solve 5 easy Codeforces Div2 A problems", ctf: "TryHackMe: Linux fundamentals — file system, basic commands" },
-              { day: 3,  date: "12 Aug", io: "Sorting algorithms (bubble, merge, quicksort) + built-in sort", ctf: "TryHackMe: Linux fundamentals continued — permissions, processes" },
-              { day: 4,  date: "13 Aug", io: "Binary search — theory + 5 practice problems", ctf: "Rest from CTF — review Linux commands you learned" },
-              { day: 5,  date: "14 Aug", io: "Recursion basics — write 3 small recursive functions", ctf: "TryHackMe: Networking fundamentals — TCP/IP basics" },
-              { day: 6,  date: "15 Aug", io: "Light day — solve 3 mixed easy problems", ctf: "TryHackMe: Networking — DNS, HTTP basics" },
-              { day: 7,  date: "16 Aug", io: "Review day — redo 2 hard problems from week", ctf: "Review day — re-read Linux/networking notes" },
-              { day: 8,  date: "17 Aug", io: "Stacks and queues — implement both from scratch", ctf: "picoCTF: create account, read rules, browse categories" },
-              { day: 9,  date: "18 Aug", io: "Practice: 5 stack/queue problems on Codeforces", ctf: "picoCTF: solve 2 General Skills beginner challenges" },
-              { day: 10, date: "19 Aug", io: "Greedy algorithms — intro + theory", ctf: "picoCTF: solve 1–2 more General Skills challenges" },
-              { day: 11, date: "20 Aug", io: "Greedy — solve 5 practice problems", ctf: "Rest from CTF — consolidate learnings" },
-              { day: 12, date: "21 Aug", io: "Light day — 3 mixed problems", ctf: "picoCTF: try your first Web Exploitation easy challenge" },
-              { day: 13, date: "22 Aug", io: "Virtual Codeforces contest (2h, old Div2)", ctf: "Continue picoCTF Web Exploitation category" },
-              { day: 14, date: "23 Aug", io: "Review — go over contest problems", ctf: "Review — note down every new term/tool" },
-              { day: 15, date: "24 Aug", io: "Graph representations — adjacency list vs matrix", ctf: "picoCTF: 1–2 more Web Exploitation challenges" },
-              { day: 16, date: "25 Aug", io: "BFS — theory + implement it yourself", ctf: "picoCTF: try a Cryptography easy challenge" },
-              { day: 17, date: "26 Aug", io: "DFS — theory + implement it yourself", ctf: "picoCTF: another Cryptography challenge" },
-              { day: 18, date: "27 Aug", io: "Practice: 5 BFS/DFS problems", ctf: "Rest from CTF — review crypto/web notes" },
-              { day: 19, date: "28 Aug", io: "Light day — 3 mixed problems", ctf: "picoCTF: try a Forensics easy challenge" },
-              { day: 20, date: "29 Aug", io: "Practice: 3 more graph problems (harder)", ctf: "picoCTF: another Forensics challenge" },
-              { day: 21, date: "30 Aug", io: "Review — redo weakest graph problem", ctf: "Review — summarize Web/Crypto/Forensics learnings" },
-              { day: 22, date: "31 Aug", io: "DP — memoization concept, intro problems", ctf: "Python refresher: scripting basics" },
-              { day: 23, date: "1 Sep",  io: "DP — classic problems (Fibonacci, knapsack)", ctf: "Python: write a small automation script" },
-              { day: 24, date: "2 Sep",  io: "DP — 4 more practice problems", ctf: "picoCTF: Binary Exploitation easy (just explore)" },
-              { day: 25, date: "3 Sep",  io: "Light day — 3 mixed problems", ctf: "Read about Nmap and Burp Suite conceptually" },
-              { day: 26, date: "4 Sep",  io: "Mixed DP + graph problems", ctf: "picoCTF: revisit unsolved challenges" },
-              { day: 27, date: "5 Sep",  io: "Second virtual Codeforces contest", ctf: "Rest from CTF" },
-              { day: 28, date: "6 Sep",  io: "Review — go over contest problems", ctf: "Review — re-explain every solved picoCTF challenge" },
-              { day: 29, date: "7 Sep",  io: "Full mixed practice: 3 algorithm problems + 1 picoCTF challenge", ctf: "(same block: combined)" },
-              { day: 30, date: "8 Sep",  io: "Month review: list all topics covered, pick 2 weak spots", ctf: "(same block: combined)" },
-              { day: 31, date: "9 Sep",  io: "Rest day — you've earned it", ctf: "Rest day" }
-            ];
-
-            function getTodayTasks() {
-              const now = new Date();
-              // If today is within holiday period, use holiday schedule
-              if (now >= holidayStart && now <= holidayEnd) {
-                const msPerDay = 86400000;
-                const dayNumber = Math.floor((now - holidayStart) / msPerDay) + 1;
-                const dayData = holidaySchedule.find(d => d.day === dayNumber);
-                if (dayData) {
-                  return [
-                    { id: 'io', startMin: 9*60, endMin: 12*60, timeRange: '09:00 – 12:00', text: `[IOI] Day ${dayNumber} – ${dayData.date}\n${dayData.io}` },
-                    { id: 'ctf', startMin: 14*60, endMin: 16*60, timeRange: '14:00 – 16:00', text: `[CTF] Day ${dayNumber} – ${dayData.date}\n${dayData.ctf}` }
-                  ];
-                }
-              }
-              // Fallback: old weekly timetable (if holiday over)
-              const dayOrder = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-              const dayName = dayOrder[now.getDay()];
-              const oldTimetable = {
-                Monday: [ ["04:00","04:30","Exercise"], ... ],
-                // ... (keep the old full timetable object here for non‑holiday days)
-              };
-              if (oldTimetable[dayName]) {
-                return oldTimetable[dayName].map(([start, end, text], idx) => ({
-                  id: idx,
-                  startMin: timeToMinutes(start),
-                  endMin: timeToMinutes(end),
-                  timeRange: `${start} – ${end}`,
-                  text
-                }));
-              }
-              return [];
-            }
-
-            // The rest of the code (renderTimeline, updateDashboard, etc.) remains identical
-            // except that tasks are now obtained via getTodayTasks() instead of the weekly object.
-            // I'll include a slightly adapted renderTimeline that uses the new function.
-            function renderTimeline() {
-              const container = document.getElementById('timelineContainer');
-              if (!container) return;
-              container.innerHTML = '';
-              const tasks = getTodayTasks();
-              const currentMin = new Date().getHours()*60 + new Date().getMinutes();
-              const currentIdx = tasks.findIndex(t => currentMin >= t.startMin && currentMin < t.endMin);
-              if (currentIdx === -1 && tasks.length > 0) currentIdx = 0;
-              tasks.forEach((task, idx) => {
-                const item = document.createElement('div');
-                item.className = 'timeline-item';
-                if (idx === currentIdx) item.classList.add('current');
-                else if (idx < currentIdx) item.classList.add('completed');
-                let badgeText = 'Upcoming';
-                if (idx < currentIdx) badgeText = 'Done';
-                else if (idx === currentIdx) badgeText = 'Now';
-                item.innerHTML = `
-                  <div class="timeline-dot"></div>
-                  <div class="timeline-content">
-                    <div style="display:flex; flex-direction:column">
-                      <div class="timeline-time">${task.timeRange}</div>
-                      <div class="timeline-task">${task.text.replace(/\n/g, '<br>')}</div>
-                    </div>
-                    <span class="status-badge">${badgeText}</span>
-                  </div>
-                `;
-                container.appendChild(item);
-              });
-              setTimeout(() => {
-                const currentEl = document.querySelector('.timeline-item.current');
-                if (currentEl) currentEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              }, 100);
-            }
-
-            // (rest of the THRENOX script — exactly as before, no other changes needed)
-            // I'm omitting the repetition for brevity; it's the same huge block from previous answer.
-            // The only changes are:
-            //   - Added holidayStart/End and holidaySchedule array
-            //   - Replaced the old timetable object with getTodayTasks()
-            //   - Updated renderTimeline to use getTodayTasks()
-            // Everything else (DOM, auth, plan, calendar, screenscape) remains untouched.
-
-          </script>
-        </body>
-        </html>
-    </script>
-
-    <script>
-        // Secret Trigger Logic
-        const trigger = document.getElementById('secret-trigger');
-        const overlay = document.getElementById('threnox-overlay');
-        const closeBtn = document.getElementById('threnox-close');
-        const frame = document.getElementById('threnox-frame');
-        const template = document.getElementById('threnox-template');
-
-        trigger.addEventListener('click', () => {
-            overlay.style.display = 'block';
-            frame.srcdoc = template.textContent;
-            document.body.style.overflow = 'hidden';
+        `;
+      });
+      historyContainer.innerHTML = html;
+      historyContainer.querySelectorAll('.history-item').forEach(item => {
+        item.addEventListener('click', async function() {
+          const mediaId = this.dataset.mediaid;
+          const doc = await watchHistoryRef.doc(mediaId).get();
+          if (!doc.exists) return;
+          const data = doc.data();
+          ssTitle.value = data.title || '';
+          if (data.tmdbId) ssId.value = data.tmdbId;
+          else if (data.imdbId) ssId.value = data.imdbId;
+          ssType.value = data.type || 'movie';
+          if (data.type === 'tv') {
+            ssSeason.value = data.season || 1;
+            ssEpisode.value = data.episode || 1;
+          }
+          ssLang.value = data.language || 'eng';
+          loadScreenscape();
+          historyContainer.querySelectorAll('.history-item').forEach(el => el.style.borderColor = 'var(--border)');
+          this.style.borderColor = 'var(--accent)';
         });
-
-        closeBtn.addEventListener('click', () => {
-            overlay.style.display = 'none';
-            frame.srcdoc = '';
-            document.body.style.overflow = 'auto';
+        item.addEventListener('mouseenter', () => {
+          item.style.background = 'rgba(0, 255, 65, 0.05)';
         });
+        item.addEventListener('mouseleave', () => {
+          item.style.background = '#050505';
+        });
+      });
+      const firstChild = historyContainer.querySelector('.history-item');
+      if (firstChild) {
+        latestDocId = firstChild.dataset.mediaid;
+      }
+    }
 
-        trigger.addEventListener('mouseover', () => trigger.style.opacity = '1');
-        trigger.addEventListener('mouseout', () => trigger.style.opacity = '0.3');
-    </script>
+    function subscribeWatchHistory() {
+      if (unsubHistory) unsubHistory();
+      const user = firebase.auth().currentUser;
+      if (!user) {
+        historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">Please log in to see watch history.</p>`;
+        return;
+      }
+      unsubHistory = watchHistoryRef
+        .where('userId', '==', user.uid)
+        .onSnapshot(snapshot => {
+          const docs = [];
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            data.id = doc.id;
+            docs.push(data);
+          });
+          docs.sort((a, b) => {
+            const aTime = a.lastUpdated?.toMillis?.() || 0;
+            const bTime = b.lastUpdated?.toMillis?.() || 0;
+            return bTime - aTime;
+          });
+          renderWatchHistory({
+            empty: docs.length === 0,
+            forEach: (cb) => docs.forEach(d => cb({ data: () => d, id: d.id }))
+          });
+          if (docs.length > 0 && !ssIframe.src) {
+            const latest = docs[0];
+            ssTitle.value = latest.title || '';
+            if (latest.tmdbId) ssId.value = latest.tmdbId;
+            else if (latest.imdbId) ssId.value = latest.imdbId;
+            ssType.value = latest.type || 'movie';
+            if (latest.type === 'tv') {
+              ssSeason.value = latest.season || 1;
+              ssEpisode.value = latest.episode || 1;
+            }
+            ssLang.value = latest.language || 'eng';
+            loadScreenscape();
+          }
+        }, err => {
+          console.error('History subscription error:', err);
+          historyContainer.innerHTML = `<p style="color: var(--danger);">Error loading history: ${err.message}</p>`;
+        });
+    }
+
+    ssLoadBtn.addEventListener('click', loadScreenscape);
+    [ssTitle, ssId, ssType, ssSeason, ssEpisode, ssLang].forEach(el => {
+      el.addEventListener('keydown', (e) => { if (e.key === 'Enter') ssLoadBtn.click(); });
+    });
+    manualSaveBtn.addEventListener('click', sendProgressRequest);
+
+    function init() {
+      const now = new Date();
+      currentDay = dayOrder[now.getDay()];
+      renderTimeline();
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
+      updatePlanHeader();
+      renderPlan();
+      renderDayDetail(selectedCalDate);
+    }
+    init();
+    setupEvents();
+  </script>
 </body>
 </html>
