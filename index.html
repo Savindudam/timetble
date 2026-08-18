@@ -228,9 +228,9 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         <span class="icon-only">To Do</span>
       </button>
-      <button class="sidebar-btn" data-view="cp">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-        <span class="icon-only">CP</span>
+      <button class="sidebar-btn" data-view="planner">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        <span class="icon-only">Planner</span>
       </button>
       <button class="sidebar-btn" data-view="calendar">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -239,10 +239,6 @@
       <button class="sidebar-btn" data-view="screenscape">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         <span class="icon-only">Screenscape</span>
-      </button>
-      <button class="sidebar-btn" data-view="hacking">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-        <span class="icon-only">Hacking</span>
       </button>
     </nav>
     <div class="sidebar-footer">
@@ -307,16 +303,16 @@
           <div style="margin-top: 0.5rem;"><span class="stat-label">Focus Time</span></div>
           <div class="focus-time" id="focusTime">0h 0m</div>
         </div>
-        <div class="card-widget current-task-widget" id="planProgressWidget" style="cursor:pointer;">
+        <div class="card-widget current-task-widget" id="plannerSummaryWidget" style="cursor:pointer;">
           <div class="progress-ring-container">
             <svg class="progress-ring" viewBox="0 0 100 100">
               <circle class="progress-ring-circle" cx="50" cy="50" r="42"/>
-              <circle class="progress-ring-fill" id="planRingFill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="263.89" style="stroke: var(--success);"/>
-              <text x="50" y="50" text-anchor="middle" dy="7" class="progress-ring-text" id="planPercent">0%</text>
+              <circle class="progress-ring-fill" id="plannerRingFill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="263.89" style="stroke: var(--success);"/>
+              <text x="50" y="50" text-anchor="middle" dy="7" class="progress-ring-text" id="plannerPercent">0%</text>
             </svg>
             <div class="current-task-details">
-              <h3 id="planWidgetTitle">CP – IOI 2027 Prep Plan</h3>
-              <p><span id="planDoneCount">0</span> / <span id="planTotalCount">0</span> tasks done · Tap to open</p>
+              <h3 id="plannerWidgetTitle">Today's Planner</h3>
+              <p><span id="plannerDoneMin">0</span> / <span id="plannerTotalMinWidget">0</span> min · Tap to open</p>
             </div>
           </div>
         </div>
@@ -337,30 +333,39 @@
       </div>
     </div>
 
-    <div class="view" id="cpView">
+    <div class="view" id="plannerView">
       <div class="stats-container">
         <div class="plan-header">
-          <h2 id="planHeaderTitle">CP – IOI 2027 Full Preparation Plan</h2>
-          <p id="planHeaderSubtitle">Loading…</p>
-          <div class="plan-progress-track"><div class="plan-progress-fill" id="planProgressFill"></div></div>
+          <h2>Daily Balanced Planner</h2>
+          <p>Allocate your available time today across your key areas. Check off what you complete. The planner learns and balances over time.</p>
+          <div class="plan-progress-track"><div class="plan-progress-fill" id="plannerProgressFill"></div></div>
           <div class="plan-progress-label">
-            <span><strong id="planProgressPct">0%</strong> complete</span>
-            <span><span id="planProgressDone">0</span> / <span id="planProgressTotal">0</span> tasks</span>
+            <span><strong id="plannerProgressPct">0%</strong> complete today</span>
+            <span><span id="plannerCompletedMin">0</span> / <span id="plannerTotalMin">0</span> min</span>
           </div>
         </div>
 
         <div class="card-widget" style="padding: 1.5rem; margin-bottom: 1.5rem;">
-          <h3 style="color: var(--accent); margin-top:0; margin-bottom: 0.5rem;">Today's Session</h3>
-          <p style="color: var(--text-secondary); font-size: 0.8rem; margin: 0 0 1rem 0;">Enter how many hours you can put in today. It pulls the next unfinished tasks off the CP roadmap to fill that time — work through them, then tick them off here or below.</p>
-          <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center;">
-            <input type="number" id="cpHoursInput" min="0.5" step="0.5" value="3" style="width:100px;">
-            <span style="color: var(--text-secondary); font-size:0.8rem;">hours</span>
-            <button class="todo-add-btn" id="cpPlanBtn">Plan My Session</button>
+          <h3 style="color: var(--accent); margin-top:0; margin-bottom: 0.5rem;">Plan a Day</h3>
+          <p style="color: var(--text-secondary); font-size: 0.8rem; margin: 0 0 1rem 0;">Pick a date and how many hours you have. The planner will suggest a balanced schedule based on your history.</p>
+          <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:center; margin-bottom:1rem;">
+            <div>
+              <label style="color: var(--text-secondary); font-size:0.75rem; display:block; margin-bottom:0.2rem;">Date</label>
+              <input type="date" id="plannerDateInput">
+            </div>
+            <div>
+              <label style="color: var(--text-secondary); font-size:0.75rem; display:block; margin-bottom:0.2rem;">Available Hours</label>
+              <input type="number" id="plannerHoursInput" min="0.5" step="0.5" value="8">
+            </div>
+            <button class="todo-add-btn" id="plannerGenerateBtn" style="margin-top:1.2rem;">Generate Plan</button>
           </div>
-          <ul class="todo-list" id="cpSessionList" style="margin-top:1.25rem;"></ul>
+          <div id="plannerPlanContainer"></div>
         </div>
 
-        <div id="planContainer"></div>
+        <div class="card-widget" style="padding: 1.5rem; margin-top: 1rem;">
+          <h3 style="color: var(--accent); margin-top:0; margin-bottom: 1rem;">History</h3>
+          <div id="plannerHistoryContainer"></div>
+        </div>
       </div>
     </div>
 
@@ -459,33 +464,6 @@
         </div>
       </div>
     </div>
-
-    <div class="view" id="hackingView">
-      <div class="stats-container">
-        <div class="plan-header">
-          <h2>Hacking / CTF Roadmap</h2>
-          <p>Zero to competitive CTF player — every stage, every subtopic, tick as you go.</p>
-          <div class="plan-progress-track"><div class="plan-progress-fill" id="hackProgressFill"></div></div>
-          <div class="plan-progress-label">
-            <span><strong id="hackProgressPct">0%</strong> complete</span>
-            <span><span id="hackProgressDone">0</span> / <span id="hackProgressTotal">0</span> tasks</span>
-          </div>
-        </div>
-
-        <div class="card-widget" style="padding: 1.5rem; margin-bottom: 1.5rem;">
-          <h3 style="color: var(--accent); margin-top:0; margin-bottom: 0.5rem;">Today's Session</h3>
-          <p style="color: var(--text-secondary); font-size: 0.8rem; margin: 0 0 1rem 0;">Enter how many hours you can put in today. It pulls the next unfinished tasks off the roadmap to fill that time — work through them, then tick them off here or below.</p>
-          <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center;">
-            <input type="number" id="hackHoursInput" min="0.5" step="0.5" value="2" style="width:100px;">
-            <span style="color: var(--text-secondary); font-size:0.8rem;">hours</span>
-            <button class="todo-add-btn" id="hackPlanBtn">Plan My Session</button>
-          </div>
-          <ul class="todo-list" id="hackSessionList" style="margin-top:1.25rem;"></ul>
-        </div>
-
-        <div id="hackPlanContainer"></div>
-      </div>
-    </div>
   </div>
 
   <button class="fab" id="resetBtn" title="Go to current task">📍</button>
@@ -508,6 +486,7 @@
     const db = firebase.firestore();
     const auth = firebase.auth();
     const watchHistoryRef = db.collection("watchHistory");
+    const dailyPlansRef = db.collection("dailyPlans");
 
     const timetable = {
       Monday: [ ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
@@ -661,10 +640,9 @@
       dashboard: document.getElementById('dashboardView'),
       timetable: document.getElementById('timetableView'),
       todo: document.getElementById('todoView'),
-      cp: document.getElementById('cpView'),
+      planner: document.getElementById('plannerView'),
       calendar: document.getElementById('calendarView'),
-      screenscape: document.getElementById('screenscapeView'),
-      hacking: document.getElementById('hackingView')
+      screenscape: document.getElementById('screenscapeView')
     };
     sidebarBtns.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -677,8 +655,7 @@
         if (viewName === 'timetable') renderTimeline();
         if (viewName === 'calendar') { renderCalendarGrid(); renderDayDetail(selectedCalDate); }
         if (viewName === 'screenscape') { if (!ssIframe.src) loadScreenscape(); }
-        if (viewName === 'cp') { renderPlan(); renderCPSession(); }
-        if (viewName === 'hacking') { renderHackingPlan(); renderHackSession(); }
+        if (viewName === 'planner') { renderPlanner(); loadPlannerHistory(); }
         if (window.innerWidth <= 768) dom.sidebar.classList.remove('open');
       });
     });
@@ -725,6 +702,7 @@
       if (e.key === "Enter") document.getElementById("todoAddBtn").click();
     });
 
+    // ===== CALENDAR =====
     const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const fullMonthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     const weekdayNames = ["S","M","T","W","T","F","S"];
@@ -746,6 +724,7 @@
     selectedCalDate.setHours(0,0,0,0);
     const calendarRef = db.collection("calendarEvents");
     let unsubCalendar = null;
+
     function getDaysUntil(e) {
       const now = new Date();
       const today0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -905,671 +884,333 @@
       labelInput.value = ''; dateInput.value = '';
     });
 
-    /* ===== IOI Prep Plan ===== */
-    const ioiPlan = [{"week": "Week 1 · C++ Fundamentals & I/O", "days": [{"day": 1, "date": "10 Aug Mon", "iso": "2026-08-10", "tasks": ["Set up g++ / VS Code / online judge accounts (Codeforces, CSES, AtCoder)", "Variables, data types: int, long long, float, double, char, bool, string", "cin/cout, basic I/O formatting", "Practice: 5 CF 800 I/O & arithmetic problems"]}, {"day": 2, "date": "11 Aug Tue", "iso": "2026-08-11", "tasks": ["if / else if / else, switch statements", "Comparison & logical operators", "Practice: grading system, leap year checker", "Practice: 5 CF 800 conditional problems"]}, {"day": 3, "date": "12 Aug Wed", "iso": "2026-08-12", "tasks": ["for, while, do-while loops", "Nested loops, loop control (break/continue)", "Practice: pattern printing (triangles, pyramids)", "Practice: multiplication table generator"]}, {"day": 4, "date": "13 Aug Thu", "iso": "2026-08-13", "tasks": ["Functions: declaration, parameters, return types, void, overloading", "Pass by value vs pass by reference", "Practice: write reusable math utility functions", "Practice: 5 CF 800 function-based problems"]}, {"day": 5, "date": "14 Aug Fri", "iso": "2026-08-14", "tasks": ["Recursion basics: factorial, power, digit sum", "Recursion tree visualization", "Practice: nth Fibonacci (recursive)", "Practice: Euclidean GCD/LCM recursively"]}, {"day": 6, "date": "15 Aug Sat", "iso": "2026-08-15", "tasks": ["1D arrays: declaration, traversal, input/output", "2D arrays: matrices, traversal patterns", "Practice: max/min/sum of array", "Practice: matrix transpose & rotation"]}, {"day": 7, "date": "16 Aug Sun", "iso": "2026-08-16", "tasks": ["Review day: redo any shaky problems from the week", "Timed practice (1.5h): 6 CF 800 mixed problems", "Write a short reflection on mistakes made"]}]}, {"week": "Week 2 · Strings, Recursion & Searching", "days": [{"day": 8, "date": "17 Aug Mon", "iso": "2026-08-17", "tasks": ["String basics: length, indexing, concatenation", "substr, find, getline, to_string, stoi/stoll", "Practice: palindrome checker", "Practice: string reversal & case conversion"]}, {"day": 9, "date": "18 Aug Tue", "iso": "2026-08-18", "tasks": ["Character arrays vs std::string", "ASCII manipulation, character frequency counting", "Practice: anagram checker", "Practice: count vowels/consonants"]}, {"day": 10, "date": "19 Aug Wed", "iso": "2026-08-19", "tasks": ["Recursion deep dive: backtracking basics", "Practice: generate all subsets of a set", "Practice: generate all permutations of a string"]}, {"day": 11, "date": "20 Aug Thu", "iso": "2026-08-20", "tasks": ["Linear search & its complexity", "Binary search on sorted arrays (manual implementation)", "Practice: first/last occurrence of a value", "Practice: search in rotated sorted array"]}, {"day": 12, "date": "21 Aug Fri", "iso": "2026-08-21", "tasks": ["Sorting basics: bubble sort, selection sort, insertion sort (by hand)", "Understanding stability & complexity of each", "Practice: implement and time each sort"]}, {"day": 13, "date": "22 Aug Sat", "iso": "2026-08-22", "tasks": ["std::sort with custom comparators", "Sorting pairs/structs by multiple keys", "Practice: 5 CF 900 sorting-based problems"]}, {"day": 14, "date": "23 Aug Sun", "iso": "2026-08-23", "tasks": ["Weekly mini-contest (2h): 6 CSES Introductory problems", "Review all wrong/slow answers with editorials"]}]}, {"week": "Week 3 · STL Core I — Sequence Containers", "days": [{"day": 15, "date": "24 Aug Mon", "iso": "2026-08-24", "tasks": ["std::vector: push_back, pop_back, size, resize, clear, 2D vectors", "Practice: dynamic array based problems"]}, {"day": 16, "date": "25 Aug Tue", "iso": "2026-08-25", "tasks": ["std::pair and std::tuple", "Structured bindings, make_pair/make_tuple", "Practice: coordinate/point storage problems"]}, {"day": 17, "date": "26 Aug Wed", "iso": "2026-08-26", "tasks": ["std::array vs C-style arrays vs vector", "auto keyword, range-based for loops", "Practice: 5 CF 900 vector-based problems"]}, {"day": 18, "date": "27 Aug Thu", "iso": "2026-08-27", "tasks": ["Iterators: begin/end, reverse iterators", "STL algorithms: min, max, accumulate, count, find", "Practice: use algorithm header on 5 problems"]}, {"day": 19, "date": "28 Aug Fri", "iso": "2026-08-28", "tasks": ["Two-dimensional vectors & vector of vectors (grids/graphs prep)", "Practice: matrix problems using vector<vector<int>>"]}, {"day": 20, "date": "29 Aug Sat", "iso": "2026-08-29", "tasks": ["std::string as STL container: erase, insert, replace", "Practice: 5 CF 900 string manipulation problems"]}, {"day": 21, "date": "30 Aug Sun", "iso": "2026-08-30", "tasks": ["Timed mini-contest (2h): 6 CF 900-1000 problems focused on vectors/strings", "Editorial review of mistakes"]}]}, {"week": "Week 4 · STL Core II — Sets & Maps", "days": [{"day": 22, "date": "31 Aug Mon", "iso": "2026-08-31", "tasks": ["std::set: insert, erase, find, count, ordered iteration", "Practice: unique elements, duplicate removal"]}, {"day": 23, "date": "1 Sep Tue", "iso": "2026-09-01", "tasks": ["std::multiset: handling duplicates, equal_range", "Practice: k-th smallest with duplicates"]}, {"day": 24, "date": "2 Sep Wed", "iso": "2026-09-02", "tasks": ["std::map: key-value pairs, insert, operator[], iteration", "Practice: frequency counting with map"]}, {"day": 25, "date": "3 Sep Thu", "iso": "2026-09-03", "tasks": ["std::unordered_set / std::unordered_map: hash-based O(1) average lookup", "When to use hash vs ordered containers", "Practice: 2 problems where O(1) lookup matters"]}, {"day": 26, "date": "4 Sep Fri", "iso": "2026-09-04", "tasks": ["map/set with custom comparators & pairs as keys", "Practice: coordinate compression using map"]}, {"day": 27, "date": "5 Sep Sat", "iso": "2026-09-05", "tasks": ["Combining set/map with two pointers for frequency problems", "Practice: 5 CF 1000 set/map problems"]}, {"day": 28, "date": "6 Sep Sun", "iso": "2026-09-06", "tasks": ["Weekly mini-contest (2h): 6 problems mixing sets/maps", "Review mistakes & note patterns"]}]}, {"week": "Week 5 · STL Core III — Stacks, Queues & Heaps", "days": [{"day": 29, "date": "7 Sep Mon", "iso": "2026-09-07", "tasks": ["std::stack: push, pop, top, empty", "Practice: balanced brackets/parentheses matching"]}, {"day": 30, "date": "8 Sep Tue", "iso": "2026-09-08", "tasks": ["std::queue & std::deque: push/pop from both ends", "Practice: simulate a queue using two stacks"]}, {"day": 31, "date": "9 Sep Wed", "iso": "2026-09-09", "tasks": ["Monotonic stack technique", "Practice: next greater element, next smaller element"]}, {"day": 32, "date": "10 Sep Thu", "iso": "2026-09-10", "tasks": ["std::priority_queue: max-heap default, min-heap with greater<int>", "Practice: k largest / k smallest elements"]}, {"day": 33, "date": "11 Sep Fri", "iso": "2026-09-11", "tasks": ["Priority queue with pairs/custom structs", "Practice: merge k sorted arrays using a heap"]}, {"day": 34, "date": "12 Sep Sat", "iso": "2026-09-12", "tasks": ["Sliding window maximum using deque", "Practice: 5 CF 1000-1100 stack/queue/heap problems"]}, {"day": 35, "date": "13 Sep Sun", "iso": "2026-09-13", "tasks": ["Timed mini-contest (2.5h): 6 problems mixing stacks/queues/heaps", "Editorial review"]}]}, {"week": "Week 6 · Complexity & Complete Search", "days": [{"day": 36, "date": "14 Sep Mon", "iso": "2026-09-14", "tasks": ["Big-O notation: O(1), O(log n), O(n), O(n log n), O(n^2), O(2^n)", "Practice: estimate complexity of given code snippets"]}, {"day": 37, "date": "15 Sep Tue", "iso": "2026-09-15", "tasks": ["Relating input size (n) to allowed complexity under time limits", "Practice: pick correct approach for given constraints (5 problems)"]}, {"day": 38, "date": "16 Sep Wed", "iso": "2026-09-16", "tasks": ["Complete search / brute force fundamentals", "Generating all subsets via bitmasking", "Practice: subset sum via brute force"]}, {"day": 39, "date": "17 Sep Thu", "iso": "2026-09-17", "tasks": ["Generating permutations via next_permutation / recursion", "Practice: travelling-salesman style brute force on small n"]}, {"day": 40, "date": "18 Sep Fri", "iso": "2026-09-18", "tasks": ["Meet in the middle technique", "Practice: subset sum for n up to ~40"]}, {"day": 41, "date": "19 Sep Sat", "iso": "2026-09-19", "tasks": ["Pruning & backtracking optimization", "Practice: N-Queens, Sudoku-style backtracking problem"]}, {"day": 42, "date": "20 Sep Sun", "iso": "2026-09-20", "tasks": ["Weekly mock (2.5h): 6 complete-search/backtracking problems", "Review & note pruning ideas that worked"]}]}, {"week": "Week 7 · Greedy Algorithms & Binary Search", "days": [{"day": 43, "date": "21 Sep Mon", "iso": "2026-09-21", "tasks": ["Greedy algorithm principles: local optimum vs global optimum", "Practice: activity selection problem"]}, {"day": 44, "date": "22 Sep Tue", "iso": "2026-09-22", "tasks": ["Coin change (greedy case) & interval scheduling", "Practice: 4 CF 900 greedy problems"]}, {"day": 45, "date": "23 Sep Wed", "iso": "2026-09-23", "tasks": ["Proving greedy correctness with exchange argument (conceptual)", "Practice: 4 more greedy-tagged problems"]}, {"day": 46, "date": "24 Sep Thu", "iso": "2026-09-24", "tasks": ["Binary search on sorted arrays: lower_bound, upper_bound (manual + STL)", "Practice: first/last occurrence, count of value"]}, {"day": 47, "date": "25 Sep Fri", "iso": "2026-09-25", "tasks": ["Binary search on the answer (monotonic predicate functions)", "Practice: Aggressive Cows (SPOJ)"]}, {"day": 48, "date": "26 Sep Sat", "iso": "2026-09-26", "tasks": ["Binary search on the answer continued", "Practice: Book Allocation / Painter's Partition problem"]}, {"day": 49, "date": "27 Sep Sun", "iso": "2026-09-27", "tasks": ["Timed mini-contest (2.5h): 3 greedy + 3 binary-search problems", "Editorial review"]}]}, {"week": "Week 8 · Two Pointers, Prefix Sums & Sliding Window", "days": [{"day": 50, "date": "28 Sep Mon", "iso": "2026-09-28", "tasks": ["Two pointers technique on sorted arrays", "Practice: pair sum equals target"]}, {"day": 51, "date": "29 Sep Tue", "iso": "2026-09-29", "tasks": ["Two pointers continued", "Practice: container with most water, 3Sum"]}, {"day": 52, "date": "30 Sep Wed", "iso": "2026-09-30", "tasks": ["Prefix sums (1D): range sum queries in O(1)", "Practice: 4 prefix-sum problems"]}, {"day": 53, "date": "1 Oct Thu", "iso": "2026-10-01", "tasks": ["Prefix sums (2D) for submatrix sums", "Difference arrays for range updates", "Practice: 4 problems using difference arrays"]}, {"day": 54, "date": "2 Oct Fri", "iso": "2026-10-02", "tasks": ["Fixed-size sliding window", "Practice: max sum subarray of size k"]}, {"day": 55, "date": "3 Oct Sat", "iso": "2026-10-03", "tasks": ["Variable-size sliding window", "Practice: longest substring without repeating characters"]}, {"day": 56, "date": "4 Oct Sun", "iso": "2026-10-04", "tasks": ["Weekly mock (2.5h): 6 problems mixing two pointers/prefix sums/sliding window", "Review"]}]}, {"week": "Week 9 · Dynamic Programming I — Foundations", "days": [{"day": 57, "date": "5 Oct Mon", "iso": "2026-10-05", "tasks": ["What is DP: overlapping subproblems & optimal substructure", "Memoization vs tabulation", "Practice: CSES Dice Combinations"]}, {"day": 58, "date": "6 Oct Tue", "iso": "2026-10-06", "tasks": ["1D DP: climbing stairs, house robber style problems", "Practice: CSES Minimizing Coins"]}, {"day": 59, "date": "7 Oct Wed", "iso": "2026-10-07", "tasks": ["Longest Increasing Subsequence (O(n^2) then O(n log n))", "Practice: LIS variants"]}, {"day": 60, "date": "8 Oct Thu", "iso": "2026-10-08", "tasks": ["0/1 Knapsack: recursive + tabulated versions", "Practice: subset sum as knapsack"]}, {"day": 61, "date": "9 Oct Fri", "iso": "2026-10-09", "tasks": ["Unbounded knapsack: coin change (count ways), rod cutting", "Practice: 3 unbounded-knapsack problems"]}, {"day": 62, "date": "10 Oct Sat", "iso": "2026-10-10", "tasks": ["Edit distance & Longest Common Subsequence", "Practice: LCS variants (printing the sequence)"]}, {"day": 63, "date": "11 Oct Sun", "iso": "2026-10-11", "tasks": ["Weekly mock (3h): 6 DP problems from CSES DP section", "Time strictly, self-grade after"]}]}, {"week": "Week 10 · Dynamic Programming II — Advanced Patterns", "days": [{"day": 64, "date": "12 Oct Mon", "iso": "2026-10-12", "tasks": ["2D grid DP: unique paths, minimum path sum", "Practice: 3 grid-DP problems"]}, {"day": 65, "date": "13 Oct Tue", "iso": "2026-10-13", "tasks": ["Interval DP: matrix chain multiplication style problems", "Practice: CSES Removing Digits / interval DP problem"]}, {"day": 66, "date": "14 Oct Wed", "iso": "2026-10-14", "tasks": ["Bitmask DP fundamentals: representing subsets as bits", "Practice: travelling-salesman via bitmask DP (small n)"]}, {"day": 67, "date": "15 Oct Thu", "iso": "2026-10-15", "tasks": ["Bitmask DP continued: assignment problem style", "Practice: 2 more bitmask-DP problems"]}, {"day": 68, "date": "16 Oct Fri", "iso": "2026-10-16", "tasks": ["Digit DP fundamentals: counting numbers with a property", "Practice: 2 digit-DP problems"]}, {"day": 69, "date": "17 Oct Sat", "iso": "2026-10-17", "tasks": ["Tree DP introduction (DP on a rooted tree)", "Practice: max independent set on a tree"]}, {"day": 70, "date": "18 Oct Sun", "iso": "2026-10-18", "tasks": ["Timed mock (3h): 6 mixed DP problems (grid/interval/bitmask)", "Deep review of editorial approaches"]}]}, {"week": "Week 11 · Graphs I — Representation & Traversal", "days": [{"day": 71, "date": "19 Oct Mon", "iso": "2026-10-19", "tasks": ["Graph representations: adjacency list vs adjacency matrix", "Directed vs undirected, weighted vs unweighted", "Practice: build a graph from input, print adjacency list"]}, {"day": 72, "date": "20 Oct Tue", "iso": "2026-10-20", "tasks": ["Breadth-First Search (BFS): implementation & shortest path in unweighted graphs", "Practice: 4 BFS problems"]}, {"day": 73, "date": "21 Oct Wed", "iso": "2026-10-21", "tasks": ["Depth-First Search (DFS): recursive & iterative implementation", "Practice: connected components counting"]}, {"day": 74, "date": "22 Oct Thu", "iso": "2026-10-22", "tasks": ["Bipartite graph checking via BFS/DFS coloring", "Practice: 3 bipartite-check problems"]}, {"day": 75, "date": "23 Oct Fri", "iso": "2026-10-23", "tasks": ["Flood fill / grid BFS-DFS (island counting style problems)", "Practice: number of islands, maze shortest path"]}, {"day": 76, "date": "24 Oct Sat", "iso": "2026-10-24", "tasks": ["Multi-source BFS", "Practice: rotten oranges / nearest source style problem"]}, {"day": 77, "date": "25 Oct Sun", "iso": "2026-10-25", "tasks": ["Weekly mock (2.5h): 6 BFS/DFS problems", "Review approaches for slow solutions"]}]}, {"week": "Week 12 · Graphs II — Ordering & Union-Find", "days": [{"day": 78, "date": "26 Oct Mon", "iso": "2026-10-26", "tasks": ["Topological sort via DFS", "Practice: 3 topological-sort problems"]}, {"day": 79, "date": "27 Oct Tue", "iso": "2026-10-27", "tasks": ["Topological sort via Kahn's algorithm (BFS-based)", "Cycle detection in directed graphs", "Practice: 3 problems"]}, {"day": 80, "date": "28 Oct Wed", "iso": "2026-10-28", "tasks": ["Disjoint Set Union (DSU/Union-Find): union by rank, path compression", "Practice: 4 DSU problems (connectivity queries)"]}, {"day": 81, "date": "29 Oct Thu", "iso": "2026-10-29", "tasks": ["DSU applications: Kruskal's MST algorithm", "Practice: implement Kruskal's on 3 problems"]}, {"day": 82, "date": "30 Oct Fri", "iso": "2026-10-30", "tasks": ["Prim's MST algorithm (with priority_queue)", "Compare Kruskal vs Prim use-cases", "Practice: 2 MST problems"]}, {"day": 83, "date": "31 Oct Sat", "iso": "2026-10-31", "tasks": ["Cycle detection in undirected graphs (DSU & DFS methods)", "Practice: 3 problems"]}, {"day": 84, "date": "1 Nov Sun", "iso": "2026-11-01", "tasks": ["Timed mock (2.5h): 6 problems mixing topo-sort/DSU/MST", "Editorial review"]}]}, {"week": "Week 13 · Graphs III — Shortest Paths", "days": [{"day": 85, "date": "2 Nov Mon", "iso": "2026-11-02", "tasks": ["Dijkstra's algorithm (priority_queue based, O((V+E) log V))", "Practice: 3 Dijkstra problems"]}, {"day": 86, "date": "3 Nov Tue", "iso": "2026-11-03", "tasks": ["Dijkstra edge cases: negative weights, multiple edges, self-loops", "Practice: 2 more Dijkstra problems"]}, {"day": 87, "date": "4 Nov Wed", "iso": "2026-11-04", "tasks": ["Bellman-Ford algorithm: handling negative weights, cycle detection", "Practice: 3 Bellman-Ford problems"]}, {"day": 88, "date": "5 Nov Thu", "iso": "2026-11-05", "tasks": ["Floyd-Warshall algorithm: all-pairs shortest paths", "Practice: 3 Floyd-Warshall problems"]}, {"day": 89, "date": "6 Nov Fri", "iso": "2026-11-06", "tasks": ["0-1 BFS (deque-based shortest path for 0/1 weight edges)", "Practice: 2 problems"]}, {"day": 90, "date": "7 Nov Sat", "iso": "2026-11-07", "tasks": ["Shortest path DAG (using topological order)", "Practice: 2 problems"]}, {"day": 91, "date": "8 Nov Sun", "iso": "2026-11-08", "tasks": ["Weekly mock (3h): 6 shortest-path problems (mixed algorithms)", "Review approach selection reasoning"]}]}, {"week": "Week 14 · Trees & Advanced Data Structures I", "days": [{"day": 92, "date": "9 Nov Mon", "iso": "2026-11-09", "tasks": ["Tree basics: rooted trees, DFS traversal, subtree size computation", "Practice: 3 tree-traversal problems"]}, {"day": 93, "date": "10 Nov Tue", "iso": "2026-11-10", "tasks": ["Diameter of a tree, tree DP recap", "Practice: 2 diameter/tree-DP problems"]}, {"day": 94, "date": "11 Nov Wed", "iso": "2026-11-11", "tasks": ["Segment Tree: build, range query, point update (sum/min/max)", "Practice: implement from scratch, 2 problems"]}, {"day": 95, "date": "12 Nov Thu", "iso": "2026-11-12", "tasks": ["Segment Tree: range update with lazy propagation", "Practice: 2 lazy-propagation problems"]}, {"day": 96, "date": "13 Nov Fri", "iso": "2026-11-13", "tasks": ["Fenwick Tree / Binary Indexed Tree (BIT): point update, prefix query", "Practice: 3 BIT problems"]}, {"day": 97, "date": "14 Nov Sat", "iso": "2026-11-14", "tasks": ["BIT for range update + range query, 2D BIT intro", "Practice: 2 problems"]}, {"day": 98, "date": "15 Nov Sun", "iso": "2026-11-15", "tasks": ["Timed mock (3h): 6 segment-tree/BIT problems", "Editorial deep-dive on any TLE/WA"]}]}, {"week": "Week 15 · Trees & Advanced Data Structures II", "days": [{"day": 99, "date": "16 Nov Mon", "iso": "2026-11-16", "tasks": ["Sparse Table for static range minimum/maximum queries (RMQ)", "Practice: 3 sparse-table problems"]}, {"day": 100, "date": "17 Nov Tue", "iso": "2026-11-17", "tasks": ["Binary lifting for kth ancestor queries", "Practice: 2 binary-lifting problems"]}, {"day": 101, "date": "18 Nov Wed", "iso": "2026-11-18", "tasks": ["Lowest Common Ancestor (LCA) via binary lifting", "Practice: 3 LCA problems"]}, {"day": 102, "date": "19 Nov Thu", "iso": "2026-11-19", "tasks": ["Euler tour technique for subtree queries", "Practice: 2 Euler-tour problems"]}, {"day": 103, "date": "20 Nov Fri", "iso": "2026-11-20", "tasks": ["sqrt decomposition basics for range queries", "Practice: 2 problems"]}, {"day": 104, "date": "21 Nov Sat", "iso": "2026-11-21", "tasks": ["Combining segment tree + DFS order for subtree/path updates", "Practice: 2 combined problems"]}, {"day": 105, "date": "22 Nov Sun", "iso": "2026-11-22", "tasks": ["Weekly mock (3h): 6 advanced-data-structure problems", "Review + list recurring mistakes"]}]}, {"week": "Week 16 · String Algorithms & Number Theory", "days": [{"day": 106, "date": "23 Nov Mon", "iso": "2026-11-23", "tasks": ["String hashing (polynomial rolling hash), collision avoidance", "Practice: 3 string-hashing problems"]}, {"day": 107, "date": "24 Nov Tue", "iso": "2026-11-24", "tasks": ["KMP (Knuth-Morris-Pratt) pattern matching, failure function", "Practice: 3 KMP problems"]}, {"day": 108, "date": "25 Nov Wed", "iso": "2026-11-25", "tasks": ["Z-function and its applications", "Practice: 3 Z-function problems"]}, {"day": 109, "date": "26 Nov Thu", "iso": "2026-11-26", "tasks": ["Trie data structure: insert, search, prefix queries", "Practice: 3 Trie problems"]}, {"day": 110, "date": "27 Nov Fri", "iso": "2026-11-27", "tasks": ["Number theory: sieve of Eratosthenes, primality testing, factorization", "Practice: 3 problems"]}, {"day": 111, "date": "28 Nov Sat", "iso": "2026-11-28", "tasks": ["Modular arithmetic, modular exponentiation, modular inverse", "Extended Euclidean algorithm", "Practice: 3 problems"]}, {"day": 112, "date": "29 Nov Sun", "iso": "2026-11-29", "tasks": ["Combinatorics basics: nCr with mod, Pascal's triangle, factorial precompute", "Weekly mock (2.5h): 5 mixed string/number-theory problems"]}]}, {"week": "Week 17 · Advanced Graphs & Contest Techniques", "days": [{"day": 113, "date": "30 Nov Mon", "iso": "2026-11-30", "tasks": ["Bridges and articulation points (Tarjan's algorithm)", "Practice: 3 problems"]}, {"day": 114, "date": "1 Dec Tue", "iso": "2026-12-01", "tasks": ["Strongly Connected Components (Kosaraju's / Tarjan's SCC)", "Practice: 2 SCC problems"]}, {"day": 115, "date": "2 Dec Wed", "iso": "2026-12-02", "tasks": ["Introduction to max flow (Ford-Fulkerson / Edmonds-Karp concept)", "Practice: 2 basic flow problems"]}, {"day": 116, "date": "3 Dec Thu", "iso": "2026-12-03", "tasks": ["Heavy-Light Decomposition concept (path queries on trees)", "Practice: 1-2 HLD-flavored problems (as far as time allows)"]}, {"day": 117, "date": "4 Dec Fri", "iso": "2026-12-04", "tasks": ["DP optimization tricks: DP on trees with rerooting, convex hull trick intro (conceptual)", "Practice: 2 problems"]}, {"day": 118, "date": "5 Dec Sat", "iso": "2026-12-05", "tasks": ["Geometry basics: cross product, point-in-polygon, distance formulas", "Practice: 3 geometry problems"]}, {"day": 119, "date": "6 Dec Sun", "iso": "2026-12-06", "tasks": ["Weekly mock (3h): 6 advanced/mixed problems", "Deep editorial review"]}]}, {"week": "Week 18 · Full Review & Contest Simulation", "days": [{"day": 120, "date": "7 Dec Mon", "iso": "2026-12-07", "tasks": ["Solve 12 mixed CF 900-1200 problems fast, aim 8-12 min each", "Log which topics slow you down"]}, {"day": 121, "date": "8 Dec Tue", "iso": "2026-12-08", "tasks": ["Deep review: re-solve every problem you've gotten wrong across all 17 weeks", "Update a personal 'weak topics' list"]}, {"day": 122, "date": "9 Dec Wed", "iso": "2026-12-09", "tasks": ["Full 3-hour IOI-style mock contest (CSES/CF, 5-6 problems, partial scoring mindset)", "Self-grade against time limits"]}, {"day": 123, "date": "10 Dec Thu", "iso": "2026-12-10", "tasks": ["Stress testing: write a random test generator + brute-force checker for a past problem", "Apply it to 2 previous solutions"]}, {"day": 124, "date": "11 Dec Fri", "iso": "2026-12-11", "tasks": ["Full 4-hour IOI-style mock contest (simulate real exam conditions, no distractions)", "Review immediately after"]}, {"day": 125, "date": "12 Dec Sat", "iso": "2026-12-12", "tasks": ["Active recovery: watch 2-3 editorial/solution walkthrough videos on your weakest topic", "No coding — just absorb and take notes"]}, {"day": 126, "date": "13 Dec Sun", "iso": "2026-12-13", "tasks": ["Month recap: write down every mastered topic and every remaining weak spot", "Plan the next study cycle's focus areas"]}]}, {"week": "Week 19 · Advanced DP Optimizations", "days": [{"day": 127, "date": "14 Dec Mon", "iso": "2026-12-14", "tasks": ["Divide and Conquer DP optimization — concept and when it applies", "Practice: 2 D&C optimization problems"]}, {"day": 128, "date": "15 Dec Tue", "iso": "2026-12-15", "tasks": ["Knuth's optimization — concept and proof sketch", "Practice: 2 Knuth optimization problems"]}, {"day": 129, "date": "16 Dec Wed", "iso": "2026-12-16", "tasks": ["Convex Hull Trick (CHT) — basic monotonic version", "Practice: 2 CHT problems"]}, {"day": 130, "date": "17 Dec Thu", "iso": "2026-12-17", "tasks": ["Li Chao Tree for dynamic CHT", "Practice: 2 Li Chao tree problems"]}, {"day": 131, "date": "18 Dec Fri", "iso": "2026-12-18", "tasks": ["SOS (Sum over Subsets) DP", "Practice: 2 SOS DP problems"]}, {"day": 132, "date": "19 Dec Sat", "iso": "2026-12-19", "tasks": ["Weekly mock (2.5h): 5 advanced-DP-optimization problems", "Editorial review of anything unsolved"]}, {"day": 133, "date": "20 Dec Sun", "iso": "2026-12-20", "tasks": ["Review day: redo any shaky problems from the week", "Note recurring mistakes in a weak-topics list"]}]}, {"week": "Week 20 · Advanced Graph I — Flows & Matching", "days": [{"day": 134, "date": "21 Dec Mon", "iso": "2026-12-21", "tasks": ["Max flow deep dive — Dinic's algorithm implementation", "Practice: 2 Dinic's algorithm problems"]}, {"day": 135, "date": "22 Dec Tue", "iso": "2026-12-22", "tasks": ["Min-Cost Max-Flow (MCMF) — Bellman-Ford based augmenting", "Practice: 2 MCMF problems"]}, {"day": 136, "date": "23 Dec Wed", "iso": "2026-12-23", "tasks": ["Flow with lower bounds — feasibility and circulation concept", "Practice: 1 lower-bounds flow problem"]}, {"day": 137, "date": "24 Dec Thu", "iso": "2026-12-24", "tasks": ["Bipartite matching — Hopcroft-Karp algorithm", "Practice: 2 matching problems"]}, {"day": 138, "date": "25 Dec Fri", "iso": "2026-12-25", "tasks": ["König's theorem and minimum vertex cover via matching", "Practice: 2 problems"]}, {"day": 139, "date": "26 Dec Sat", "iso": "2026-12-26", "tasks": ["Weekly mock (2.5h): 5 flow/matching problems", "Editorial review"]}, {"day": 140, "date": "27 Dec Sun", "iso": "2026-12-27", "tasks": ["Review + note patterns from flow/matching problems", "Rest / light reading day"]}]}, {"week": "Week 21 · Advanced Graph II", "days": [{"day": 141, "date": "28 Dec Mon", "iso": "2026-12-28", "tasks": ["2-SAT — implementation via SCC", "Practice: 2 2-SAT problems"]}, {"day": 142, "date": "29 Dec Tue", "iso": "2026-12-29", "tasks": ["Euler paths and circuits — Hierholzer's algorithm", "Practice: 2 problems"]}, {"day": 143, "date": "30 Dec Wed", "iso": "2026-12-30", "tasks": ["General graph matching (Blossom algorithm) — concept only", "Practice: 1 problem"]}, {"day": 144, "date": "31 Dec Thu", "iso": "2026-12-31", "tasks": ["Centroid decomposition on trees", "Practice: 2 centroid decomposition problems"]}, {"day": 145, "date": "1 Jan Fri", "iso": "2027-01-01", "tasks": ["Virtual trees (auxiliary tree technique)", "Practice: 1-2 problems"]}, {"day": 146, "date": "2 Jan Sat", "iso": "2027-01-02", "tasks": ["Weekly mock (3h): 5 advanced graph problems", "Editorial review"]}, {"day": 147, "date": "3 Jan Sun", "iso": "2027-01-03", "tasks": ["Review + update weak-topics list", "Rest / light reading day"]}]}, {"week": "Week 22 · Advanced String Algorithms", "days": [{"day": 148, "date": "4 Jan Mon", "iso": "2027-01-04", "tasks": ["Suffix array construction (O(n log n))", "Practice: 2 suffix array problems"]}, {"day": 149, "date": "5 Jan Tue", "iso": "2027-01-05", "tasks": ["LCP array and applications (Kasai's algorithm)", "Practice: 2 problems"]}, {"day": 150, "date": "6 Jan Wed", "iso": "2027-01-06", "tasks": ["Suffix automaton — basics and construction", "Practice: 2 suffix automaton problems"]}, {"day": 151, "date": "7 Jan Thu", "iso": "2027-01-07", "tasks": ["Aho-Corasick automaton — multi-pattern matching", "Practice: 2 problems"]}, {"day": 152, "date": "8 Jan Fri", "iso": "2027-01-08", "tasks": ["Manacher's algorithm for palindromic substrings", "Practice: 2 problems"]}, {"day": 153, "date": "9 Jan Sat", "iso": "2027-01-09", "tasks": ["Weekly mock (2.5h): 5 string-algorithm problems", "Editorial review"]}, {"day": 154, "date": "10 Jan Sun", "iso": "2027-01-10", "tasks": ["Review + editorial deep-dive on hardest problem", "Rest / light reading day"]}]}, {"week": "Week 23 · Computational Geometry", "days": [{"day": 155, "date": "11 Jan Mon", "iso": "2027-01-11", "tasks": ["Basic geometry primitives — points, vectors, cross/dot product", "Practice: 2 primitive-geometry problems"]}, {"day": 156, "date": "12 Jan Tue", "iso": "2027-01-12", "tasks": ["Convex hull — Graham scan / Andrew's monotone chain", "Practice: 2 convex hull problems"]}, {"day": 157, "date": "13 Jan Wed", "iso": "2027-01-13", "tasks": ["Line and segment intersection", "Practice: 2 problems"]}, {"day": 158, "date": "14 Jan Thu", "iso": "2027-01-14", "tasks": ["Polygon area, point-in-polygon (ray casting / winding)", "Practice: 2 problems"]}, {"day": 159, "date": "15 Jan Fri", "iso": "2027-01-15", "tasks": ["Closest pair of points (divide and conquer)", "Practice: 1-2 problems"]}, {"day": 160, "date": "16 Jan Sat", "iso": "2027-01-16", "tasks": ["Rotating calipers — intro (diameter of a point set)", "Practice: 1 problem"]}, {"day": 161, "date": "17 Jan Sun", "iso": "2027-01-17", "tasks": ["Weekly mock (2.5h): 5 geometry problems", "Editorial review"]}]}, {"week": "Week 24 · Game Theory & Advanced Number Theory", "days": [{"day": 162, "date": "18 Jan Mon", "iso": "2027-01-18", "tasks": ["Game theory basics — Nim game, XOR sum rule", "Practice: 2 Nim-style problems"]}, {"day": 163, "date": "19 Jan Tue", "iso": "2027-01-19", "tasks": ["Sprague-Grundy theorem and Grundy numbers", "Practice: 2 problems"]}, {"day": 164, "date": "20 Jan Wed", "iso": "2027-01-20", "tasks": ["Game tree / minimax concept for small games", "Practice: 1-2 problems"]}, {"day": 165, "date": "21 Jan Thu", "iso": "2027-01-21", "tasks": ["Chinese Remainder Theorem (CRT)", "Practice: 2 CRT problems"]}, {"day": 166, "date": "22 Jan Fri", "iso": "2027-01-22", "tasks": ["Miller-Rabin primality test, Pollard's rho factorization", "Practice: 2 problems"]}, {"day": 167, "date": "23 Jan Sat", "iso": "2027-01-23", "tasks": ["Euler's totient function and applications", "Practice: 2 problems"]}, {"day": 168, "date": "24 Jan Sun", "iso": "2027-01-24", "tasks": ["Weekly mock (2.5h): 5 game-theory/number-theory problems", "Editorial review"]}]}, {"week": "Week 25 · Advanced Data Structures II", "days": [{"day": 169, "date": "25 Jan Mon", "iso": "2027-01-25", "tasks": ["Persistent segment tree — concept and implementation", "Practice: 2 problems"]}, {"day": 170, "date": "26 Jan Tue", "iso": "2027-01-26", "tasks": ["Merge sort tree for offline range queries", "Practice: 2 problems"]}, {"day": 171, "date": "27 Jan Wed", "iso": "2027-01-27", "tasks": ["Mo's algorithm — offline sqrt-decomposition queries", "Practice: 2 Mo's algorithm problems"]}, {"day": 172, "date": "28 Jan Thu", "iso": "2027-01-28", "tasks": ["Mo's algorithm with point updates", "Practice: 1-2 problems"]}, {"day": 173, "date": "29 Jan Fri", "iso": "2027-01-29", "tasks": ["Wavelet tree — concept (k-th smallest in range)", "Practice: 1 problem"]}, {"day": 174, "date": "30 Jan Sat", "iso": "2027-01-30", "tasks": ["Treap / balanced BST from scratch", "Practice: 2 treap problems"]}, {"day": 175, "date": "31 Jan Sun", "iso": "2027-01-31", "tasks": ["Weekly mock (3h): 5 advanced-data-structure problems", "Editorial review"]}]}, {"week": "Week 26 · Offline Techniques & Misc", "days": [{"day": 176, "date": "1 Feb Mon", "iso": "2027-02-01", "tasks": ["DSU on tree (small-to-large merging)", "Practice: 2 problems"]}, {"day": 177, "date": "2 Feb Tue", "iso": "2027-02-02", "tasks": ["Parallel binary search technique", "Practice: 2 problems"]}, {"day": 178, "date": "3 Feb Wed", "iso": "2027-02-03", "tasks": ["Offline queries sorted by value/time — general pattern", "Practice: 2 problems"]}, {"day": 179, "date": "4 Feb Thu", "iso": "2027-02-04", "tasks": ["Bitset optimization tricks for brute-force speed-ups", "Practice: 2 problems"]}, {"day": 180, "date": "5 Feb Fri", "iso": "2027-02-05", "tasks": ["Randomized algorithms — hashing tricks, randomized incremental methods", "Practice: 1-2 problems"]}, {"day": 181, "date": "6 Feb Sat", "iso": "2027-02-06", "tasks": ["Weekly mock (2.5h): 5 mixed advanced problems", "Editorial review"]}, {"day": 182, "date": "7 Feb Sun", "iso": "2027-02-07", "tasks": ["Review + consolidate weak-topics list", "Rest / light reading day"]}]}, {"week": "Week 27 · IOI Past Papers Practice I", "days": [{"day": 183, "date": "8 Feb Mon", "iso": "2027-02-08", "tasks": ["Solve IOI Day 1 problems from 2 past years under time pressure (partial-scoring mindset)", "Log subtask results per problem"]}, {"day": 184, "date": "9 Feb Tue", "iso": "2027-02-09", "tasks": ["Solve IOI Day 2 problems from the same 2 years", "Review approach differences from official solutions"]}, {"day": 185, "date": "10 Feb Wed", "iso": "2027-02-10", "tasks": ["Subtask-only strategy drill — solve only the easy subtasks of 4 hard problems fast", "Note time spent per subtask"]}, {"day": 186, "date": "11 Feb Thu", "iso": "2027-02-11", "tasks": ["Full official editorial read-through for the past years attempted", "Note recurring gaps in a weak-topics list"]}, {"day": 187, "date": "12 Feb Fri", "iso": "2027-02-12", "tasks": ["Solve 2 more past IOI problems focused on your weakest category from the log"]}, {"day": 188, "date": "13 Feb Sat", "iso": "2027-02-13", "tasks": ["Timed 5-hour IOI-style simulation using one full past paper"]}, {"day": 189, "date": "14 Feb Sun", "iso": "2027-02-14", "tasks": ["Review the simulation in full", "Rest day: light editorial reading only"]}]}, {"week": "Week 28 · IOI Past Papers Practice II", "days": [{"day": 190, "date": "15 Feb Mon", "iso": "2027-02-15", "tasks": ["Solve IOI problems from 2 different past years, prioritizing interactive-style problems if present"]}, {"day": 191, "date": "16 Feb Tue", "iso": "2027-02-16", "tasks": ["Practice output-only / constructive subtasks specifically", "Practice: 2 output-only problems"]}, {"day": 192, "date": "17 Feb Wed", "iso": "2027-02-17", "tasks": ["Solve 2 problems purely for partial-score maximization under a strict 2h cap each"]}, {"day": 193, "date": "18 Feb Thu", "iso": "2027-02-18", "tasks": ["Full editorial review of everything solved this week"]}, {"day": 194, "date": "19 Feb Fri", "iso": "2027-02-19", "tasks": ["Solve 2 more past IOI problems from a region/country not yet covered"]}, {"day": 195, "date": "20 Feb Sat", "iso": "2027-02-20", "tasks": ["Timed 5-hour IOI-style simulation using another full past paper"]}, {"day": 196, "date": "21 Feb Sun", "iso": "2027-02-21", "tasks": ["Review the simulation in full", "Update the personal weak-topics list"]}]}, {"week": "Week 29 · Regional/National Olympiad Practice", "days": [{"day": 197, "date": "22 Feb Mon", "iso": "2027-02-22", "tasks": ["Solve a set of national/regional olympiad problems at an easier difficulty tier"]}, {"day": 198, "date": "23 Feb Tue", "iso": "2027-02-23", "tasks": ["Solve a harder regional-olympiad problem set, focused on speed"]}, {"day": 199, "date": "24 Feb Wed", "iso": "2027-02-24", "tasks": ["Team-practice style session — solve 3 problems under real contest timing"]}, {"day": 200, "date": "25 Feb Thu", "iso": "2027-02-25", "tasks": ["Review + editorial pass on anything unsolved from the week"]}, {"day": 201, "date": "26 Feb Fri", "iso": "2027-02-26", "tasks": ["Repeat with a fresh regional/national problem set"]}, {"day": 202, "date": "27 Feb Sat", "iso": "2027-02-27", "tasks": ["Timed 4-hour simulation using a regional olympiad paper"]}, {"day": 203, "date": "28 Feb Sun", "iso": "2027-02-28", "tasks": ["Review + rest day: light editorial reading only"]}]}, {"week": "Week 30 · Full Contest Simulation & Weak-Point Drilling", "days": [{"day": 204, "date": "1 Mar Mon", "iso": "2027-03-01", "tasks": ["Full 5-hour IOI-style mock #1 — real conditions, no distractions"]}, {"day": 205, "date": "2 Mar Tue", "iso": "2027-03-02", "tasks": ["Immediate deep review of mock #1 — every wrong/slow answer"]}, {"day": 206, "date": "3 Mar Wed", "iso": "2027-03-03", "tasks": ["Targeted drilling on the single weakest topic identified across the last 12 weeks"]}, {"day": 207, "date": "4 Mar Thu", "iso": "2027-03-04", "tasks": ["Full 5-hour IOI-style mock #2"]}, {"day": 208, "date": "5 Mar Fri", "iso": "2027-03-05", "tasks": ["Immediate deep review of mock #2"]}, {"day": 209, "date": "6 Mar Sat", "iso": "2027-03-06", "tasks": ["Light recovery day — watch 2-3 top competitor solution walkthroughs, notes only"]}, {"day": 210, "date": "7 Mar Sun", "iso": "2027-03-07", "tasks": ["Full recap: update mastered-topics and weak-topics lists", "Plan the next study cycle heading into IOI 2027"]}]}];
-    let planState = {};
-    let planOpenDays = new Set();
-    const planStateRef = db.collection("ioiPlan").doc("state");
-    let unsubPlan = null;
-    function planTaskId(day, idx) { return `d${day}-${idx}`; }
-    function estimateDayMinutes(d) {
-      let explicit = 0;
-      d.tasks.forEach(t => {
-        const m = t.match(/\((\d+(?:\.\d+)?)h\)/);
-        if (m) explicit = Math.max(explicit, parseFloat(m[1]) * 60);
-      });
-      if (explicit > 0) return Math.round(explicit + Math.max(0, d.tasks.length - 1) * 15);
-      return d.tasks.length * 45;
+    // ===== DAILY PLANNER =====
+    const plannerCategories = [
+      { id: 'combined_maths', label: 'Combined Maths', target: 90, maxPerDay: 120 },
+      { id: 'physics', label: 'Physics', target: 60, maxPerDay: 90 },
+      { id: 'ict', label: 'ICT', target: 60, maxPerDay: 90 },
+      { id: 'cp', label: 'CP', target: 120, maxPerDay: 180 },
+      { id: 'hacking', label: 'Hacking Learning', target: 60, maxPerDay: 120 },
+      { id: 'exercise', label: 'Exercise', target: 30, maxPerDay: 45 },
+      { id: 'gaming', label: 'Gaming', target: 60, maxPerDay: 60 },
+      { id: 'refresh', label: 'Refresh (Social Media)', target: 20, maxPerDay: 30 },
+      { id: 'alone_time', label: 'Alone Time (No Phone)', target: 30, maxPerDay: 45 }
+    ];
+    const plannerStartDate = new Date('2026-08-19'); // Aug 19 as requested
+
+    let selectedPlannerDate = new Date();
+    selectedPlannerDate.setHours(0,0,0,0);
+    let plannerDocSnapshot = null; // current doc for selected date
+    let plannerHistoryCache = []; // array of {date, entries, totalAllocated, totalCompleted}
+    let unsubPlannerDoc = null;
+
+    function plannerDateString(date) {
+      return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
     }
-    function findDayByNumber(dayNum) {
-      for (const w of ioiPlan) { for (const d of w.days) { if (d.day === dayNum) return d; } }
-      return null;
-    }
-    function computePlanTotals() {
-      let total = 0, done = 0;
-      ioiPlan.forEach(w => w.days.forEach(d => {
-        d.tasks.forEach((_, i) => {
-          total++;
-          if (planState[planTaskId(d.day, i)]) done++;
+
+    function computeTotalCompletedFromHistory() {
+      const totals = {};
+      plannerCategories.forEach(c => totals[c.id] = 0);
+      plannerHistoryCache.forEach(doc => {
+        if (doc.date >= plannerDateString(selectedPlannerDate)) return; // exclude selected date
+        doc.entries.forEach(entry => {
+          if (entry.completed) totals[entry.categoryId] = (totals[entry.categoryId] || 0) + entry.allocatedMinutes;
         });
+      });
+      return totals;
+    }
+
+    async function loadPlannerHistory() {
+      try {
+        const snapshot = await dailyPlansRef.orderBy('date', 'asc').get();
+        plannerHistoryCache = [];
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          plannerHistoryCache.push({
+            date: data.date,
+            entries: data.entries || [],
+            totalAllocated: data.totalAllocated || 0,
+            totalCompleted: data.totalCompleted || 0
+          });
+        });
+        renderPlannerHistory();
+      } catch (err) {
+        console.error('Failed to load planner history:', err);
+      }
+    }
+
+    async function generatePlannerPlan() {
+      const dateInput = document.getElementById('plannerDateInput').value;
+      if (!dateInput) return alert('Please select a date.');
+      selectedPlannerDate = new Date(dateInput + 'T00:00:00');
+      const hours = parseFloat(document.getElementById('plannerHoursInput').value) || 0;
+      if (hours <= 0) return alert('Please enter a positive number of hours.');
+      const availableMinutes = Math.round(hours * 60);
+
+      // Fetch history if not loaded or date changed
+      await loadPlannerHistory();
+
+      const totalCompleted = computeTotalCompletedFromHistory();
+
+      // Compute deficits based on targets
+      const deficits = {};
+      plannerCategories.forEach(c => {
+        deficits[c.id] = Math.max(0, c.target - (totalCompleted[c.id] || 0));
+      });
+      const totalDeficit = Object.values(deficits).reduce((sum, v) => sum + v, 0);
+
+      let allocation = {};
+
+      if (totalDeficit === 0) {
+        // All targets met; distribute equally
+        const perCat = Math.floor(availableMinutes / plannerCategories.length);
+        plannerCategories.forEach(c => {
+          allocation[c.id] = Math.min(c.maxPerDay, perCat);
+        });
+        // Distribute remainder
+        let remaining = availableMinutes - plannerCategories.reduce((sum, c) => sum + allocation[c.id], 0);
+        for (let i = 0; i < plannerCategories.length && remaining > 0; i++) {
+          const c = plannerCategories[i];
+          const canAdd = c.maxPerDay - allocation[c.id];
+          const add = Math.min(canAdd, remaining);
+          allocation[c.id] += add;
+          remaining -= add;
+        }
+      } else {
+        // Allocate proportionally to deficits, respecting max
+        let allocatedTotal = 0;
+        plannerCategories.forEach(c => {
+          const proportion = deficits[c.id] / totalDeficit;
+          let amount = Math.round(proportion * availableMinutes);
+          amount = Math.min(amount, c.maxPerDay);
+          allocation[c.id] = amount;
+          allocatedTotal += amount;
+        });
+
+        // Adjust remaining or over-allocated
+        let diff = availableMinutes - allocatedTotal;
+        if (diff > 0) {
+          // Give extra to categories not at max
+          const candidates = plannerCategories.filter(c => allocation[c.id] < c.maxPerDay);
+          let i = 0;
+          while (diff > 0 && candidates.length > 0) {
+            const c = candidates[i % candidates.length];
+            const canAdd = c.maxPerDay - allocation[c.id];
+            if (canAdd > 0) {
+              const add = Math.min(canAdd, Math.ceil(diff / candidates.length));
+              allocation[c.id] += add;
+              diff -= add;
+            }
+            i++;
+            if (i > candidates.length * 10) break; // safety
+          }
+        } else if (diff < 0) {
+          // Need to reduce some
+          const overCats = plannerCategories.filter(c => allocation[c.id] > 10); // keep at least 10 min
+          let i = 0;
+          while (diff < 0 && overCats.length > 0) {
+            const c = overCats[i % overCats.length];
+            const canRemove = allocation[c.id] - 10;
+            if (canRemove > 0) {
+              const remove = Math.min(canRemove, -diff);
+              allocation[c.id] -= remove;
+              diff += remove;
+            }
+            i++;
+            if (i > overCats.length * 10) break;
+          }
+        }
+      }
+
+      // Ensure minimum 10 minutes per category if possible
+      plannerCategories.forEach(c => {
+        if (allocation[c.id] < 10 && availableMinutes >= plannerCategories.length * 10) {
+          allocation[c.id] = 10;
+        }
+      });
+
+      // Round to nearest 5 minutes
+      plannerCategories.forEach(c => {
+        allocation[c.id] = Math.round(allocation[c.id] / 5) * 5;
+        if (allocation[c.id] < 0) allocation[c.id] = 0;
+        if (allocation[c.id] > c.maxPerDay) allocation[c.id] = c.maxPerDay;
+      });
+
+      // Create entries array
+      const entries = plannerCategories.map(c => ({
+        categoryId: c.id,
+        allocatedMinutes: allocation[c.id],
+        completed: false
       }));
-      return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
-    }
-    function computeDayTotals(d) {
-      let total = d.tasks.length, done = 0;
-      d.tasks.forEach((_, i) => { if (planState[planTaskId(d.day, i)]) done++; });
-      return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
-    }
-    function todayIso() {
-      const n = new Date();
-      return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`;
-    }
-    function updatePlanHeader() {
-      const totalDays = ioiPlan.reduce((sum, w) => sum + w.days.length, 0);
-      const firstIso = ioiPlan[0]?.days[0]?.iso;
-      const lastWeek = ioiPlan[ioiPlan.length - 1];
-      const lastIso = lastWeek?.days[lastWeek.days.length - 1]?.iso;
-      const sub = document.getElementById('planHeaderSubtitle');
-      if (sub && firstIso && lastIso) {
-        const fmt = (iso) => { const [y,m,d] = iso.split('-').map(Number); return `${d} ${monthNames[m-1]} ${y}`; };
-        sub.textContent = `${fmt(firstIso)} – ${fmt(lastIso)} · ${totalDays} days · Full C++/algorithms syllabus for IOI 2027`;
+
+      const totalAllocated = entries.reduce((sum, e) => sum + e.allocatedMinutes, 0);
+      const totalCompleted = 0;
+
+      // Save to Firestore
+      const docRef = dailyPlansRef.doc(plannerDateString(selectedPlannerDate));
+      const existingDoc = await docRef.get();
+      if (existingDoc.exists) {
+        // Preserve completions
+        const oldEntries = existingDoc.data().entries || [];
+        entries.forEach(newEntry => {
+          const old = oldEntries.find(o => o.categoryId === newEntry.categoryId);
+          if (old && old.completed) newEntry.completed = true;
+        });
       }
+
+      await docRef.set({
+        date: plannerDateString(selectedPlannerDate),
+        entries: entries,
+        totalAllocated: totalAllocated,
+        totalCompleted: totalCompleted,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      renderPlanner();
     }
-    function renderPlan() {
-      const container = document.getElementById('planContainer');
+
+    function renderPlanner() {
+      const container = document.getElementById('plannerPlanContainer');
       if (!container) return;
-      const today = todayIso();
-      if (planOpenDays.size === 0) {
-        ioiPlan.forEach(w => w.days.forEach(d => { if (d.iso === today) planOpenDays.add(d.day); }));
-      }
-      container.innerHTML = ioiPlan.map(w => `
-        <div class="plan-week">
-          <div class="plan-week-title">${w.week}</div>
-          ${w.days.map(d => {
-            const t = computeDayTotals(d);
-            const isToday = d.iso === today;
-            const isOpen = planOpenDays.has(d.day);
-            const allDone = t.total > 0 && t.done === t.total;
-            return `
-              <div class="plan-day ${isToday ? 'today' : ''} ${isOpen ? 'open' : ''} ${allDone ? 'all-done' : ''}" data-day="${d.day}">
-                <div class="plan-day-header" data-toggle="${d.day}">
-                  <div class="plan-day-title">
-                    <input type="checkbox" class="plan-day-toggle-all" data-toggleall="${d.day}" ${allDone ? 'checked' : ''} title="Mark all tasks in this day">
-                    <span class="plan-day-label">Day ${d.day}</span>
-                    <span class="plan-day-date">${d.date} · ~${Math.round((estimateDayMinutes(d) / 60) * 10) / 10}h</span>
-                  </div>
-                  <div class="plan-day-meta">
-                    <span>${t.done}/${t.total}</span>
-                    <div class="plan-day-mini"><div style="width:${t.pct}%"></div></div>
-                    <svg class="plan-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-                  </div>
-                </div>
-                <ul class="plan-tasks">
-                  ${d.tasks.map((task, i) => {
-                    const id = planTaskId(d.day, i);
-                    const checked = !!planState[id];
-                    return `<li class="plan-task ${checked ? 'done' : ''}" data-taskid="${id}">
-                        <input type="checkbox" ${checked ? 'checked' : ''}>
-                        <span class="plan-task-text">${escapeHtml(task)}</span>
-                      </li>`;
-                  }).join('')}
-                </ul>
-              </div>
-            `;
-          }).join('')}
-        </div>
-      `).join('');
-      container.querySelectorAll('.plan-day-header').forEach(h => {
-        h.addEventListener('click', (e) => {
-          if (e.target.classList.contains('plan-day-toggle-all')) return;
-          const dayNum = Number(h.dataset.toggle);
-          planOpenDays.has(dayNum) ? planOpenDays.delete(dayNum) : planOpenDays.add(dayNum);
-          renderPlan();
-        });
+      const dateStr = plannerDateString(selectedPlannerDate);
+      // Set date input
+      document.getElementById('plannerDateInput').value = dateStr;
+      // Fetch doc for selected date if not already subscribed
+      if (unsubPlannerDoc) unsubPlannerDoc();
+      unsubPlannerDoc = dailyPlansRef.doc(dateStr).onSnapshot(snap => {
+        plannerDocSnapshot = snap;
+        updatePlannerUI();
+      }, err => {
+        console.error('Planner doc subscription error:', err);
+        updatePlannerUI();
       });
-      container.querySelectorAll('.plan-day-toggle-all').forEach(cb => {
-        cb.addEventListener('click', (e) => e.stopPropagation());
+    }
+
+    function updatePlannerUI() {
+      const container = document.getElementById('plannerPlanContainer');
+      if (!container) return;
+      const doc = plannerDocSnapshot;
+      const totalAllocatedEl = document.getElementById('plannerTotalMin');
+      const totalCompletedEl = document.getElementById('plannerCompletedMin');
+      const progressFill = document.getElementById('plannerProgressFill');
+      const progressPct = document.getElementById('plannerProgressPct');
+      const planList = container;
+
+      if (!doc || !doc.exists || !doc.data() || !doc.data().entries || doc.data().entries.length === 0) {
+        container.innerHTML = `<p style="color: var(--text-secondary); font-size:0.9rem;">No plan yet. Click "Generate Plan" to create today's schedule.</p>`;
+        totalAllocatedEl.textContent = '0';
+        totalCompletedEl.textContent = '0';
+        progressFill.style.width = '0%';
+        progressPct.textContent = '0%';
+        updatePlannerDashboardWidget(0, 0);
+        return;
+      }
+
+      const data = doc.data();
+      const entries = data.entries || [];
+      const totalAllocated = entries.reduce((sum, e) => sum + e.allocatedMinutes, 0);
+      const totalCompleted = entries.filter(e => e.completed).reduce((sum, e) => sum + e.allocatedMinutes, 0);
+      const pct = totalAllocated > 0 ? Math.round((totalCompleted / totalAllocated) * 100) : 0;
+
+      // Update progress header
+      totalAllocatedEl.textContent = totalAllocated;
+      totalCompletedEl.textContent = totalCompleted;
+      progressFill.style.width = pct + '%';
+      progressPct.textContent = pct + '%';
+
+      // Render entries
+      let html = '<ul class="todo-list" style="margin-top:0;">';
+      entries.forEach(entry => {
+        const cat = plannerCategories.find(c => c.id === entry.categoryId);
+        if (!cat) return;
+        const checked = entry.completed ? 'checked' : '';
+        const doneClass = entry.completed ? 'done' : '';
+        html += `
+          <li class="todo-item ${doneClass}" data-category="${entry.categoryId}">
+            <input type="checkbox" class="todo-checkbox planner-checkbox" ${checked}>
+            <span class="todo-text">${escapeHtml(cat.label)} <span style="color:var(--text-secondary); font-size:0.7rem;">— ${entry.allocatedMinutes} min</span></span>
+          </li>
+        `;
+      });
+      html += '</ul>';
+      container.innerHTML = html;
+
+      // Add event listeners
+      container.querySelectorAll('.planner-checkbox').forEach(cb => {
         cb.addEventListener('change', (e) => {
-          e.stopPropagation();
-          const dayNum = Number(cb.dataset.toggleall);
-          const day = findDayByNumber(dayNum);
-          if (!day) return;
-          const newVal = cb.checked;
-          day.tasks.forEach((_, i) => { planState[planTaskId(dayNum, i)] = newVal; });
-          persistPlanState();
-          renderPlan();
+          const categoryId = e.target.closest('li').dataset.category;
+          const checked = e.target.checked;
+          const docRef = dailyPlansRef.doc(plannerDateString(selectedPlannerDate));
+          docRef.get().then(doc => {
+            if (doc.exists) {
+              const entries = doc.data().entries || [];
+              const updatedEntries = entries.map(entry => {
+                if (entry.categoryId === categoryId) {
+                  return { ...entry, completed: checked };
+                }
+                return entry;
+              });
+              const totalCompleted = updatedEntries.filter(e => e.completed).reduce((sum, e) => sum + e.allocatedMinutes, 0);
+              docRef.update({ entries: updatedEntries, totalCompleted: totalCompleted });
+            }
+          });
         });
       });
-      container.querySelectorAll('.plan-task').forEach(el => {
-        const id = el.dataset.taskid;
-        const box = el.querySelector('input[type="checkbox"]');
-        const toggle = (e) => {
-          e.stopPropagation();
-          const newVal = !planState[id];
-          planState[id] = newVal;
-          box.checked = newVal;
-          el.classList.toggle('done', newVal);
-          persistPlanState();
-          updatePlanProgressUI();
-        };
-        el.addEventListener('click', (e) => { if (e.target.tagName !== 'INPUT') toggle(e); });
-        box.addEventListener('change', () => {
-          planState[id] = box.checked;
-          el.classList.toggle('done', box.checked);
-          persistPlanState();
-          updatePlanProgressUI();
-        });
-      });
-      updatePlanProgressUI(false);
+
+      // Update dashboard widget
+      updatePlannerDashboardWidget(totalCompleted, totalAllocated);
     }
-    function updatePlanProgressUI(rerenderMeta = true) {
-      const { total, done, pct } = computePlanTotals();
-      const fill = document.getElementById('planProgressFill');
-      const pctEl = document.getElementById('planProgressPct');
-      const doneEl = document.getElementById('planProgressDone');
-      const totalEl = document.getElementById('planProgressTotal');
-      if (fill) fill.style.width = pct + '%';
-      if (pctEl) pctEl.textContent = pct + '%';
-      if (doneEl) doneEl.textContent = done;
-      if (totalEl) totalEl.textContent = total;
-      const ring = document.getElementById('planRingFill');
-      const ringTxt = document.getElementById('planPercent');
-      const dc = document.getElementById('planDoneCount');
-      const tc = document.getElementById('planTotalCount');
+
+    function updatePlannerDashboardWidget(completedMin, totalMin) {
+      const ringFill = document.getElementById('plannerRingFill');
+      const ringText = document.getElementById('plannerPercent');
+      const doneMinEl = document.getElementById('plannerDoneMin');
+      const totalMinEl = document.getElementById('plannerTotalMinWidget');
       const circumference = 2 * Math.PI * 42;
-      if (ring) ring.style.strokeDashoffset = circumference - (pct / 100) * circumference;
-      if (ringTxt) ringTxt.textContent = pct + '%';
-      if (dc) dc.textContent = done;
-      if (tc) tc.textContent = total;
-      if (rerenderMeta) {
-        ioiPlan.forEach(w => w.days.forEach(d => {
-          const el = document.querySelector(`.plan-day[data-day="${d.day}"]`);
-          if (!el) return;
-          const t = computeDayTotals(d);
-          const meta = el.querySelector('.plan-day-meta span');
-          const mini = el.querySelector('.plan-day-mini > div');
-          const toggleAll = el.querySelector('.plan-day-toggle-all');
-          if (meta) meta.textContent = `${t.done}/${t.total}`;
-          if (mini) mini.style.width = t.pct + '%';
-          const allDone = t.total > 0 && t.done === t.total;
-          if (toggleAll) toggleAll.checked = allDone;
-          el.classList.toggle('all-done', allDone);
-        }));
+      if (ringFill) {
+        const pct = totalMin > 0 ? (completedMin / totalMin) * 100 : 0;
+        ringFill.style.strokeDashoffset = circumference - (pct / 100) * circumference;
+        ringText.textContent = Math.round(pct) + '%';
+        doneMinEl.textContent = completedMin;
+        totalMinEl.textContent = totalMin;
       }
     }
-    let planSaveTimer = null;
-    function persistPlanState() {
-      clearTimeout(planSaveTimer);
-      planSaveTimer = setTimeout(() => {
-        planStateRef.set({ state: planState, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }).catch(err => console.error('Plan save failed', err));
-      }, 300);
+
+    function renderPlannerHistory() {
+      const container = document.getElementById('plannerHistoryContainer');
+      if (!container) return;
+      if (plannerHistoryCache.length === 0) {
+        container.innerHTML = `<p style="color: var(--text-secondary); font-size:0.85rem;">No history yet. Generate your first plan!</p>`;
+        return;
+      }
+      // Sort descending (latest first)
+      const sorted = [...plannerHistoryCache].sort((a,b) => b.date.localeCompare(a.date));
+      let html = '';
+      sorted.forEach(doc => {
+        const totalCompleted = doc.entries.filter(e => e.completed).reduce((sum, e) => sum + e.allocatedMinutes, 0);
+        const totalAllocated = doc.entries.reduce((sum, e) => sum + e.allocatedMinutes, 0);
+        const pct = totalAllocated > 0 ? Math.round((totalCompleted / totalAllocated) * 100) : 0;
+        html += `
+          <div class="history-item" style="background: #050505; border: 1px solid var(--border); padding: 0.6rem 1rem; margin-bottom:0.5rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+              <span style="font-size:0.9rem; color:var(--text);">${doc.date}</span>
+              <span style="font-size:0.75rem; color:var(--text-secondary);">${totalCompleted}/${totalAllocated} min · ${pct}%</span>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
     }
-    document.getElementById('planProgressWidget').addEventListener('click', () => {
-      document.querySelector('.sidebar-btn[data-view="cp"]').click();
+
+    // Setup planner event listeners
+    document.getElementById('plannerGenerateBtn').addEventListener('click', generatePlannerPlan);
+    document.getElementById('plannerDateInput').addEventListener('change', () => {
+      selectedPlannerDate = new Date(document.getElementById('plannerDateInput').value + 'T00:00:00');
+      renderPlanner();
+      loadPlannerHistory();
     });
 
-    /* ===== CP Today's Session ===== */
-    let lastCPSession = [];
-    function flattenCPTasks() {
-      const flat = [];
-      ioiPlan.forEach(w => {
-        w.days.forEach(d => {
-          const dayMinutes = estimateDayMinutes(d);
-          const perTaskTime = dayMinutes / d.tasks.length;
-          d.tasks.forEach((task, i) => {
-            flat.push({ day: d.day, date: d.date, text: task, minutes: perTaskTime, id: planTaskId(d.day, i) });
-          });
-        });
-      });
-      return flat;
-    }
-    function planCPSession() {
-      const hoursInput = document.getElementById('cpHoursInput');
-      const hours = Math.max(0, parseFloat(hoursInput.value) || 0);
-      const budgetMin = hours * 60;
-      const flat = flattenCPTasks().filter(t => !planState[t.id]);
-      let cum = 0;
-      const session = [];
-      for (const t of flat) {
-        if (cum >= budgetMin && session.length > 0) break;
-        session.push(t);
-        cum += t.minutes;
-      }
-      lastCPSession = session;
-      renderCPSession();
-    }
-    function renderCPSession() {
-      const list = document.getElementById('cpSessionList');
-      if (!list) return;
-      if (lastCPSession.length === 0) {
-        list.innerHTML = `<li style="color: var(--text-secondary); font-size: 0.82rem; padding: 0.5rem 0;">Pick your hours and hit "Plan My Session" to get today's task list.</li>`;
-        return;
-      }
-      list.innerHTML = lastCPSession.map(t => {
-        const checked = !!planState[t.id];
-        return `
-          <li class="todo-item ${checked ? 'done' : ''}" data-sessionid="${t.id}">
-            <input type="checkbox" class="todo-checkbox" ${checked ? 'checked' : ''}>
-            <span class="todo-text">${escapeHtml(t.text)} <span style="color:var(--text-secondary); font-size:0.7rem;">— Day ${t.day} · ${escapeHtml(t.date)}</span></span>
-          </li>
-        `;
-      }).join('');
-      list.querySelectorAll('.todo-item').forEach(li => {
-        const id = li.dataset.sessionid;
-        const box = li.querySelector('.todo-checkbox');
-        box.addEventListener('change', () => {
-          planState[id] = box.checked;
-          li.classList.toggle('done', box.checked);
-          persistPlanState();
-          updatePlanProgressUI();
-          renderPlan();
-        });
-      });
-    }
-
-    /* ===== Hacking / CTF Roadmap ===== */
-    const hackingPlan = [
-      { stage: "Stage 0 · Mindset & Ground Rules", topics: [
-        { id: "s0", title: "Mindset & Ground Rules", time: 60, tasks: [
-          "Understand hacker (problem solver / security researcher) vs criminal (unauthorized access)",
-          "Learn the concept of authorization — only test systems you own or have written permission to test",
-          "Learn what a CTF (Capture The Flag) competition is",
-          "Learn what bug bounty programs are (HackerOne, Bugcrowd)",
-          "Get comfortable with the idea that this field never stops — always learning new tools and bugs"
-        ]}
-      ]},
-      { stage: "Stage 1 · Computer Fundamentals", topics: [
-        { id: "s1", title: "Computer Fundamentals", time: 180, tasks: [
-          "How a computer works: CPU, RAM, storage, motherboard, I/O basics",
-          "Binary, hexadecimal, and ASCII — number systems and conversions",
-          "How data is stored: bits, bytes, files, file systems (NTFS, ext4)",
-          "Operating systems overview: what an OS does (Windows, Linux, macOS)",
-          "Boot process: BIOS/UEFI, bootloader, kernel, init",
-          "Processes, threads, memory management basics",
-          "What a shell / command line is and why hackers live in it"
-        ]}
-      ]},
-      { stage: "Stage 2 · Linux", topics: [
-        { id: "s2a", title: "Linux Navigation & Files", time: 240, tasks: [
-          "Install a Linux distro in a VM (VirtualBox/VMware) — start with Ubuntu or Debian",
-          "Learn the filesystem hierarchy (/etc, /var, /home, /bin, /usr...)",
-          "Basic navigation: pwd, ls, cd, cp, mv, rm, mkdir, touch",
-          "File permissions: chmod, chown, the rwx/octal system, sudo/root",
-          "Text processing: cat, less, more, head, tail, grep, sed, awk, cut",
-          "Package management: apt, dpkg (Debian/Ubuntu family)"
-        ]},
-        { id: "s2b", title: "Linux Processes & Networking", time: 240, tasks: [
-          "Process management: ps, top, htop, kill, jobs, systemctl",
-          "Networking basics on Linux: ifconfig/ip, netstat, ss, ping, curl, wget, dig, nslookup, traceroute",
-          "Shell scripting basics: variables, loops, conditionals, functions",
-          "Environment variables, PATH, aliases, .bashrc",
-          "SSH: connecting, keys, tunneling basics"
-        ]},
-        { id: "s2c", title: "Linux Admin & Pentest Distros", time: 180, tasks: [
-          "Users & groups management (useradd, passwd, /etc/passwd, /etc/shadow)",
-          "Cron jobs and scheduled tasks",
-          "Archiving/compression: tar, gzip, zip",
-          "Log files: where they live (/var/log) and how to read them",
-          "Install and get comfortable with Kali Linux or Parrot OS"
-        ]}
-      ]},
-      { stage: "Stage 3 · Networking Fundamentals", topics: [
-        { id: "s3a", title: "Core Networking Concepts", time: 240, tasks: [
-          "What a network is; LAN vs WAN vs the Internet",
-          "The OSI model — all 7 layers, know them cold",
-          "The TCP/IP model and how it maps to OSI",
-          "IP addressing: IPv4 structure, classes, subnetting, CIDR notation",
-          "IPv6 basics",
-          "MAC addresses and how ARP works",
-          "Routers, switches, hubs — what each actually does",
-          "TCP vs UDP: three-way handshake, ports, reliability differences",
-          "Common ports and protocols: memorize the standard list (21 FTP, 22 SSH, 23 Telnet, 25 SMTP, 53 DNS, 80 HTTP, 443 HTTPS, 445 SMB, 3389 RDP, etc.)"
-        ]},
-        { id: "s3b", title: "Protocols Deep Dive", time: 240, tasks: [
-          "DNS: how domain resolution works, record types (A, AAAA, MX, TXT, NS, CNAME), zone transfers",
-          "DHCP: how devices get IP addresses automatically",
-          "HTTP/HTTPS: methods (GET/POST/PUT/DELETE), status codes, headers, cookies, sessions",
-          "TLS/SSL: how encryption in transit works, certificates, handshake",
-          "NAT and how it lets private networks reach the internet",
-          "VPNs: what they do and common protocols (OpenVPN, WireGuard)",
-          "Firewalls: stateful vs stateless, basic iptables rules"
-        ]},
-        { id: "s3c", title: "Packet Analysis & Home Lab", time: 180, tasks: [
-          "Proxies: forward vs reverse proxies",
-          "Wireshark: capturing and reading packets, filters",
-          "Build a home lab network with a router, a couple VMs, and practice sniffing your own traffic"
-        ]}
-      ]},
-      { stage: "Stage 4 · Programming & Scripting", topics: [
-        { id: "s4a", title: "Python for Hacking", time: 300, tasks: [
-          "Python syntax, data types, control flow, functions",
-          "File I/O in Python",
-          "The socket module (raw networking)",
-          "The requests module (web requests)",
-          "Regular expressions (re module)",
-          "Write a simple port scanner, brute forcer, and parser"
-        ]},
-        { id: "s4b", title: "Bash, C & Assembly", time: 240, tasks: [
-          "Deepen Bash scripting from the Linux stage",
-          "C: understand memory, pointers, and the stack (essential for binary exploitation later)",
-          "Basic x86/x86-64 Assembly — read simple disassembled code"
-        ]},
-        { id: "s4c", title: "SQL, Web Languages, Git & CP Practice", time: 240, tasks: [
-          "SQL — SELECT/INSERT/UPDATE/DELETE, joins, how queries are built",
-          "JavaScript — enough to read/write scripts that run in a browser",
-          "PHP — enough to read server-side code",
-          "Git & GitHub — version control, cloning repos, basic workflow",
-          "Keep practicing LeetCode/Codeforces to keep programming logic sharp"
-        ]}
-      ]},
-      { stage: "Stage 5 · Security Fundamentals", topics: [
-        { id: "s5a", title: "Core Security Concepts", time: 180, tasks: [
-          "CIA triad: Confidentiality, Integrity, Availability",
-          "Authentication vs Authorization vs Accounting (AAA)",
-          "Threats, vulnerabilities, exploits, risk — how they relate",
-          "Types of attackers: black hat, white hat, grey hat, script kiddie, APT, insider threat",
-          "Common attack categories overview: malware, phishing, DoS/DDoS, MITM, social engineering, injection"
-        ]},
-        { id: "s5b", title: "Cryptography Basics", time: 150, tasks: [
-          "Symmetric vs asymmetric encryption",
-          "Hashing (MD5, SHA family) and why hashes aren't 'encryption'",
-          "Digital signatures",
-          "Public key infrastructure (PKI)",
-          "Common attacks: weak hashing, hash cracking, rainbow tables"
-        ]},
-        { id: "s5c", title: "Access Control & Frameworks", time: 120, tasks: [
-          "Access control models: DAC, MAC, RBAC",
-          "Security policies, defense-in-depth, least privilege principle",
-          "The Cyber Kill Chain and MITRE ATT&CK framework",
-          "Basics of ISO 27001, NIST, OWASP as standards"
-        ]}
-      ]},
-      { stage: "Stage 6 · Web Application Security", topics: [
-        { id: "s6a", title: "Web Fundamentals & OWASP Top 10", time: 180, tasks: [
-          "How web apps work end to end: browser -> DNS -> server -> DB",
-          "HTML/CSS basics (enough to read page source)",
-          "Cookies, sessions, and JWTs",
-          "Study each item of the OWASP Top 10 at a high level"
-        ]},
-        { id: "s6b", title: "Injection & XSS", time: 240, tasks: [
-          "SQL Injection in depth: classic, blind, time-based, UNION-based",
-          "Cross-Site Scripting (XSS): reflected, stored, DOM-based",
-          "Cross-Site Request Forgery (CSRF)"
-        ]},
-        { id: "s6c", title: "File & Access Vulnerabilities", time: 240, tasks: [
-          "Insecure Direct Object References (IDOR)",
-          "File upload vulnerabilities",
-          "Local/Remote File Inclusion (LFI/RFI)",
-          "XML External Entity (XXE) attacks",
-          "Server-Side Template Injection (SSTI)"
-        ]},
-        { id: "s6d", title: "Auth, APIs & Web Tools", time: 210, tasks: [
-          "Authentication bypass techniques",
-          "API security basics (REST, GraphQL common issues)",
-          "Learn Burp Suite (community then pro), OWASP ZAP",
-          "Learn sqlmap, Nikto, ffuf/gobuster (directory brute forcing)",
-          "Browser DevTools mastery (Network tab, Console, Storage)"
-        ]}
-      ]},
-      { stage: "Stage 7 · Network / Infrastructure Pentesting", topics: [
-        { id: "s7a", title: "Recon & Scanning", time: 210, tasks: [
-          "Reconnaissance/OSINT: whois, Google dorking, Shodan, theHarvester, Maltego basics",
-          "Nmap in depth: TCP/UDP scans, service/version detection, NSE scripts, evasion",
-          "Enumeration: SMB, NFS, SNMP, LDAP, FTP",
-          "Vulnerability scanning: Nessus, OpenVAS"
-        ]},
-        { id: "s7b", title: "Exploitation & Password Attacks", time: 210, tasks: [
-          "Exploitation frameworks: Metasploit — modules, payloads, meterpreter basics",
-          "Password attacks: dictionary vs brute-force vs hybrid",
-          "Tools: Hydra, John the Ripper, Hashcat, wordlists (rockyou.txt)",
-          "Understand credential stuffing"
-        ]},
-        { id: "s7c", title: "Windows/AD & Privilege Escalation", time: 240, tasks: [
-          "Windows-specific attacks: Active Directory basics, Kerberos, pass-the-hash, BloodHound",
-          "Linux privesc: SUID binaries, cron jobs, kernel exploits, misconfigurations",
-          "Windows privesc: services, registry, tokens"
-        ]},
-        { id: "s7d", title: "Pivoting, Wireless & Social Engineering", time: 210, tasks: [
-          "Pivoting and lateral movement basics",
-          "Post-exploitation and persistence concepts",
-          "Wireless security: WPA2/WPA3 concepts, handshake capture, Aircrack-ng (own network only)",
-          "Social engineering theory: phishing, pretexting"
-        ]}
-      ]},
-      { stage: "Stage 8 · Binary Exploitation & Malware Analysis", topics: [
-        { id: "s8a", title: "C/Assembly & Memory Deep Dive", time: 180, tasks: [
-          "Deepen C and Assembly knowledge",
-          "Understand the stack, heap, and registers in depth"
-        ]},
-        { id: "s8b", title: "Buffer Overflows & Protections", time: 240, tasks: [
-          "Buffer overflow fundamentals — stack-based overflow from scratch",
-          "Memory protections conceptually: ASLR, DEP/NX, stack canaries, ROP chains"
-        ]},
-        { id: "s8c", title: "Reverse Engineering Tools", time: 210, tasks: [
-          "Reverse engineering fundamentals: static vs dynamic analysis",
-          "Tools: Ghidra, IDA Free, x64dbg, GDB with pwndbg/GEF"
-        ]},
-        { id: "s8d", title: "Malware Analysis & Fuzzing", time: 180, tasks: [
-          "Basics of malware analysis: sandboxing, behavioral analysis, static analysis (isolated VMs only)",
-          "Fuzzing fundamentals: what fuzzers do, tools like AFL++"
-        ]}
-      ]},
-      { stage: "Stage 9 · Certifications", topics: [
-        { id: "s9", title: "Certification Path", time: 120, tasks: [
-          "CompTIA IT Fundamentals / A+ (only if computer fundamentals feel shaky)",
-          "CompTIA Network+ (solidifies networking)",
-          "CompTIA Security+ (common entry cert)",
-          "eJPT (Junior Penetration Tester) — great practical first cert",
-          "PNPT (Practical Network Penetration Tester)",
-          "OSCP (Offensive Security Certified Professional) — major milestone goal",
-          "Later specialize: OSWE (web), OSEP (evasion), OSED (exploit dev), GXPN, CRTP (AD)"
-        ]}
-      ]},
-      { stage: "Stage 10 · Practice Platforms", topics: [
-        { id: "s10", title: "Legal Practice Platforms", time: 150, tasks: [
-          "TryHackMe — start with the Pre Security path",
-          "HackTheBox — move here once comfortable working independently",
-          "PortSwigger Web Security Academy — best free resource for web vulns",
-          "OverTheWire (Bandit wargame) — Linux command line drills",
-          "PicoCTF — beginner-friendly CTF archive",
-          "VulnHub — downloadable vulnerable VMs",
-          "DVWA (Damn Vulnerable Web Application) — practice web attacks locally",
-          "CTFtime.org — find live CTF competitions to join a team for",
-          "Crackmes.one — reverse engineering practice challenges"
-        ]}
-      ]},
-      { stage: "Stage 11 · Community, Habits & Staying Current", topics: [
-        { id: "s11", title: "Community & Ongoing Habits", time: 120, tasks: [
-          "Follow security news: The Hacker News, BleepingComputer, Krebs on Security",
-          "Read CVE writeups and disclosed reports on HackerOne's public disclosure list",
-          "Join Discord/forums for TryHackMe, HackTheBox, and local CTF teams",
-          "Watch DEF CON and Black Hat talks (many free on YouTube)",
-          "Start a write-up blog/GitHub of machines and CTFs solved",
-          "Register on HackerOne/Bugcrowd once solid enough for real bug bounty hunting",
-          "Keep sharpening competitive programming (LeetCode/Codeforces/IOI) in parallel"
-        ]}
-      ]}
-    ];
-    let hackingState = {};
-    let hackOpenTopics = new Set();
-    const hackingPlanStateRef = db.collection("hackingPlan").doc("state");
-    let unsubHacking = null;
-    let lastHackSession = [];
-
-    function hackTaskId(topicId, idx) { return `h-${topicId}-${idx}`; }
-    function findHackTopic(topicId) {
-      for (const stage of hackingPlan) {
-        for (const topic of stage.topics) { if (topic.id === topicId) return topic; }
-      }
-      return null;
-    }
-    function flattenHackTasks() {
-      const flat = [];
-      hackingPlan.forEach(stage => {
-        stage.topics.forEach(topic => {
-          const perTaskTime = topic.time / topic.tasks.length;
-          topic.tasks.forEach((task, i) => {
-            flat.push({ topicId: topic.id, topicTitle: topic.title, stageTitle: stage.stage, idx: i, text: task, minutes: perTaskTime, id: hackTaskId(topic.id, i) });
-          });
-        });
-      });
-      return flat;
-    }
-    function computeHackTotals() {
-      const flat = flattenHackTasks();
-      const total = flat.length;
-      const done = flat.filter(t => hackingState[t.id]).length;
-      return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
-    }
-    function computeHackTopicTotals(topic) {
-      let total = topic.tasks.length, done = 0;
-      topic.tasks.forEach((_, i) => { if (hackingState[hackTaskId(topic.id, i)]) done++; });
-      return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
-    }
-    function renderHackingPlan() {
-      const container = document.getElementById('hackPlanContainer');
-      if (!container) return;
-      container.innerHTML = hackingPlan.map(stage => `
-        <div class="plan-week">
-          <div class="plan-week-title">${stage.stage}</div>
-          ${stage.topics.map(topic => {
-            const t = computeHackTopicTotals(topic);
-            const isOpen = hackOpenTopics.has(topic.id);
-            const allDone = t.total > 0 && t.done === t.total;
-            return `
-              <div class="plan-day ${isOpen ? 'open' : ''} ${allDone ? 'all-done' : ''}" data-topic="${topic.id}">
-                <div class="plan-day-header" data-toggle="${topic.id}">
-                  <div class="plan-day-title">
-                    <input type="checkbox" class="plan-day-toggle-all" data-toggleall="${topic.id}" ${allDone ? 'checked' : ''} title="Mark all tasks in this topic">
-                    <span class="plan-day-label">${escapeHtml(topic.title)}</span>
-                    <span class="plan-day-date">~${Math.round((topic.time / 60) * 10) / 10}h</span>
-                  </div>
-                  <div class="plan-day-meta">
-                    <span>${t.done}/${t.total}</span>
-                    <div class="plan-day-mini"><div style="width:${t.pct}%"></div></div>
-                    <svg class="plan-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-                  </div>
-                </div>
-                <ul class="plan-tasks">
-                  ${topic.tasks.map((task, i) => {
-                    const id = hackTaskId(topic.id, i);
-                    const checked = !!hackingState[id];
-                    return `<li class="plan-task ${checked ? 'done' : ''}" data-taskid="${id}">
-                        <input type="checkbox" ${checked ? 'checked' : ''}>
-                        <span class="plan-task-text">${escapeHtml(task)}</span>
-                      </li>`;
-                  }).join('')}
-                </ul>
-              </div>
-            `;
-          }).join('')}
-        </div>
-      `).join('');
-
-      container.querySelectorAll('.plan-day-header').forEach(h => {
-        h.addEventListener('click', (e) => {
-          if (e.target.classList.contains('plan-day-toggle-all')) return;
-          const id = h.dataset.toggle;
-          hackOpenTopics.has(id) ? hackOpenTopics.delete(id) : hackOpenTopics.add(id);
-          renderHackingPlan();
-        });
-      });
-      container.querySelectorAll('.plan-day-toggle-all').forEach(cb => {
-        cb.addEventListener('click', (e) => e.stopPropagation());
-        cb.addEventListener('change', (e) => {
-          e.stopPropagation();
-          const topicId = cb.dataset.toggleall;
-          const topic = findHackTopic(topicId);
-          if (!topic) return;
-          const newVal = cb.checked;
-          topic.tasks.forEach((_, i) => { hackingState[hackTaskId(topicId, i)] = newVal; });
-          persistHackState();
-          renderHackingPlan();
-          renderHackSession();
-        });
-      });
-      container.querySelectorAll('.plan-task').forEach(el => {
-        const id = el.dataset.taskid;
-        const box = el.querySelector('input[type="checkbox"]');
-        const toggle = (e) => {
-          e.stopPropagation();
-          const newVal = !hackingState[id];
-          hackingState[id] = newVal;
-          box.checked = newVal;
-          el.classList.toggle('done', newVal);
-          persistHackState();
-          updateHackProgressUI();
-          renderHackSession();
-        };
-        el.addEventListener('click', (e) => { if (e.target.tagName !== 'INPUT') toggle(e); });
-        box.addEventListener('change', () => {
-          hackingState[id] = box.checked;
-          el.classList.toggle('done', box.checked);
-          persistHackState();
-          updateHackProgressUI();
-          renderHackSession();
-        });
-      });
-      updateHackProgressUI(false);
-    }
-    function updateHackProgressUI(rerenderMeta = true) {
-      const { total, done, pct } = computeHackTotals();
-      const fill = document.getElementById('hackProgressFill');
-      const pctEl = document.getElementById('hackProgressPct');
-      const doneEl = document.getElementById('hackProgressDone');
-      const totalEl = document.getElementById('hackProgressTotal');
-      if (fill) fill.style.width = pct + '%';
-      if (pctEl) pctEl.textContent = pct + '%';
-      if (doneEl) doneEl.textContent = done;
-      if (totalEl) totalEl.textContent = total;
-      if (rerenderMeta) {
-        hackingPlan.forEach(stage => stage.topics.forEach(topic => {
-          const el = document.querySelector(`.plan-day[data-topic="${topic.id}"]`);
-          if (!el) return;
-          const t = computeHackTopicTotals(topic);
-          const meta = el.querySelector('.plan-day-meta span');
-          const mini = el.querySelector('.plan-day-mini > div');
-          const toggleAll = el.querySelector('.plan-day-toggle-all');
-          if (meta) meta.textContent = `${t.done}/${t.total}`;
-          if (mini) mini.style.width = t.pct + '%';
-          const allDone = t.total > 0 && t.done === t.total;
-          if (toggleAll) toggleAll.checked = allDone;
-          el.classList.toggle('all-done', allDone);
-        }));
-      }
-    }
-    let hackSaveTimer = null;
-    function persistHackState() {
-      clearTimeout(hackSaveTimer);
-      hackSaveTimer = setTimeout(() => {
-        hackingPlanStateRef.set({ state: hackingState, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }).catch(err => console.error('Hacking plan save failed', err));
-      }, 300);
-    }
-    function planHackSession() {
-      const hoursInput = document.getElementById('hackHoursInput');
-      const hours = Math.max(0, parseFloat(hoursInput.value) || 0);
-      const budgetMin = hours * 60;
-      const flat = flattenHackTasks().filter(t => !hackingState[t.id]);
-      let cum = 0;
-      const session = [];
-      for (const t of flat) {
-        if (cum >= budgetMin && session.length > 0) break;
-        session.push(t);
-        cum += t.minutes;
-      }
-      lastHackSession = session;
-      renderHackSession();
-    }
-    function renderHackSession() {
-      const list = document.getElementById('hackSessionList');
-      if (!list) return;
-      lastHackSession = lastHackSession.filter(t => t); // keep list stable across re-renders
-      if (lastHackSession.length === 0) {
-        list.innerHTML = `<li style="color: var(--text-secondary); font-size: 0.82rem; padding: 0.5rem 0;">Pick your hours and hit "Plan My Session" to get today's task list.</li>`;
-        return;
-      }
-      list.innerHTML = lastHackSession.map(t => {
-        const checked = !!hackingState[t.id];
-        return `
-          <li class="todo-item ${checked ? 'done' : ''}" data-sessionid="${t.id}">
-            <input type="checkbox" class="todo-checkbox" ${checked ? 'checked' : ''}>
-            <span class="todo-text">${escapeHtml(t.text)} <span style="color:var(--text-secondary); font-size:0.7rem;">— ${escapeHtml(t.topicTitle)}</span></span>
-          </li>
-        `;
-      }).join('');
-      list.querySelectorAll('.todo-item').forEach(li => {
-        const id = li.dataset.sessionid;
-        const box = li.querySelector('.todo-checkbox');
-        box.addEventListener('change', () => {
-          hackingState[id] = box.checked;
-          li.classList.toggle('done', box.checked);
-          persistHackState();
-          updateHackProgressUI();
-          renderHackingPlan();
-        });
-      });
-    }
-
+    // ===== AUTH & DATA LISTENERS =====
     async function runDailyCleanup() {
       try {
         const today = new Date().toDateString();
@@ -1585,6 +1226,8 @@
       } catch (e) { console.warn("Cleanup deferred:", e); }
     }
 
+    let unsubHistory = null;
+
     function attachDataListeners() {
       unsubTodos = todosRef.orderBy("createdAt", "asc").onSnapshot(renderTodos);
       unsubCalendar = calendarRef.orderBy("createdAt", "asc").onSnapshot(snapshot => {
@@ -1593,25 +1236,18 @@
         renderCalendar();
         updateEventNoteWidget();
       });
-      unsubPlan = planStateRef.onSnapshot(snap => {
-        const data = snap.exists ? snap.data() : null;
-        planState = (data && data.state) || {};
-        renderPlan();
-      }, err => { console.error('Plan subscribe failed', err); renderPlan(); });
-      unsubHacking = hackingPlanStateRef.onSnapshot(snap => {
-        const data = snap.exists ? snap.data() : null;
-        hackingState = (data && data.state) || {};
-        renderHackingPlan();
-        renderHackSession();
-      }, err => { console.error('Hacking plan subscribe failed', err); renderHackingPlan(); });
+      // Planner listeners are set when rendering
+      renderPlanner();
+      loadPlannerHistory();
     }
     function detachDataListeners() {
       if (unsubTodos) unsubTodos();
       if (unsubCalendar) unsubCalendar();
-      if (unsubPlan) unsubPlan();
-      if (unsubHacking) unsubHacking();
-      unsubTodos = unsubCalendar = unsubPlan = unsubHacking = null;
+      if (unsubPlannerDoc) unsubPlannerDoc();
+      if (unsubHistory) { unsubHistory(); unsubHistory = null; }
+      unsubTodos = unsubCalendar = unsubPlannerDoc = null;
     }
+
     function authenticate() {
       const email = document.getElementById('loginEmail').value.trim();
       const pass = document.getElementById('loginPass').value;
@@ -1641,14 +1277,6 @@
       if (emailInput) emailInput.onkeydown = (e) => { if (e.key === 'Enter') authenticate(); };
       const logoutBtn = document.getElementById('logoutBtn');
       if (logoutBtn) logoutBtn.onclick = () => auth.signOut();
-      const hackBtn = document.getElementById('hackPlanBtn');
-      const hackHours = document.getElementById('hackHoursInput');
-      if (hackBtn) hackBtn.onclick = planHackSession;
-      if (hackHours) hackHours.onkeydown = (e) => { if (e.key === 'Enter') planHackSession(); };
-      const cpBtn = document.getElementById('cpPlanBtn');
-      const cpHours = document.getElementById('cpHoursInput');
-      if (cpBtn) cpBtn.onclick = planCPSession;
-      if (cpHours) cpHours.onkeydown = (e) => { if (e.key === 'Enter') planCPSession(); };
     }
 
     auth.onAuthStateChanged(user => {
@@ -1668,6 +1296,7 @@
       }
     });
 
+    // ===== SCREENSCAPE =====
     const ssTitle = document.getElementById('screenscapeTitle');
     const ssId = document.getElementById('screenscapeId');
     const ssType = document.getElementById('screenscapeType');
@@ -1679,9 +1308,6 @@
     const manualSaveBtn = document.getElementById('manualSaveBtn');
     const historyContainer = document.getElementById('watchHistoryContainer');
     const saveStatus = document.getElementById('saveStatus');
-
-    let unsubHistory = null;
-    let latestDocId = null;
 
     function buildScreenscapeURL() {
       let id = ssId.value.trim();
@@ -1887,18 +1513,18 @@
     });
     manualSaveBtn.addEventListener('click', sendProgressRequest);
 
+    // ===== INIT =====
     function init() {
       const now = new Date();
       currentDay = dayOrder[now.getDay()];
+      selectedPlannerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      document.getElementById('plannerDateInput').value = plannerDateString(selectedPlannerDate);
       renderTimeline();
       updateDateTime();
       setInterval(updateDateTime, 1000);
-      updatePlanHeader();
-      renderPlan();
-      renderDayDetail(selectedCalDate);
-      renderHackingPlan();
-      renderHackSession();
-      renderCPSession();
+      renderCalendar();
+      renderPlanner();
+      loadPlannerHistory();
     }
     init();
     setupEvents();
