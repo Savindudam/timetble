@@ -557,7 +557,7 @@
         </div>
 
         <div style="position: relative; width: 100%; padding-top: 56.25%; background: #000; border: 1px solid var(--border); margin-bottom: 1.5rem;">
-          <iframe id="screenscapeIframe" src="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="autoplay; picture-in-picture" allowfullscreen></iframe>
+          <iframe id="screenscapeIframe" src="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="autoplay; picture-in-picture"></iframe>
         </div>
 
         <div class="card-widget" style="padding: 1.5rem; margin-top: 0.5rem;">
@@ -609,6 +609,89 @@
     const db = firebase.firestore();
     const auth = firebase.auth();
     const watchHistoryRef = db.collection("watchHistory");
+
+    // ==================== AUTH BOOTSTRAP ====================
+    // Authentication is wired immediately after Firebase initializes so a later
+    // dashboard error can never disable the login button.
+    const loginOverlay = document.getElementById("loginOverlay");
+    const loginEmail = document.getElementById("loginEmail");
+    const loginPass = document.getElementById("loginPass");
+    const loginBtn = document.getElementById("loginBtn");
+    const loginError = document.getElementById("loginError");
+
+    function showLoginError(message) {
+      if (!loginError) return;
+      loginError.textContent = message;
+      loginError.style.display = "block";
+    }
+
+    async function authenticate() {
+      const email = loginEmail ? loginEmail.value.trim() : "";
+      const pass = loginPass ? loginPass.value : "";
+      if (!email || !pass) {
+        showLoginError("Enter both email and password.");
+        return;
+      }
+      if (!window.firebase || !auth) {
+        showLoginError("Firebase could not be loaded. Check your internet connection.");
+        return;
+      }
+      if (loginBtn) loginBtn.disabled = true;
+      if (loginError) loginError.style.display = "none";
+      try {
+        await auth.signInWithEmailAndPassword(email, pass);
+      } catch (err) {
+        console.error("Firebase login failed:", err);
+        const code = err && err.code ? err.code : "";
+        const messages = {
+          "auth/invalid-email": "That email address is not valid.",
+          "auth/user-not-found": "No account exists for that email.",
+          "auth/wrong-password": "Incorrect password.",
+          "auth/invalid-credential": "Incorrect email or password.",
+          "auth/too-many-requests": "Too many login attempts. Try again later.",
+          "auth/network-request-failed": "Network error. Check your internet connection.",
+          "auth/operation-not-allowed": "Email/password login is disabled in Firebase Authentication.",
+          "auth/configuration-not-found": "Firebase Authentication is not configured for this project."
+        };
+        showLoginError(messages[code] || (err && err.message) || "Login failed.");
+        if (loginPass) loginPass.value = "";
+      } finally {
+        if (loginBtn) loginBtn.disabled = false;
+      }
+    }
+
+    function bootstrapAuthUI() {
+      if (!loginBtn) return;
+      loginBtn.addEventListener("click", authenticate);
+      loginPass?.addEventListener("keydown", e => { if (e.key === "Enter") authenticate(); });
+      loginEmail?.addEventListener("keydown", e => { if (e.key === "Enter") authenticate(); });
+    }
+    bootstrapAuthUI();
+
+    auth.onAuthStateChanged(user => {
+      if (!loginOverlay) return;
+      if (user) {
+        loginOverlay.style.opacity = "0";
+        setTimeout(() => { loginOverlay.style.display = "none"; }, 300);
+        // These functions are declarations later in the same script and are
+        // available by the time Firebase delivers the auth-state callback.
+        try {
+          attachDataListeners();
+          runDailyCleanup();
+          subscribeWatchHistory();
+          loadDailyPlanner();
+        } catch (err) {
+          console.error("Post-login initialization error:", err);
+        }
+      } else {
+        loginOverlay.style.display = "flex";
+        loginOverlay.style.opacity = "1";
+        try { detachDataListeners(); } catch (err) { console.error(err); }
+        try {
+          if (unsubHistory) { unsubHistory(); unsubHistory = null; }
+        } catch (err) { console.error(err); }
+      }
+    });
 
     // ==================== STATIC DATA ====================
     const timetable = {
@@ -2262,62 +2345,19 @@
       if (unsubHacking) unsubHacking();
       unsubTodos = unsubCalendar = unsubPlan = unsubHacking = null;
     }
-    function authenticate() {
-      const email = document.getElementById('loginEmail').value.trim();
-      const pass = document.getElementById('loginPass').value;
-      const error = document.getElementById('loginError');
-      const btn = document.getElementById('loginBtn');
-      if (!email || !pass) {
-        error.textContent = 'Enter both email and password.';
-        error.style.display = 'block';
-        return;
-      }
-      btn.disabled = true;
-      auth.signInWithEmailAndPassword(email, pass)
-        .then(() => { error.style.display = 'none'; })
-        .catch(() => {
-          error.textContent = 'Incorrect email or password.';
-          error.style.display = 'block';
-          document.getElementById('loginPass').value = '';
-        })
-        .finally(() => { btn.disabled = false; });
-    }
-    function setupEvents() {
-      const btn = document.getElementById('loginBtn');
-      const passInput = document.getElementById('loginPass');
-      const emailInput = document.getElementById('loginEmail');
-      if (btn) btn.onclick = authenticate;
-      if (passInput) passInput.onkeydown = (e) => { if (e.key === 'Enter') authenticate(); };
-      if (emailInput) emailInput.onkeydown = (e) => { if (e.key === 'Enter') authenticate(); };
-      const logoutBtn = document.getElementById('logoutBtn');
+    // ==================== NON-AUTH EVENT SETUP ====================
+    function setupNonAuthEvents() {
+      const logoutBtn = document.getElementById("logoutBtn");
       if (logoutBtn) logoutBtn.onclick = () => auth.signOut();
-      const hackBtn = document.getElementById('hackPlanBtn');
-      const hackHours = document.getElementById('hackHoursInput');
+      const hackBtn = document.getElementById("hackPlanBtn");
+      const hackHours = document.getElementById("hackHoursInput");
       if (hackBtn) hackBtn.onclick = planHackSession;
-      if (hackHours) hackHours.onkeydown = (e) => { if (e.key === 'Enter') planHackSession(); };
-      const cpBtn = document.getElementById('cpPlanBtn');
-      const cpHours = document.getElementById('cpHoursInput');
+      if (hackHours) hackHours.onkeydown = e => { if (e.key === "Enter") planHackSession(); };
+      const cpBtn = document.getElementById("cpPlanBtn");
+      const cpHours = document.getElementById("cpHoursInput");
       if (cpBtn) cpBtn.onclick = planCPSession;
-      if (cpHours) cpHours.onkeydown = (e) => { if (e.key === 'Enter') planCPSession(); };
+      if (cpHours) cpHours.onkeydown = e => { if (e.key === "Enter") planCPSession(); };
     }
-
-    auth.onAuthStateChanged(user => {
-      const overlay = document.getElementById('loginOverlay');
-      if (user) {
-        overlay.style.opacity = '0';
-        setTimeout(() => { overlay.style.display = 'none'; }, 300);
-        attachDataListeners();
-        runDailyCleanup();
-        subscribeWatchHistory();
-        loadDailyPlanner(); // initial load
-      } else {
-        overlay.style.display = 'flex';
-        overlay.style.opacity = '1';
-        detachDataListeners();
-        if (unsubHistory) { unsubHistory(); unsubHistory = null; }
-        if (historyContainer) historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">Please log in to see watch history.</p>`;
-      }
-    });
 
     // ==================== INIT ====================
     function init() {
@@ -2332,7 +2372,7 @@
       renderHackingPlan();
     }
     init();
-    setupEvents();
+    setupNonAuthEvents();
   </script>
 </body>
 </html>
