@@ -241,6 +241,8 @@
     .category-history-card .cat-sub { color:var(--text-secondary); font-size:.65rem; margin-top:.2rem; }
     .empty-planner { color:var(--text-secondary); font-size:.8rem; padding:1rem; text-align:center; border:1px dashed var(--border); }
     .planner-warning { color:#ffcc66; border:1px solid #554400; padding:.7rem 1rem; font-size:.72rem; margin-bottom:1rem; }
+    .danger-btn { border-color: var(--danger) !important; color: var(--danger) !important; }
+    .danger-btn:hover { background: rgba(255,0,51,0.1) !important; box-shadow: 0 0 15px rgba(255,0,51,0.3) !important; }
     @media (max-width:768px) {
       .planner-title-row, .history-heading-row { flex-direction:column; }
       .actual-time-wrap { min-width:105px; }
@@ -462,8 +464,13 @@
     <div class="view" id="cpView">
       <div class="stats-container">
         <div class="plan-header">
-          <h2 id="planHeaderTitle">CP – IOI 2027 Full Preparation Plan</h2>
-          <p id="planHeaderSubtitle">Loading…</p>
+          <div class="planner-title-row">
+            <div>
+              <h2 id="planHeaderTitle">CP – IOI 2027 Full Preparation Plan</h2>
+              <p id="planHeaderSubtitle">Loading…</p>
+            </div>
+            <button class="planner-small-btn danger-btn" id="cpResetBtn">Reset Progress</button>
+          </div>
           <div class="plan-progress-track"><div class="plan-progress-fill" id="planProgressFill"></div></div>
           <div class="plan-progress-label">
             <span><strong id="planProgressPct">0%</strong> complete</span>
@@ -576,8 +583,13 @@
     <div class="view" id="hackingView">
       <div class="stats-container">
         <div class="plan-header">
-          <h2>Hacking / CTF Roadmap</h2>
-          <p>Zero to competitive CTF player — every stage, every subtopic, tick as you go.</p>
+          <div class="planner-title-row">
+            <div>
+              <h2>Hacking / CTF Roadmap</h2>
+              <p>Zero to competitive CTF player — every stage, every subtopic, tick as you go.</p>
+            </div>
+            <button class="planner-small-btn danger-btn" id="hackResetBtn">Reset Progress</button>
+          </div>
           <div class="plan-progress-track"><div class="plan-progress-fill" id="hackProgressFill"></div></div>
           <div class="plan-progress-label">
             <span><strong id="hackProgressPct">0%</strong> complete</span>
@@ -856,6 +868,79 @@
       }));
     }
 
+    // ==================== HACKING / CTF PLAN DATA ====================
+    // Zero-to-competitive-CTF roadmap. Topic-based (no calendar dates) so it
+    // never goes stale — you just work down the stages in order.
+    const hackingPlan = [
+      {
+        stage: "Stage 1 — Foundations",
+        topics: [
+          { id: "linux_basics", title: "Linux & command line basics", time: 240,
+            tasks: ["Filesystem layout, permissions, users/groups", "Shell navigation, pipes, redirection", "grep/sed/awk/find for triage", "Bash scripting fundamentals"] },
+          { id: "networking_basics", title: "Networking fundamentals", time: 240,
+            tasks: ["OSI/TCP-IP model", "Subnetting and routing basics", "TCP vs UDP, common ports/services", "Packet capture with Wireshark/tcpdump"] },
+          { id: "programming_basics", title: "Scripting for security work", time: 240,
+            tasks: ["Python fundamentals for tooling", "Working with sockets in Python", "Parsing files and automating tasks", "Reading and modifying small C programs"] },
+          { id: "how_web_works", title: "How the web actually works", time: 180,
+            tasks: ["HTTP/HTTPS request-response cycle", "Cookies, sessions, headers", "REST APIs and JSON", "Browser dev tools for inspection"] }
+        ]
+      },
+      {
+        stage: "Stage 2 — Core CTF Categories",
+        topics: [
+          { id: "web_exploitation", title: "Web exploitation", time: 360,
+            tasks: ["SQL injection fundamentals", "XSS (reflected/stored/DOM)", "Authentication & session flaws", "SSRF, IDOR, and access control bugs", "File upload and path traversal issues"] },
+          { id: "crypto_basics", title: "Cryptography challenges", time: 300,
+            tasks: ["Classical ciphers (Caesar, Vigenere, XOR)", "Encoding vs encryption vs hashing", "RSA basics and common weak-key attacks", "Frequency analysis and known-plaintext attacks"] },
+          { id: "reverse_engineering", title: "Reverse engineering", time: 360,
+            tasks: ["Reading x86/x86-64 assembly basics", "Using Ghidra/IDA for static analysis", "Dynamic analysis with a debugger (gdb/x64dbg)", "Identifying common obfuscation and packing"] },
+          { id: "binary_exploitation", title: "Binary exploitation (pwn)", time: 360,
+            tasks: ["Stack layout and buffer overflows", "Format string vulnerabilities", "Introduction to ROP chains", "Using pwntools for exploit scripting"] },
+          { id: "forensics", title: "Digital forensics", time: 240,
+            tasks: ["File carving and metadata analysis", "Memory dump analysis basics", "Network traffic (pcap) analysis", "Steganography techniques"] },
+          { id: "osint", title: "OSINT challenges", time: 180,
+            tasks: ["Reverse image search and geolocation", "Metadata extraction from files", "Search operators and public records", "Social media and username correlation"] }
+        ]
+      },
+      {
+        stage: "Stage 3 — Practical Tooling",
+        topics: [
+          { id: "recon_tooling", title: "Reconnaissance tooling", time: 240,
+            tasks: ["nmap scanning techniques", "Subdomain enumeration", "Directory/content discovery (ffuf/gobuster)", "Service fingerprinting"] },
+          { id: "burp_suite", title: "Burp Suite / web proxies", time: 240,
+            tasks: ["Intercepting and modifying requests", "Repeater and Intruder workflows", "Automating scans responsibly", "Extensions for common bug classes"] },
+          { id: "priv_esc", title: "Privilege escalation (Linux & Windows)", time: 300,
+            tasks: ["Linux privesc enumeration (SUID, cron, PATH)", "Windows privesc enumeration (services, tokens)", "Kernel exploit awareness", "Post-exploitation basics"] },
+          { id: "active_directory", title: "Active Directory basics", time: 300,
+            tasks: ["AD structure: domains, OUs, GPOs", "Kerberoasting and common attack paths", "BloodHound for path analysis", "Common AD misconfigurations"] }
+        ]
+      },
+      {
+        stage: "Stage 4 — Competitive CTF Practice",
+        topics: [
+          { id: "practice_platforms", title: "Practice on beginner platforms", time: 300,
+            tasks: ["Work through picoCTF challenges", "Work through OverTheWire wargames", "Work through TryHackMe rooms", "Log write-ups for every solved challenge"] },
+          { id: "first_ctfs", title: "Enter real CTF competitions", time: 300,
+            tasks: ["Join a CTF team or find teammates", "Compete in a beginner-friendly jeopardy CTF", "Time-box challenges during a live contest", "Debrief and note what slowed you down"] },
+          { id: "writeups", title: "Write-ups and knowledge base", time: 180,
+            tasks: ["Publish write-ups for solved challenges", "Build a personal cheat-sheet per category", "Review other teams' write-ups after contests", "Track recurring techniques across challenges"] },
+          { id: "specialize", title: "Specialize in 1–2 categories", time: 300,
+            tasks: ["Pick a primary category (web/pwn/rev/crypto)", "Go deep with advanced material in it", "Build custom tooling/scripts for that category", "Mentor or pair with teammates in it"] }
+        ]
+      },
+      {
+        stage: "Stage 5 — Toward Professional Skills",
+        topics: [
+          { id: "cert_path", title: "Certification path", time: 180,
+            tasks: ["Research entry certs (eJPT, PNPT, OSCP path)", "Build a study plan for the chosen cert", "Practice on lab platforms (HTB/PortSwigger Academy)", "Schedule and attempt the exam"] },
+          { id: "bug_bounty", title: "Bug bounty basics", time: 240,
+            tasks: ["Learn responsible disclosure and scope rules", "Set up a bug bounty methodology checklist", "Practice on a public bug bounty program", "Write a clean, reproducible vulnerability report"] },
+          { id: "portfolio", title: "Build a portfolio", time: 180,
+            tasks: ["Set up a write-up blog or GitHub page", "Document CTF placements and solved challenges", "List tools/scripts you've built", "Prepare a short project each showing depth"] }
+        ]
+      }
+    ];
+
     // ==================== TIMETABLE RENDERING ====================
     function renderTimeline() {
       const container = document.getElementById('timelineContainer');
@@ -876,7 +961,7 @@
         if (idx === currentIdx) item.classList.add('current');
         else if (idx < currentIdx) item.classList.add('completed');
         let badgeText = 'Upcoming';
-        if (idx < currentIdx) badgeText = 'Done';
+        if (idx < currentIdx) badgeText = 'Passed';
         else if (idx === currentIdx) badgeText = 'Now';
         item.innerHTML = `
           <div class="timeline-dot"></div>
@@ -1222,7 +1307,6 @@
     });
 
     // ==================== CP PLAN (IOI) ====================
-    // (ioiPlan array defined earlier with huge data, we reference it)
     let planState = {};
     let planOpenDays = new Set();
     const planStateRef = db.collection("ioiPlan").doc("state");
@@ -1399,17 +1483,24 @@
         planStateRef.set({ state: planState, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }).catch(err => console.error('Plan save failed', err));
       }, 300);
     }
+    function resetPlanState() {
+      if (!confirm('Reset ALL CP roadmap progress? This clears every ticked task and cannot be undone.')) return;
+      planState = {};
+      planOpenDays = new Set();
+      planStateRef.set({ state: {}, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: false })
+        .catch(err => console.error('Plan reset failed', err));
+      renderPlan();
+    }
     document.getElementById('planProgressWidget').addEventListener('click', () => {
       document.querySelector('.sidebar-btn[data-view="cp"]').click();
     });
+    document.getElementById('cpResetBtn')?.addEventListener('click', resetPlanState);
 
     // ==================== HACKING PLAN ====================
-    // (hackingPlan array defined earlier)
     let hackingState = {};
     let hackOpenTopics = new Set();
     const hackingPlanStateRef = db.collection("hackingPlan").doc("state");
     let unsubHacking = null;
-    let lastHackSession = [];
 
     function hackTaskId(topicId, idx) { return `h-${topicId}-${idx}`; }
     function findHackTopic(topicId) {
@@ -1500,7 +1591,6 @@
           topic.tasks.forEach((_, i) => { hackingState[hackTaskId(topicId, i)] = newVal; });
           persistHackState();
           renderHackingPlan();
-          renderHackSession();
         });
       });
       container.querySelectorAll('.plan-task').forEach(el => {
@@ -1514,7 +1604,6 @@
           el.classList.toggle('done', newVal);
           persistHackState();
           updateHackProgressUI();
-          renderHackSession();
         };
         el.addEventListener('click', (e) => { if (e.target.tagName !== 'INPUT') toggle(e); });
         box.addEventListener('change', () => {
@@ -1522,7 +1611,6 @@
           el.classList.toggle('done', box.checked);
           persistHackState();
           updateHackProgressUI();
-          renderHackSession();
         });
       });
       updateHackProgressUI(false);
@@ -1560,50 +1648,15 @@
         hackingPlanStateRef.set({ state: hackingState, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }).catch(err => console.error('Hacking plan save failed', err));
       }, 300);
     }
-    function planHackSession() {
-      const hoursInput = document.getElementById('hackHoursInput');
-      const hours = Math.max(0, parseFloat(hoursInput.value) || 0);
-      const budgetMin = hours * 60;
-      const flat = flattenHackTasks().filter(t => !hackingState[t.id]);
-      let cum = 0;
-      const session = [];
-      for (const t of flat) {
-        if (cum >= budgetMin && session.length > 0) break;
-        session.push(t);
-        cum += t.minutes;
-      }
-      lastHackSession = session;
-      renderHackSession();
+    function resetHackState() {
+      if (!confirm('Reset ALL Hacking/CTF roadmap progress? This clears every ticked task and cannot be undone.')) return;
+      hackingState = {};
+      hackOpenTopics = new Set();
+      hackingPlanStateRef.set({ state: {}, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: false })
+        .catch(err => console.error('Hacking plan reset failed', err));
+      renderHackingPlan();
     }
-    function renderHackSession() {
-      const list = document.getElementById('hackSessionList');
-      if (!list) return;
-      lastHackSession = lastHackSession.filter(t => t);
-      if (lastHackSession.length === 0) {
-        list.innerHTML = `<li style="color: var(--text-secondary); font-size: 0.82rem; padding: 0.5rem 0;">Pick your hours and hit "Plan My Session" to get today's task list.</li>`;
-        return;
-      }
-      list.innerHTML = lastHackSession.map(t => {
-        const checked = !!hackingState[t.id];
-        return `
-          <li class="todo-item ${checked ? 'done' : ''}" data-sessionid="${t.id}">
-            <input type="checkbox" class="todo-checkbox" ${checked ? 'checked' : ''}>
-            <span class="todo-text">${escapeHtml(t.text)} <span style="color:var(--text-secondary); font-size:0.7rem;">— ${escapeHtml(t.topicTitle)}</span></span>
-          </li>
-        `;
-      }).join('');
-      list.querySelectorAll('.todo-item').forEach(li => {
-        const id = li.dataset.sessionid;
-        const box = li.querySelector('.todo-checkbox');
-        box.addEventListener('change', () => {
-          hackingState[id] = box.checked;
-          li.classList.toggle('done', box.checked);
-          persistHackState();
-          updateHackProgressUI();
-          renderHackingPlan();
-        });
-      });
-    }
+    document.getElementById('hackResetBtn')?.addEventListener('click', resetHackState);
 
     // ==================== DAILY PLANNER ====================
     const DAILY_PLANNER_START = '2026-08-19';
@@ -2349,14 +2402,6 @@
     function setupNonAuthEvents() {
       const logoutBtn = document.getElementById("logoutBtn");
       if (logoutBtn) logoutBtn.onclick = () => auth.signOut();
-      const hackBtn = document.getElementById("hackPlanBtn");
-      const hackHours = document.getElementById("hackHoursInput");
-      if (hackBtn) hackBtn.onclick = planHackSession;
-      if (hackHours) hackHours.onkeydown = e => { if (e.key === "Enter") planHackSession(); };
-      const cpBtn = document.getElementById("cpPlanBtn");
-      const cpHours = document.getElementById("cpHoursInput");
-      if (cpBtn) cpBtn.onclick = planCPSession;
-      if (cpHours) cpHours.onkeydown = e => { if (e.key === "Enter") planCPSession(); };
     }
 
     // ==================== INIT ====================
@@ -2367,9 +2412,9 @@
       updateDateTime();
       setInterval(updateDateTime, 1000);
       updatePlanHeader();
-      renderPlan();
+      try { renderPlan(); } catch (err) { console.error('CP plan render failed', err); }
       renderDayDetail(selectedCalDate);
-      renderHackingPlan();
+      try { renderHackingPlan(); } catch (err) { console.error('Hacking plan render failed', err); }
     }
     init();
     setupNonAuthEvents();
