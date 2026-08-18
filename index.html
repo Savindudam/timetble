@@ -205,6 +205,49 @@
     .history-list { display: flex; flex-direction: column; gap: 0.4rem; }
     .history-item { display: flex; justify-content: space-between; padding: 0.6rem 1rem; background: #050505; border: 1px solid var(--border); cursor: pointer; }
     .history-item:hover { border-color: var(--accent); }
+
+    .daily-planner-intro { margin-bottom: 1rem; }
+    .planner-title-row, .history-heading-row { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; }
+    .planner-start-badge { border:1px solid var(--accent); color:var(--accent); padding:.45rem .65rem; font-size:.65rem; white-space:nowrap; }
+    .planner-small-btn { padding:.45rem .7rem; font-size:.7rem; cursor:pointer; }
+    .daily-summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:.6rem; margin-bottom:1rem; }
+    .daily-summary-card { background:#050505; border:1px solid var(--border); padding:.8rem 1rem; }
+    .daily-summary-card strong { display:block; color:var(--accent); font-size:1rem; margin-top:.2rem; }
+    .daily-summary-card span { color:var(--text-secondary); font-size:.65rem; text-transform:uppercase; }
+    .daily-plan-date-title { color:var(--accent); font-size:.9rem; margin:0 0 .75rem; }
+    .daily-item { align-items:center; }
+    .daily-item-main { flex:1; min-width:0; }
+    .daily-item-category { font-size:.88rem; }
+    .daily-item-meta { color:var(--text-secondary); font-size:.68rem; margin-top:.2rem; }
+    .daily-item-time { min-width:75px; }
+    .actual-time-wrap { display:flex; align-items:center; gap:.35rem; min-width:125px; }
+    .actual-time-wrap label { color:var(--text-secondary); font-size:.62rem; text-transform:uppercase; }
+    .actual-time-input { width:72px !important; padding:.38rem .45rem !important; text-align:center; }
+    .history-day { background:#050505; border:1px solid var(--border); margin-bottom:.6rem; }
+    .history-day-header { display:flex; justify-content:space-between; gap:1rem; align-items:center; padding:.8rem 1rem; cursor:pointer; }
+    .history-day-header:hover { border-color:var(--accent); }
+    .history-day-date { color:var(--accent); font-weight:700; font-size:.8rem; }
+    .history-day-stats { color:var(--text-secondary); font-size:.7rem; }
+    .history-day-body { display:none; border-top:1px solid var(--border); padding:.55rem 1rem; }
+    .history-day.open .history-day-body { display:block; }
+    .history-task { display:grid; grid-template-columns:1fr auto auto; gap:.7rem; align-items:center; padding:.45rem 0; border-bottom:1px solid rgba(18,51,18,.6); font-size:.75rem; }
+    .history-task:last-child { border-bottom:0; }
+    .history-task .planned { color:var(--text-secondary); }
+    .history-task .actual { color:var(--accent); font-weight:700; }
+    .category-history-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:.6rem; }
+    .category-history-card { background:#050505; border:1px solid var(--border); padding:.8rem; }
+    .category-history-card .cat-name { font-size:.78rem; margin-bottom:.35rem; }
+    .category-history-card .cat-total { color:var(--accent); font-size:1.1rem; font-weight:700; }
+    .category-history-card .cat-sub { color:var(--text-secondary); font-size:.65rem; margin-top:.2rem; }
+    .empty-planner { color:var(--text-secondary); font-size:.8rem; padding:1rem; text-align:center; border:1px dashed var(--border); }
+    .planner-warning { color:#ffcc66; border:1px solid #554400; padding:.7rem 1rem; font-size:.72rem; margin-bottom:1rem; }
+    @media (max-width:768px) {
+      .planner-title-row, .history-heading-row { flex-direction:column; }
+      .actual-time-wrap { min-width:105px; }
+      .actual-time-input { width:60px !important; }
+      .history-task { grid-template-columns:1fr auto; }
+      .history-task .planned { grid-column:2; }
+    }
     @media (max-width: 768px) {
       .sidebar { position: absolute; transform: translateX(-100%); height: 100vh; }
       .sidebar.open { transform: translateX(0); }
@@ -363,23 +406,54 @@
     <!-- Daily Planner View -->
     <div class="view" id="dailyplannerView">
       <div class="daily-planner-container">
+        <div class="daily-planner-intro card-widget">
+          <div class="planner-title-row">
+            <div>
+              <h2 style="margin:0 0 .35rem;">Daily Time Planner</h2>
+              <p style="margin:0;color:var(--text-secondary);font-size:.8rem;">
+                Starting <strong style="color:var(--accent);">19 Aug 2026</strong>. Your plan is built from your available time and your real history.
+              </p>
+            </div>
+            <div class="planner-start-badge">START · 19 AUG 2026</div>
+          </div>
+        </div>
+
         <div class="daily-input-row">
           <div>
             <label>Date</label>
-            <input type="date" id="dailyDateInput">
+            <input type="date" id="dailyDateInput" min="2026-08-19">
           </div>
           <div>
-            <label>Total available hours today</label>
-            <input type="number" id="dailyHoursInput" min="0.5" step="0.5" value="16">
+            <label>Time available today (hours)</label>
+            <input type="number" id="dailyHoursInput" min="0.25" step="0.25" value="8">
           </div>
           <div style="flex:0 0 auto;">
-            <button class="daily-generate-btn" id="dailyGenerateBtn">Generate Plan</button>
+            <button class="daily-generate-btn" id="dailyGenerateBtn">Plan My Day</button>
           </div>
         </div>
+
+        <div id="dailyPlanSummary"></div>
         <div id="dailyPlanContainer"></div>
+
         <div class="daily-history">
-          <h3>History (Last 7 Days)</h3>
-          <div class="history-list" id="dailyHistoryContainer"></div>
+          <div class="history-heading-row">
+            <div>
+              <h3>Complete History</h3>
+              <p>Every generated day stays here. Completed minutes are used when building future plans.</p>
+            </div>
+            <button id="dailyRefreshHistoryBtn" class="planner-small-btn">Refresh</button>
+          </div>
+          <div id="dailyHistoryContainer"></div>
+        </div>
+
+        <div class="daily-history">
+          <div class="history-heading-row">
+            <div>
+              <h3>Category Totals</h3>
+              <p>Actual time recorded since 19 Aug 2026.</p>
+            </div>
+          </div>
+          <div id="dailyCategoryHistory"></div>
         </div>
       </div>
     </div>
@@ -597,13 +671,24 @@
       const date = new Date(y, m-1, d);
       return `${d} ${monthNames[m-1]} ${fullWeekdayNames[date.getDay()].slice(0,3)}`;
     }
-    // Shift CP plan dates to start Aug 19
-    ioiPlan.forEach(week => week.days.forEach(day => {
-      const [y,m,d] = day.iso.split('-').map(Number);
-      const newDate = new Date(y, m-1, d + 9);
-      day.iso = `${newDate.getFullYear()}-${String(newDate.getMonth()+1).padStart(2,'0')}-${String(newDate.getDate()).padStart(2,'0')}`;
-      day.date = formatIsoDate(day.iso);
-    }));
+    // CP plan always starts on 19 Aug 2026.
+    // The original plan dates are shifted by the exact offset needed,
+    // instead of assuming a fixed number of days.
+    const CP_START_ISO = '2026-08-19';
+    if (ioiPlan?.length && ioiPlan[0]?.days?.length) {
+      const first = ioiPlan[0].days[0].iso;
+      const [fy,fm,fd] = first.split('-').map(Number);
+      const [ty,tm,td] = CP_START_ISO.split('-').map(Number);
+      const firstDate = new Date(fy, fm - 1, fd);
+      const targetDate = new Date(ty, tm - 1, td);
+      const shiftDays = Math.round((targetDate - firstDate) / 86400000);
+      ioiPlan.forEach(week => week.days.forEach(day => {
+        const [y,m,d] = day.iso.split('-').map(Number);
+        const shifted = new Date(y, m - 1, d + shiftDays);
+        day.iso = `${shifted.getFullYear()}-${String(shifted.getMonth()+1).padStart(2,'0')}-${String(shifted.getDate()).padStart(2,'0')}`;
+        day.date = formatIsoDate(day.iso);
+      }));
+    }
 
     // ==================== TIMETABLE RENDERING ====================
     function renderTimeline() {
@@ -1355,254 +1440,481 @@
     }
 
     // ==================== DAILY PLANNER ====================
+    const DAILY_PLANNER_START = '2026-08-19';
     const dailyPlansRef = db.collection("dailyPlans");
-    let unsubDaily = null;
-    let currentDailyDate = new Date();
-    let currentDailyHours = 16;
+    let currentDailyDate = null;
     let lastDailyPlan = null;
+    let dailyHistoryCache = [];
 
-    // Initialize date input
     const dailyDateInput = document.getElementById('dailyDateInput');
     const dailyHoursInput = document.getElementById('dailyHoursInput');
     const dailyGenerateBtn = document.getElementById('dailyGenerateBtn');
     const dailyPlanContainer = document.getElementById('dailyPlanContainer');
+    const dailyPlanSummary = document.getElementById('dailyPlanSummary');
     const dailyHistoryContainer = document.getElementById('dailyHistoryContainer');
+    const dailyCategoryHistory = document.getElementById('dailyCategoryHistory');
+    const dailyRefreshHistoryBtn = document.getElementById('dailyRefreshHistoryBtn');
 
-    function getTodayIso() {
-      return new Date().toISOString().split('T')[0];
+    function localIso(date = new Date()) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
     }
 
-    function setDailyDateToToday() {
-      const todayIso = getTodayIso();
-      dailyDateInput.value = todayIso;
-      currentDailyDate = new Date(todayIso);
+    function isoToLocalDate(iso) {
+      const [y,m,d] = iso.split('-').map(Number);
+      return new Date(y, m - 1, d);
     }
 
-    function getDateIso(date) {
-      return date.toISOString().split('T')[0];
+    function dateLabel(iso) {
+      return isoToLocalDate(iso).toLocaleDateString('en-US', {
+        weekday:'long', year:'numeric', month:'long', day:'numeric'
+      });
     }
 
-    async function loadDailyPlanner() {
-      setDailyDateToToday();
-      await loadDailyPlanForDate(currentDailyDate);
-      await loadDailyHistory();
+    function minutesLabel(mins) {
+      mins = Math.max(0, Math.round(Number(mins) || 0));
+      const h = Math.floor(mins / 60);
+      const m = mins % 60;
+      if (h && m) return `${h}h ${m}m`;
+      if (h) return `${h}h`;
+      return `${m}m`;
     }
 
-    async function loadDailyPlanForDate(date) {
-      const iso = getDateIso(date);
-      try {
-        const doc = await dailyPlansRef.doc(iso).get();
-        if (doc.exists) {
-          lastDailyPlan = doc.data();
-          renderDailyPlan(lastDailyPlan);
-        } else {
-          lastDailyPlan = null;
-          dailyPlanContainer.innerHTML = `<p style="color: var(--text-secondary);">No plan for this date yet. Enter hours and generate.</p>`;
-        }
-      } catch (err) {
-        console.error('Error loading daily plan', err);
-        dailyPlanContainer.innerHTML = `<p style="color: var(--danger);">Error loading plan: ${err.message}</p>`;
+    function getCategoryName(id) {
+      return dailyCategories.find(c => c.id === id)?.name || id;
+    }
+
+    function emptyCategoryTotals() {
+      return Object.fromEntries(dailyCategories.map(c => [c.id, 0]));
+    }
+
+    function getDailyHistorySinceStart(docs) {
+      return docs.filter(p => p.id >= DAILY_PLANNER_START && p.id <= localIso());
+    }
+
+    async function fetchAllDailyPlans() {
+      const snap = await dailyPlansRef
+        .where(firebase.firestore.FieldPath.documentId(), '>=', DAILY_PLANNER_START)
+        .get();
+      const docs = [];
+      snap.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+      docs.sort((a,b) => b.id.localeCompare(a.id));
+      return getDailyHistorySinceStart(docs);
+    }
+
+    function completedMinutesForPlan(plan) {
+      return (plan.activities || []).reduce((sum, a) => {
+        const actual = Number.isFinite(Number(a.actualMinutes))
+          ? Number(a.actualMinutes)
+          : (a.done ? Number(a.minutes || 0) : 0);
+        return sum + Math.max(0, actual);
+      }, 0);
+    }
+
+    function categoryActualsFromHistory(docs) {
+      const totals = emptyCategoryTotals();
+      docs.forEach(plan => {
+        (plan.activities || []).forEach(a => {
+          const actual = Number.isFinite(Number(a.actualMinutes))
+            ? Number(a.actualMinutes)
+            : (a.done ? Number(a.minutes || 0) : 0);
+          totals[a.category] = (totals[a.category] || 0) + Math.max(0, actual);
+        });
+      });
+      return totals;
+    }
+
+    function getRecentPlans(docs, endIso, days=7) {
+      const end = isoToLocalDate(endIso);
+      const start = new Date(end);
+      start.setDate(start.getDate() - (days - 1));
+      const startIso = localIso(start);
+      return docs.filter(p => p.id >= startIso && p.id <= endIso);
+    }
+
+    function categoryActualsFromPlans(docs) {
+      return categoryActualsFromHistory(docs);
+    }
+
+    function round5(n) {
+      return Math.max(0, Math.round(n / 5) * 5);
+    }
+
+    /*
+      Allocation logic:
+      - Uses the last 7 days of ACTUAL time, not merely planned time.
+      - Each category has a weekly target.
+      - A category that has received less actual time gets a larger share today.
+      - The current date is never used as history while generating its own new plan.
+      - All history remains stored, so yesterday's CP time affects today's CP allocation.
+    */
+    function allocateDailyMinutes(totalMinutes, historyDocs, targetDateIso) {
+      const priorDocs = historyDocs.filter(p => p.id < targetDateIso);
+      const recent = getRecentPlans(priorDocs, (() => {
+        const d = isoToLocalDate(targetDateIso);
+        d.setDate(d.getDate() - 1);
+        return localIso(d);
+      })(), 7);
+
+      const recentActual = categoryActualsFromPlans(recent);
+      const totalRecent = Object.values(recentActual).reduce((a,b) => a+b, 0);
+
+      const scores = dailyCategories.map(cat => {
+        const weeklyTarget = cat.weeklyTargetMin;
+        const dailyTarget = weeklyTarget / 7;
+        const actual = recentActual[cat.id] || 0;
+        const deficit = Math.max(0, dailyTarget * 7 - actual);
+
+        // Small base prevents categories from disappearing completely.
+        const base = Math.max(30, dailyTarget * 0.35);
+        return { id: cat.id, score: deficit + base, actual };
+      });
+
+      const scoreSum = scores.reduce((s,x) => s + x.score, 0);
+      let allocations = scores.map(x => ({
+        category: x.id,
+        minutes: Math.floor((totalMinutes * x.score / scoreSum) / 5) * 5
+      }));
+
+      let allocated = allocations.reduce((s,a) => s+a.minutes, 0);
+      let remainder = totalMinutes - allocated;
+
+      // Give remaining 5-minute blocks to the most under-served categories.
+      const ranked = [...scores].sort((a,b) => b.score - a.score);
+      while (remainder >= 5) {
+        const pick = ranked[remainder / 5 % ranked.length | 0];
+        const item = allocations.find(a => a.category === pick.id);
+        item.minutes += 5;
+        remainder -= 5;
       }
+
+      // If the total is below 5 minutes, keep the user's exact available time.
+      if (remainder > 0 && allocations.length) {
+        allocations[0].minutes += remainder;
+      }
+
+      return allocations.filter(a => a.minutes > 0);
     }
 
-    async function loadDailyHistory() {
-      const sevenDaysAgo = new Date();
-      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
-      const startIso = getDateIso(sevenDaysAgo);
+    function showPlannerWarning(message) {
+      dailyPlanContainer.innerHTML = `<div class="planner-warning">${escapeHtml(message)}</div>`;
+    }
+
+    function renderDailySummary(plan) {
+      if (!plan) {
+        dailyPlanSummary.innerHTML = '';
+        return;
+      }
+      const planned = (plan.activities || []).reduce((s,a)=>s+Number(a.minutes||0),0);
+      const actual = completedMinutesForPlan(plan);
+      const completedTasks = (plan.activities || []).filter(a => a.done).length;
+      const totalTasks = (plan.activities || []).length;
+      dailyPlanSummary.innerHTML = `
+        <div class="daily-summary">
+          <div class="daily-summary-card"><span>Available</span><strong>${minutesLabel(plan.totalMinutes)}</strong></div>
+          <div class="daily-summary-card"><span>Planned</span><strong>${minutesLabel(planned)}</strong></div>
+          <div class="daily-summary-card"><span>Actual</span><strong>${minutesLabel(actual)}</strong></div>
+          <div class="daily-summary-card"><span>Completed</span><strong>${completedTasks}/${totalTasks}</strong></div>
+        </div>`;
+    }
+
+    async function saveDailyPlan(plan) {
       try {
-        const snapshot = await dailyPlansRef.where(firebase.firestore.FieldPath.documentId(), '>=', startIso).get();
-        const docs = [];
-        snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
-        docs.sort((a, b) => b.id.localeCompare(a.id)); // newest first
-        renderDailyHistory(docs);
+        await dailyPlansRef.doc(plan.date).set({
+          ...plan,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+        lastDailyPlan = plan;
+        renderDailySummary(plan);
+        await refreshDailyHistory();
       } catch (err) {
-        console.error('Error loading daily history', err);
-        dailyHistoryContainer.innerHTML = `<p style="color: var(--danger);">Error loading history: ${err.message}</p>`;
+        console.error('Error saving daily plan:', err);
+        alert('Could not save this day: ' + err.message);
       }
     }
 
     function renderDailyPlan(plan) {
-      if (!plan || !plan.activities || plan.activities.length === 0) {
-        dailyPlanContainer.innerHTML = `<p style="color: var(--text-secondary);">No plan for this date yet. Enter hours and generate.</p>`;
+      if (!plan || !plan.activities?.length) {
+        dailyPlanSummary.innerHTML = '';
+        dailyPlanContainer.innerHTML = `<div class="empty-planner">No plan for this date yet. Enter your available hours and press <strong>Plan My Day</strong>.</div>`;
         return;
       }
+
+      renderDailySummary(plan);
+
       const list = document.createElement('ul');
       list.className = 'daily-list';
-      plan.activities.forEach(activity => {
+
+      const title = document.createElement('h3');
+      title.className = 'daily-plan-date-title';
+      title.textContent = `PLAN · ${dateLabel(plan.date)}`;
+      dailyPlanContainer.innerHTML = '';
+      dailyPlanContainer.appendChild(title);
+
+      plan.activities.forEach((activity, index) => {
         const li = document.createElement('li');
-        li.className = 'daily-item';
-        if (activity.done) li.classList.add('done');
+        li.className = 'daily-item' + (activity.done ? ' done' : '');
+
+        const planned = Number(activity.minutes || 0);
+        const actual = Number.isFinite(Number(activity.actualMinutes))
+          ? Math.max(0, Number(activity.actualMinutes))
+          : (activity.done ? planned : 0);
+
         li.innerHTML = `
-          <input type="checkbox" class="todo-checkbox" ${activity.done ? 'checked' : ''}>
-          <span class="daily-item-text">${escapeHtml(activity.category)}</span>
-          <span class="daily-item-time">${Math.floor(activity.minutes / 60)}h ${activity.minutes % 60}m</span>
+          <input type="checkbox" class="todo-checkbox" ${activity.done ? 'checked' : ''} title="Mark this task completed">
+          <div class="daily-item-main">
+            <div class="daily-item-category">${escapeHtml(getCategoryName(activity.category))}</div>
+            <div class="daily-item-meta">Planned ${minutesLabel(planned)} · actual time is recorded below</div>
+          </div>
+          <span class="daily-item-time">${minutesLabel(planned)}</span>
+          <div class="actual-time-wrap">
+            <label>Actual</label>
+            <input class="actual-time-input" type="number" min="0" max="${planned}" step="5" value="${actual}" title="How many minutes you actually used">
+            <span style="color:var(--text-secondary);font-size:.65rem;">min</span>
+          </div>
         `;
-        li.querySelector('.todo-checkbox').addEventListener('change', (e) => {
-          activity.done = e.target.checked;
-          li.classList.toggle('done', e.target.checked);
-          saveDailyPlan(plan);
+
+        const checkbox = li.querySelector('.todo-checkbox');
+        const actualInput = li.querySelector('.actual-time-input');
+
+        checkbox.addEventListener('change', async () => {
+          activity.done = checkbox.checked;
+          if (checkbox.checked && Number(activity.actualMinutes || 0) === 0) {
+            activity.actualMinutes = planned;
+            actualInput.value = planned;
+          }
+          if (!checkbox.checked) {
+            activity.actualMinutes = 0;
+            actualInput.value = 0;
+          }
+          li.classList.toggle('done', activity.done);
+          await saveDailyPlan(plan);
         });
+
+        actualInput.addEventListener('change', async () => {
+          let value = Number(actualInput.value);
+          if (!Number.isFinite(value)) value = 0;
+          value = Math.max(0, Math.min(planned, Math.round(value / 5) * 5));
+          actualInput.value = value;
+          activity.actualMinutes = value;
+          activity.done = value >= planned && planned > 0;
+          checkbox.checked = activity.done;
+          li.classList.toggle('done', activity.done);
+          await saveDailyPlan(plan);
+        });
+
         list.appendChild(li);
       });
-      dailyPlanContainer.innerHTML = '';
+
       dailyPlanContainer.appendChild(list);
     }
 
-    async function saveDailyPlan(plan) {
-      const iso = plan.date;
+    function renderDailyHistory(docs) {
+      dailyHistoryCache = docs;
+      if (!docs.length) {
+        dailyHistoryContainer.innerHTML = `<div class="empty-planner">No daily history yet. Your first day begins on 19 Aug 2026.</div>`;
+        return;
+      }
+
+      dailyHistoryContainer.innerHTML = docs.map((plan, idx) => {
+        const total = Number(plan.totalMinutes || 0);
+        const actual = completedMinutesForPlan(plan);
+        const completed = (plan.activities || []).filter(a => a.done).length;
+        const totalTasks = (plan.activities || []).length;
+        const pct = total ? Math.min(100, Math.round(actual / total * 100)) : 0;
+
+        return `
+          <div class="history-day ${idx === 0 ? 'open' : ''}" data-history-date="${plan.id}">
+            <div class="history-day-header">
+              <div>
+                <div class="history-day-date">${escapeHtml(dateLabel(plan.id))}</div>
+                <div class="history-day-stats">${completed}/${totalTasks} tasks · ${minutesLabel(actual)} actual / ${minutesLabel(total)} available · ${pct}%</div>
+              </div>
+              <span style="color:var(--accent);font-size:.7rem;">${idx === 0 ? 'OPEN' : 'VIEW'}</span>
+            </div>
+            <div class="history-day-body">
+              ${(plan.activities || []).map(a => {
+                const planned = Number(a.minutes || 0);
+                const actualA = Number.isFinite(Number(a.actualMinutes)) ? Number(a.actualMinutes) : (a.done ? planned : 0);
+                return `<div class="history-task">
+                  <span>${escapeHtml(getCategoryName(a.category))}</span>
+                  <span class="planned">planned ${minutesLabel(planned)}</span>
+                  <span class="actual">${minutesLabel(actualA)} actual</span>
+                </div>`;
+              }).join('')}
+              <button class="planner-small-btn history-load-btn" data-date="${plan.id}" style="margin-top:.6rem;">Open this day</button>
+            </div>
+          </div>`;
+      }).join('');
+
+      dailyHistoryContainer.querySelectorAll('.history-day-header').forEach(header => {
+        header.addEventListener('click', () => header.parentElement.classList.toggle('open'));
+      });
+
+      dailyHistoryContainer.querySelectorAll('.history-load-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const iso = btn.dataset.date;
+          dailyDateInput.value = iso;
+          currentDailyDate = isoToLocalDate(iso);
+          const plan = dailyHistoryCache.find(p => p.id === iso);
+          lastDailyPlan = plan || null;
+          if (plan) {
+            dailyHoursInput.value = (Number(plan.totalMinutes || 0) / 60).toString();
+            renderDailyPlan(plan);
+          }
+          document.getElementById('dailyplannerView').scrollTo({top:0, behavior:'smooth'});
+        });
+      });
+    }
+
+    function renderCategoryHistory(docs) {
+      const totals = categoryActualsFromHistory(docs);
+      const counts = {};
+      dailyCategories.forEach(c => counts[c.id] = 0);
+      docs.forEach(p => (p.activities || []).forEach(a => {
+        const actual = Number.isFinite(Number(a.actualMinutes)) ? Number(a.actualMinutes) : (a.done ? Number(a.minutes || 0) : 0);
+        if (actual > 0) counts[a.category] = (counts[a.category] || 0) + 1;
+      }));
+
+      dailyCategoryHistory.innerHTML = `
+        <div class="category-history-grid">
+          ${dailyCategories.map(cat => `
+            <div class="category-history-card">
+              <div class="cat-name">${escapeHtml(cat.name)}</div>
+              <div class="cat-total">${minutesLabel(totals[cat.id] || 0)}</div>
+              <div class="cat-sub">${counts[cat.id] || 0} recorded sessions · target ${minutesLabel(cat.weeklyTargetMin)}/week</div>
+            </div>`).join('')}
+        </div>`;
+    }
+
+    async function refreshDailyHistory() {
       try {
-        await dailyPlansRef.doc(iso).set(plan, { merge: true });
-        // Update history after save
-        loadDailyHistory();
+        const docs = await fetchAllDailyPlans();
+        renderDailyHistory(docs);
+        renderCategoryHistory(docs);
+        return docs;
       } catch (err) {
-        console.error('Error saving daily plan', err);
+        console.error('Error loading daily history:', err);
+        dailyHistoryContainer.innerHTML = `<div class="planner-warning">History could not be loaded: ${escapeHtml(err.message)}</div>`;
+        return [];
+      }
+    }
+
+    async function loadDailyPlanForDate(iso) {
+      if (!iso) return;
+      if (iso < DAILY_PLANNER_START) {
+        lastDailyPlan = null;
+        showPlannerWarning(`The planner starts on 19 Aug 2026. Choose 19 Aug 2026 or later.`);
+        return;
+      }
+
+      currentDailyDate = isoToLocalDate(iso);
+      try {
+        const doc = await dailyPlansRef.doc(iso).get();
+        if (doc.exists) {
+          lastDailyPlan = { id: doc.id, ...doc.data() };
+          dailyHoursInput.value = (Number(lastDailyPlan.totalMinutes || 0) / 60).toString();
+          renderDailyPlan(lastDailyPlan);
+        } else {
+          lastDailyPlan = null;
+          dailyPlanSummary.innerHTML = '';
+          dailyPlanContainer.innerHTML = `<div class="empty-planner">No plan for ${escapeHtml(dateLabel(iso))}. Enter your available hours and generate it.</div>`;
+        }
+      } catch (err) {
+        console.error('Error loading daily plan:', err);
+        showPlannerWarning('Could not load this day: ' + err.message);
       }
     }
 
     async function generateDailyPlan() {
       const dateIso = dailyDateInput.value;
-      if (!dateIso) {
-        alert('Please select a date.');
+      if (!dateIso || dateIso < DAILY_PLANNER_START) {
+        alert('Your planner starts on 19 Aug 2026.');
         return;
       }
-      const hours = parseFloat(dailyHoursInput.value);
-      if (!hours || hours <= 0) {
-        alert('Please enter a valid number of hours.');
+
+      const hours = Number(dailyHoursInput.value);
+      if (!Number.isFinite(hours) || hours <= 0) {
+        alert('Enter the amount of time you actually have today.');
         return;
       }
+
       const totalMinutes = Math.round(hours * 60);
-      
-      // Get last 7 days completed minutes per category
-      const sevenDaysAgo = new Date();
-      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
-      const startIso = getDateIso(sevenDaysAgo);
-      const snapshot = await dailyPlansRef.where(firebase.firestore.FieldPath.documentId(), '>=', startIso).get();
-      const completedMinByCategory = {};
-      dailyCategories.forEach(cat => completedMinByCategory[cat.id] = 0);
-      snapshot.forEach(doc => {
-        const plan = doc.data();
-        if (plan.activities) {
-          plan.activities.forEach(act => {
-            if (act.done) {
-              completedMinByCategory[act.category] = (completedMinByCategory[act.category] || 0) + act.minutes;
-            }
-          });
-        }
-      });
-      
-      // Compute deficits against weekly targets (scaled to 7 days)
-      const deficits = [];
-      dailyCategories.forEach(cat => {
-        const target7Days = cat.weeklyTargetMin;
-        const completed = completedMinByCategory[cat.id] || 0;
-        const deficit = Math.max(0, target7Days - completed);
-        if (deficit > 0) deficits.push({ ...cat, deficit });
-      });
-      
-      // Allocate total minutes proportionally to deficits
-      const totalDeficit = deficits.reduce((sum, d) => sum + d.deficit, 0);
-      let allocations = [];
-      if (totalDeficit === 0 || deficits.length === 0) {
-        // If no deficits, distribute equally among all categories
-        const perCat = Math.floor(totalMinutes / dailyCategories.length);
-        dailyCategories.forEach(cat => allocations.push({ category: cat.id, minutes: perCat }));
-        // Distribute remainder
-        let rem = totalMinutes - perCat * dailyCategories.length;
-        for (let i = 0; i < rem; i++) {
-          allocations[i % allocations.length].minutes++;
-        }
-      } else {
-        // Allocate proportionally, but cap at deficit
-        let remaining = totalMinutes;
-        let deficitSum = totalDeficit;
-        const tempAlloc = deficits.map(d => ({ category: d.id, minutes: 0, deficit: d.deficit }));
-        while (remaining > 0 && deficitSum > 0) {
-          let allocatedThisRound = 0;
-          for (const item of tempAlloc) {
-            if (item.deficit > 0) {
-              const share = Math.min(item.deficit, Math.round((item.deficit / deficitSum) * remaining));
-              item.minutes += share;
-              item.deficit -= share;
-              allocatedThisRound += share;
-            }
-          }
-          if (allocatedThisRound === 0) break;
-          remaining -= allocatedThisRound;
-          deficitSum = tempAlloc.reduce((s, d) => s + Math.max(0, d.deficit), 0);
-        }
-        // If leftover, distribute equally among all categories
-        if (remaining > 0) {
-          const perCat = Math.floor(remaining / dailyCategories.length);
-          dailyCategories.forEach(cat => {
-            const existing = tempAlloc.find(a => a.category === cat.id);
-            if (existing) existing.minutes += perCat;
-            else tempAlloc.push({ category: cat.id, minutes: perCat, deficit: 0 });
-          });
-          let rem = remaining - perCat * dailyCategories.length;
-          for (let i = 0; i < rem; i++) {
-            tempAlloc[i % tempAlloc.length].minutes++;
-          }
-        }
-        allocations = tempAlloc.map(a => ({ category: a.category, minutes: a.minutes })).filter(a => a.minutes > 0);
-      }
-      
-      // Round to 5 minutes
-      allocations.forEach(a => {
-        a.minutes = Math.round(a.minutes / 5) * 5;
-      });
-      
-      // Create plan object
-      const plan = {
-        date: dateIso,
-        totalMinutes: totalMinutes,
-        activities: allocations.map(a => ({
-          category: a.category,
-          minutes: a.minutes,
-          done: false
-        }))
-      };
-      
-      // Save and render
-      lastDailyPlan = plan;
-      renderDailyPlan(plan);
-      await saveDailyPlan(plan);
-      loadDailyHistory();
-    }
-
-    function renderDailyHistory(docs) {
-      if (!docs || docs.length === 0) {
-        dailyHistoryContainer.innerHTML = `<p style="color: var(--text-secondary);">No history for the last 7 days.</p>`;
+      if (totalMinutes < 5) {
+        alert('Give yourself at least 5 minutes.');
         return;
       }
-      let html = '';
-      docs.forEach(doc => {
-        const totalMin = doc.totalMinutes || 0;
-        const completedMin = (doc.activities || []).filter(a => a.done).reduce((sum, a) => sum + a.minutes, 0);
-        const pct = totalMin ? Math.round((completedMin / totalMin) * 100) : 0;
-        html += `<div class="history-item" data-date="${doc.id}">
-          <span>${doc.id}</span>
-          <span>${completedMin}/${totalMin} min (${pct}%)</span>
-        </div>`;
-      });
-      dailyHistoryContainer.innerHTML = html;
-      dailyHistoryContainer.querySelectorAll('.history-item').forEach(item => {
-        item.addEventListener('click', () => {
-          dailyDateInput.value = item.dataset.date;
-          currentDailyDate = new Date(item.dataset.date);
-          loadDailyPlanForDate(currentDailyDate);
+
+      dailyGenerateBtn.disabled = true;
+      dailyGenerateBtn.textContent = 'BUILDING...';
+
+      try {
+        const allPlans = await fetchAllDailyPlans();
+        const existingDoc = allPlans.find(p => p.id === dateIso);
+        const allocations = allocateDailyMinutes(totalMinutes, allPlans, dateIso);
+
+        // Preserve existing completion/actual data when regenerating the same day.
+        const oldByCategory = {};
+        (existingDoc?.activities || []).forEach(a => {
+          oldByCategory[a.category] = {
+            done: !!a.done,
+            actualMinutes: Number.isFinite(Number(a.actualMinutes))
+              ? Number(a.actualMinutes)
+              : (a.done ? Number(a.minutes || 0) : 0)
+          };
         });
-      });
+
+        const plan = {
+          date: dateIso,
+          totalMinutes,
+          generatedAt: existingDoc?.generatedAt || firebase.firestore.FieldValue.serverTimestamp(),
+          algorithm: 'actual-history-balanced-v2',
+          activities: allocations.map(a => {
+            const old = oldByCategory[a.category];
+            const actual = Math.min(a.minutes, old?.actualMinutes || 0);
+            return {
+              category: a.category,
+              minutes: a.minutes,
+              actualMinutes: actual,
+              done: actual >= a.minutes && a.minutes > 0
+            };
+          })
+        };
+
+        lastDailyPlan = plan;
+        renderDailyPlan(plan);
+        await saveDailyPlan(plan);
+      } catch (err) {
+        console.error('Error generating daily plan:', err);
+        alert('Could not generate the plan: ' + err.message);
+      } finally {
+        dailyGenerateBtn.disabled = false;
+        dailyGenerateBtn.textContent = 'Plan My Day';
+      }
     }
 
-    // Event listeners for daily planner
+    function setDailyDateToToday() {
+      const today = localIso();
+      const chosen = today < DAILY_PLANNER_START ? DAILY_PLANNER_START : today;
+      dailyDateInput.min = DAILY_PLANNER_START;
+      dailyDateInput.value = chosen;
+      currentDailyDate = isoToLocalDate(chosen);
+    }
+
+    async function loadDailyPlanner() {
+      setDailyDateToToday();
+      await loadDailyPlanForDate(dailyDateInput.value);
+      await refreshDailyHistory();
+    }
+
     dailyGenerateBtn.addEventListener('click', generateDailyPlan);
-    dailyDateInput.addEventListener('change', () => {
-      currentDailyDate = new Date(dailyDateInput.value);
-      loadDailyPlanForDate(currentDailyDate);
-    });
-    dailyHoursInput.addEventListener('keydown', (e) => {
+    dailyDateInput.addEventListener('change', () => loadDailyPlanForDate(dailyDateInput.value));
+    dailyHoursInput.addEventListener('keydown', e => {
       if (e.key === 'Enter') generateDailyPlan();
     });
+    dailyRefreshHistoryBtn.addEventListener('click', refreshDailyHistory);
 
     // ==================== SCREENSCAPE ====================
     const ssTitle = document.getElementById('screenscapeTitle');
