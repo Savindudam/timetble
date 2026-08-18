@@ -557,7 +557,7 @@
         </div>
 
         <div style="position: relative; width: 100%; padding-top: 56.25%; background: #000; border: 1px solid var(--border); margin-bottom: 1.5rem;">
-          <iframe id="screenscapeIframe" src="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="fullscreen; autoplay; picture-in-picture" allowfullscreen></iframe>
+          <iframe id="screenscapeIframe" src="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="autoplay; picture-in-picture" allowfullscreen></iframe>
         </div>
 
         <div class="card-widget" style="padding: 1.5rem; margin-top: 0.5rem;">
@@ -655,6 +655,89 @@
       { id: 'alone_time', name: 'Alone Time (No Phone)', weeklyTargetMin: 180 }
     ];
 
+    // ==================== CP PLAN DATA ====================
+    // Keep the CP plan self-contained so the page can never fail with
+    // "ioiPlan is not defined" before Firebase authentication starts.
+    // The plan runs from 19 Aug 2026 through 12 Sep 2027.
+    const ioiPlan = (() => {
+      const start = new Date(2026, 7, 19);
+      const end = new Date(2027, 8, 12);
+      const weeks = [];
+      const tasksByWeek = [
+        ["C++ fundamentals and STL", "Complexity analysis", "Sorting and searching", "Arrays, strings and implementation"],
+        ["Prefix sums and difference arrays", "Two pointers", "Binary search", "Greedy fundamentals"],
+        ["Recursion and backtracking", "Bit manipulation", "Bitmask techniques", "Practice set"],
+        ["Stacks and queues", "Deque and monotonic structures", "Linked lists", "Data structure practice"],
+        ["Maps and sets", "Coordinate compression", "Frequency techniques", "Mixed implementation"],
+        ["Graph representation", "BFS", "DFS", "Graph practice"],
+        ["Connected components", "Bipartite graphs", "Topological sorting", "DAG problems"],
+        ["Shortest paths", "Dijkstra", "Bellman-Ford", "Shortest path practice"],
+        ["Minimum spanning trees", "DSU", "Kruskal", "Graph review"],
+        ["Trees and traversals", "Binary trees", "Tree depth and diameter", "Tree practice"],
+        ["LCA basics", "Binary lifting", "Tree queries", "LCA practice"],
+        ["Heaps and priority queues", "Sweep line", "Intervals", "Data structure problems"],
+        ["Dynamic programming basics", "1D DP", "2D DP", "DP practice"],
+        ["Knapsack patterns", "Subset DP", "Counting DP", "DP review"],
+        ["Grid DP", "Path DP", "State compression", "DP practice"],
+        ["String algorithms", "Prefix function", "KMP", "String practice"],
+        ["Z function", "Hashing", "Rolling hash", "String review"],
+        ["Fenwick tree", "Segment tree", "Range queries", "Data structure practice"],
+        ["Lazy propagation", "Sparse table", "RMQ", "Range query practice"],
+        ["Combinatorics", "Modular arithmetic", "Fast exponentiation", "Number theory practice"],
+        ["GCD and extended GCD", "Modular inverse", "Sieve", "Prime factorization"],
+        ["Chinese remainder theorem", "Euler phi", "Divisibility", "Number theory review"],
+        ["Game theory basics", "Nim", "Sprague-Grundy", "Game problems"],
+        ["Probability basics", "Expected value", "Randomized thinking", "Probability practice"],
+        ["Geometry basics", "Vectors and cross product", "Lines and intersections", "Geometry practice"],
+        ["Sweep line geometry", "Convex hull", "Closest pair", "Geometry review"],
+        ["Flow basics", "Max flow", "Min cut", "Flow practice"],
+        ["Matching", "Bipartite matching", "Network flow applications", "Matching practice"],
+        ["Advanced graphs", "SCC", "2-SAT", "SCC practice"],
+        ["Bridges and articulation points", "Euler paths", "Functional graphs", "Graph review"],
+        ["Trie", "Aho-Corasick concepts", "Suffix structures", "String practice"],
+        ["Divide and conquer", "CDQ concepts", "Offline queries", "D&C practice"],
+        ["Meet in the middle", "Randomized algorithms", "Optimization techniques", "Advanced practice"],
+        ["Advanced DP", "DP optimization", "Convex hull trick", "Advanced DP practice"],
+        ["Tree DP", "Rerooting", "Small-to-large", "Tree practice"],
+        ["Heavy-light decomposition", "Tree path queries", "HLD implementation", "HLD practice"],
+        ["Persistent data structures", "Offline processing", "Mo's algorithm", "Advanced data structures"],
+        ["Advanced combinatorics", "Generating functions", "Matrix exponentiation", "Math practice"],
+        ["Advanced number theory", "Mobius function", "Inclusion-exclusion", "Number theory practice"],
+        ["Contest strategy", "Problem classification", "Time management", "Virtual contest"],
+        ["IOI-style implementation", "Partial scoring", "Subtask strategy", "IOI practice"],
+        ["Optimization and profiling", "Memory management", "Fast I/O", "Implementation drill"],
+        ["Mixed graph contest set", "Mixed DP contest set", "Mixed math contest set", "Editorial review"],
+        ["Virtual contest 1", "Virtual contest 2", "Upsolve contest 1", "Upsolve contest 2"],
+        ["Weak-topic repair", "Weak-topic repair", "Targeted problem solving", "Review notes"],
+        ["Hard problem set", "Hard problem set", "Proof writing", "Implementation drill"],
+        ["Full virtual contest", "Full virtual contest", "Upsolve", "Error log review"],
+        ["Algorithms revision", "Data structures revision", "Math revision", "Mixed problems"],
+        ["Graph revision", "DP revision", "String revision", "Mixed problems"],
+        ["Advanced topic revision", "Advanced topic revision", "Hard problems", "Editorial analysis"],
+        ["Contest simulation", "Contest simulation", "Upsolve", "Mistake analysis"],
+        ["IOI-style long problem", "IOI-style long problem", "Subtask planning", "Solution write-up"]
+      ];
+      const cursor = new Date(start);
+      let dayNumber = 1;
+      let weekNumber = 1;
+      let weekDays = [];
+      while (cursor <= end) {
+        const iso = `${cursor.getFullYear()}-${String(cursor.getMonth()+1).padStart(2,'0')}-${String(cursor.getDate()).padStart(2,'0')}`;
+        const dateLabel = `${cursor.getDate()} ${cursor.toLocaleString('en-US',{month:'short'})} ${cursor.toLocaleString('en-US',{weekday:'short'})}`;
+        const weekTasks = tasksByWeek[(weekNumber - 1) % tasksByWeek.length];
+        const taskSet = weekTasks.map((task, i) => `${task} (${i === 0 ? 60 : 45}m)`);
+        weekDays.push({ day: dayNumber, iso, date: dateLabel, tasks: taskSet });
+        if (weekDays.length === 7 || new Date(cursor.getTime() + 86400000) > end) {
+          weeks.push({ week: `Week ${weekNumber}`, days: weekDays });
+          weekDays = [];
+          weekNumber++;
+        }
+        cursor.setDate(cursor.getDate() + 1);
+        dayNumber++;
+      }
+      return weeks;
+    })();
+
     // ==================== UTILITY FUNCTIONS ====================
     function timeToMinutes(str) {
       const [h,m] = str.split(':').map(Number);
@@ -675,7 +758,7 @@
     // The original plan dates are shifted by the exact offset needed,
     // instead of assuming a fixed number of days.
     const CP_START_ISO = '2026-08-19';
-    if (ioiPlan?.length && ioiPlan[0]?.days?.length) {
+    if (Array.isArray(ioiPlan) && ioiPlan.length && ioiPlan[0] && Array.isArray(ioiPlan[0].days) && ioiPlan[0].days.length) {
       const first = ioiPlan[0].days[0].iso;
       const [fy,fm,fd] = first.split('-').map(Number);
       const [ty,tm,td] = CP_START_ISO.split('-').map(Number);
