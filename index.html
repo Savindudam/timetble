@@ -189,6 +189,22 @@
     .day-detail-empty { color: var(--text-secondary); font-size: 0.82rem; text-align: center; padding: 0.4rem 0; }
     .day-detail-jump { display: block; margin: 0.7rem auto 0; background: transparent; border: 1px solid var(--border); color: var(--text-secondary); font-size: 0.72rem; padding: 0.3rem 0.7rem; cursor: pointer; }
     .day-detail-jump:hover { border-color: var(--accent); color: var(--accent); }
+    .daily-planner-container { max-width: 900px; margin: 0 auto; }
+    .daily-input-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end; margin-bottom: 1.5rem; }
+    .daily-input-row > div { flex: 1; min-width: 180px; }
+    .daily-input-row label { display: block; color: var(--text-secondary); font-size: 0.7rem; text-transform: uppercase; margin-bottom: 0.3rem; }
+    .daily-input-row input { width: 100%; }
+    .daily-generate-btn { background: #000; color: var(--accent); border: 1px solid var(--accent); padding: 0.6rem 1.5rem; cursor: pointer; font-weight: bold; }
+    .daily-generate-btn:hover { background: rgba(0, 255, 65, 0.1); }
+    .daily-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+    .daily-item { display: flex; align-items: center; gap: 1rem; padding: 0.8rem 1rem; background: #050505; border: 1px solid var(--border); }
+    .daily-item.done .daily-item-text { text-decoration: line-through; color: var(--text-secondary); }
+    .daily-item-time { color: var(--accent); font-weight: 700; min-width: 80px; text-align: right; }
+    .daily-history { margin-top: 2rem; }
+    .daily-history h3 { margin-top: 0; }
+    .history-list { display: flex; flex-direction: column; gap: 0.4rem; }
+    .history-item { display: flex; justify-content: space-between; padding: 0.6rem 1rem; background: #050505; border: 1px solid var(--border); cursor: pointer; }
+    .history-item:hover { border-color: var(--accent); }
     @media (max-width: 768px) {
       .sidebar { position: absolute; transform: translateX(-100%); height: 100vh; }
       .sidebar.open { transform: translateX(0); }
@@ -228,9 +244,13 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         <span class="icon-only">To Do</span>
       </button>
-      <button class="sidebar-btn" data-view="planner">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-        <span class="icon-only">Planner</span>
+      <button class="sidebar-btn" data-view="dailyplanner">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span class="icon-only">Daily Planner</span>
+      </button>
+      <button class="sidebar-btn" data-view="cp">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        <span class="icon-only">CP</span>
       </button>
       <button class="sidebar-btn" data-view="calendar">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -239,6 +259,10 @@
       <button class="sidebar-btn" data-view="screenscape">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         <span class="icon-only">Screenscape</span>
+      </button>
+      <button class="sidebar-btn" data-view="hacking">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+        <span class="icon-only">Hacking</span>
       </button>
     </nav>
     <div class="sidebar-footer">
@@ -261,6 +285,7 @@
       <div class="progress-bar-fill" id="progressBarFill"></div>
     </div>
 
+    <!-- Dashboard View -->
     <div class="view active" id="dashboardView">
       <div class="dashboard-grid">
         <div class="card-widget current-task-widget" id="currentTaskWidget">
@@ -303,26 +328,28 @@
           <div style="margin-top: 0.5rem;"><span class="stat-label">Focus Time</span></div>
           <div class="focus-time" id="focusTime">0h 0m</div>
         </div>
-        <div class="card-widget current-task-widget" id="plannerSummaryWidget" style="cursor:pointer;">
+        <div class="card-widget current-task-widget" id="planProgressWidget" style="cursor:pointer;">
           <div class="progress-ring-container">
             <svg class="progress-ring" viewBox="0 0 100 100">
               <circle class="progress-ring-circle" cx="50" cy="50" r="42"/>
-              <circle class="progress-ring-fill" id="plannerRingFill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="263.89" style="stroke: var(--success);"/>
-              <text x="50" y="50" text-anchor="middle" dy="7" class="progress-ring-text" id="plannerPercent">0%</text>
+              <circle class="progress-ring-fill" id="planRingFill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="263.89" style="stroke: var(--success);"/>
+              <text x="50" y="50" text-anchor="middle" dy="7" class="progress-ring-text" id="planPercent">0%</text>
             </svg>
             <div class="current-task-details">
-              <h3 id="plannerWidgetTitle">Today's Planner</h3>
-              <p><span id="plannerDoneMin">0</span> / <span id="plannerTotalMinWidget">0</span> min · Tap to open</p>
+              <h3 id="planWidgetTitle">CP – IOI 2027 Prep Plan</h3>
+              <p><span id="planDoneCount">0</span> / <span id="planTotalCount">0</span> tasks done · Tap to open</p>
             </div>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- TimetableView -->
     <div class="view" id="timetableView">
       <div class="timeline" id="timelineContainer"></div>
     </div>
 
+    <!-- ToDo View -->
     <div class="view" id="todoView">
       <div class="todo-container">
         <div class="todo-input-row">
@@ -333,42 +360,47 @@
       </div>
     </div>
 
-    <div class="view" id="plannerView">
-      <div class="stats-container">
-        <div class="plan-header">
-          <h2>Daily Balanced Planner</h2>
-          <p>Allocate your available time today across your key areas. Check off what you complete. The planner learns and balances over time.</p>
-          <div class="plan-progress-track"><div class="plan-progress-fill" id="plannerProgressFill"></div></div>
-          <div class="plan-progress-label">
-            <span><strong id="plannerProgressPct">0%</strong> complete today</span>
-            <span><span id="plannerCompletedMin">0</span> / <span id="plannerTotalMin">0</span> min</span>
+    <!-- Daily Planner View -->
+    <div class="view" id="dailyplannerView">
+      <div class="daily-planner-container">
+        <div class="daily-input-row">
+          <div>
+            <label>Date</label>
+            <input type="date" id="dailyDateInput">
+          </div>
+          <div>
+            <label>Total available hours today</label>
+            <input type="number" id="dailyHoursInput" min="0.5" step="0.5" value="16">
+          </div>
+          <div style="flex:0 0 auto;">
+            <button class="daily-generate-btn" id="dailyGenerateBtn">Generate Plan</button>
           </div>
         </div>
-
-        <div class="card-widget" style="padding: 1.5rem; margin-bottom: 1.5rem;">
-          <h3 style="color: var(--accent); margin-top:0; margin-bottom: 0.5rem;">Plan a Day</h3>
-          <p style="color: var(--text-secondary); font-size: 0.8rem; margin: 0 0 1rem 0;">Pick a date and how many hours you have. The planner will suggest a balanced schedule based on your history.</p>
-          <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:center; margin-bottom:1rem;">
-            <div>
-              <label style="color: var(--text-secondary); font-size:0.75rem; display:block; margin-bottom:0.2rem;">Date</label>
-              <input type="date" id="plannerDateInput">
-            </div>
-            <div>
-              <label style="color: var(--text-secondary); font-size:0.75rem; display:block; margin-bottom:0.2rem;">Available Hours</label>
-              <input type="number" id="plannerHoursInput" min="0.5" step="0.5" value="8">
-            </div>
-            <button class="todo-add-btn" id="plannerGenerateBtn" style="margin-top:1.2rem;">Generate Plan</button>
-          </div>
-          <div id="plannerPlanContainer"></div>
-        </div>
-
-        <div class="card-widget" style="padding: 1.5rem; margin-top: 1rem;">
-          <h3 style="color: var(--accent); margin-top:0; margin-bottom: 1rem;">History</h3>
-          <div id="plannerHistoryContainer"></div>
+        <div id="dailyPlanContainer"></div>
+        <div class="daily-history">
+          <h3>History (Last 7 Days)</h3>
+          <div class="history-list" id="dailyHistoryContainer"></div>
         </div>
       </div>
     </div>
 
+    <!-- CP View -->
+    <div class="view" id="cpView">
+      <div class="stats-container">
+        <div class="plan-header">
+          <h2 id="planHeaderTitle">CP – IOI 2027 Full Preparation Plan</h2>
+          <p id="planHeaderSubtitle">Loading…</p>
+          <div class="plan-progress-track"><div class="plan-progress-fill" id="planProgressFill"></div></div>
+          <div class="plan-progress-label">
+            <span><strong id="planProgressPct">0%</strong> complete</span>
+            <span><span id="planProgressDone">0</span> / <span id="planProgressTotal">0</span> tasks</span>
+          </div>
+        </div>
+        <div id="planContainer"></div>
+      </div>
+    </div>
+
+    <!-- Calendar View -->
     <div class="view" id="calendarView">
       <div class="calendar-page">
         <div class="calendar-grid-wrap">
@@ -406,6 +438,7 @@
       </div>
     </div>
 
+    <!-- Screenscape View -->
     <div class="view" id="screenscapeView">
       <div style="max-width: 1100px; margin: 0 auto; padding: 0 1rem;">
         <div class="card-widget" style="padding: 1.5rem; margin-bottom: 1.5rem;">
@@ -464,6 +497,22 @@
         </div>
       </div>
     </div>
+
+    <!-- Hacking View -->
+    <div class="view" id="hackingView">
+      <div class="stats-container">
+        <div class="plan-header">
+          <h2>Hacking / CTF Roadmap</h2>
+          <p>Zero to competitive CTF player — every stage, every subtopic, tick as you go.</p>
+          <div class="plan-progress-track"><div class="plan-progress-fill" id="hackProgressFill"></div></div>
+          <div class="plan-progress-label">
+            <span><strong id="hackProgressPct">0%</strong> complete</span>
+            <span><span id="hackProgressDone">0</span> / <span id="hackProgressTotal">0</span> tasks</span>
+          </div>
+        </div>
+        <div id="hackPlanContainer"></div>
+      </div>
+    </div>
   </div>
 
   <button class="fab" id="resetBtn" title="Go to current task">📍</button>
@@ -486,8 +535,8 @@
     const db = firebase.firestore();
     const auth = firebase.auth();
     const watchHistoryRef = db.collection("watchHistory");
-    const dailyPlansRef = db.collection("dailyPlans");
 
+    // ==================== STATIC DATA ====================
     const timetable = {
       Monday: [ ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
       Tuesday: [ ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
@@ -501,6 +550,7 @@
     let tasks = [];
     let currentDay = "";
 
+    // ==================== DOM REFERENCES ====================
     const dom = {
       greeting: document.getElementById('greetingMessage'),
       date: document.getElementById('dateDisplay'),
@@ -518,6 +568,20 @@
       menuToggle: document.getElementById('menuToggle')
     };
 
+    // ==================== DAILY PLANNER CATEGORIES ====================
+    const dailyCategories = [
+      { id: 'combined_maths', name: 'Combined Maths', weeklyTargetMin: 600 },
+      { id: 'physics', name: 'Physics', weeklyTargetMin: 480 },
+      { id: 'ict', name: 'ICT', weeklyTargetMin: 360 },
+      { id: 'cp', name: 'CP (Competitive Programming)', weeklyTargetMin: 600 },
+      { id: 'hacking', name: 'Hacking Learning', weeklyTargetMin: 480 },
+      { id: 'exercises', name: 'Exercises', weeklyTargetMin: 300 },
+      { id: 'gaming', name: 'Gaming Time', weeklyTargetMin: 300 },
+      { id: 'refresh', name: 'Refresh Time (Reels/Social)', weeklyTargetMin: 300 },
+      { id: 'alone_time', name: 'Alone Time (No Phone)', weeklyTargetMin: 180 }
+    ];
+
+    // ==================== UTILITY FUNCTIONS ====================
     function timeToMinutes(str) {
       const [h,m] = str.split(':').map(Number);
       return h*60 + m;
@@ -528,6 +592,20 @@
       const idx = tasks.findIndex(t => currentMin >= t.startMin && currentMin < t.endMin);
       return idx === -1 ? (tasks.length > 0 ? 0 : -1) : idx;
     }
+    function formatIsoDate(iso) {
+      const [y,m,d] = iso.split('-').map(Number);
+      const date = new Date(y, m-1, d);
+      return `${d} ${monthNames[m-1]} ${fullWeekdayNames[date.getDay()].slice(0,3)}`;
+    }
+    // Shift CP plan dates to start Aug 19
+    ioiPlan.forEach(week => week.days.forEach(day => {
+      const [y,m,d] = day.iso.split('-').map(Number);
+      const newDate = new Date(y, m-1, d + 9);
+      day.iso = `${newDate.getFullYear()}-${String(newDate.getMonth()+1).padStart(2,'0')}-${String(newDate.getDate()).padStart(2,'0')}`;
+      day.date = formatIsoDate(day.iso);
+    }));
+
+    // ==================== TIMETABLE RENDERING ====================
     function renderTimeline() {
       const container = document.getElementById('timelineContainer');
       if (!container) return;
@@ -566,6 +644,8 @@
         if (currentEl) currentEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 100);
     }
+
+    // ==================== DASHBOARD UPDATES ====================
     function updateDashboard() {
       if (tasks.length === 0) return;
       const now = new Date();
@@ -631,6 +711,8 @@
       updateDashboard();
       updateEventNoteWidget();
     }
+
+    // ==================== SIDEBAR NAVIGATION ====================
     dom.menuToggle.addEventListener('click', () => {
       dom.sidebar.classList.toggle('open');
     });
@@ -640,9 +722,11 @@
       dashboard: document.getElementById('dashboardView'),
       timetable: document.getElementById('timetableView'),
       todo: document.getElementById('todoView'),
-      planner: document.getElementById('plannerView'),
+      dailyplanner: document.getElementById('dailyplannerView'),
+      cp: document.getElementById('cpView'),
       calendar: document.getElementById('calendarView'),
-      screenscape: document.getElementById('screenscapeView')
+      screenscape: document.getElementById('screenscapeView'),
+      hacking: document.getElementById('hackingView')
     };
     sidebarBtns.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -655,11 +739,14 @@
         if (viewName === 'timetable') renderTimeline();
         if (viewName === 'calendar') { renderCalendarGrid(); renderDayDetail(selectedCalDate); }
         if (viewName === 'screenscape') { if (!ssIframe.src) loadScreenscape(); }
-        if (viewName === 'planner') { renderPlanner(); loadPlannerHistory(); }
+        if (viewName === 'cp') { renderPlan(); }
+        if (viewName === 'hacking') { renderHackingPlan(); }
+        if (viewName === 'dailyplanner') { loadDailyPlanner(); }
         if (window.innerWidth <= 768) dom.sidebar.classList.remove('open');
       });
     });
 
+    // ==================== TO-DO ====================
     const todosRef = db.collection("todos");
     let unsubTodos = null;
     function renderTodos(snapshot) {
@@ -702,7 +789,7 @@
       if (e.key === "Enter") document.getElementById("todoAddBtn").click();
     });
 
-    // ===== CALENDAR =====
+    // ==================== CALENDAR ====================
     const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const fullMonthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     const weekdayNames = ["S","M","T","W","T","F","S"];
@@ -724,7 +811,6 @@
     selectedCalDate.setHours(0,0,0,0);
     const calendarRef = db.collection("calendarEvents");
     let unsubCalendar = null;
-
     function getDaysUntil(e) {
       const now = new Date();
       const today0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -884,419 +970,641 @@
       labelInput.value = ''; dateInput.value = '';
     });
 
-    // ===== DAILY PLANNER =====
-    const plannerCategories = [
-      { id: 'combined_maths', label: 'Combined Maths', target: 90, maxPerDay: 120 },
-      { id: 'physics', label: 'Physics', target: 60, maxPerDay: 90 },
-      { id: 'ict', label: 'ICT', target: 60, maxPerDay: 90 },
-      { id: 'cp', label: 'CP', target: 120, maxPerDay: 180 },
-      { id: 'hacking', label: 'Hacking Learning', target: 60, maxPerDay: 120 },
-      { id: 'exercise', label: 'Exercise', target: 30, maxPerDay: 45 },
-      { id: 'gaming', label: 'Gaming', target: 60, maxPerDay: 60 },
-      { id: 'refresh', label: 'Refresh (Social Media)', target: 20, maxPerDay: 30 },
-      { id: 'alone_time', label: 'Alone Time (No Phone)', target: 30, maxPerDay: 45 }
-    ];
-    const plannerStartDate = new Date('2026-08-19'); // Aug 19 as requested
-
-    let selectedPlannerDate = new Date();
-    selectedPlannerDate.setHours(0,0,0,0);
-    let plannerDocSnapshot = null; // current doc for selected date
-    let plannerHistoryCache = []; // array of {date, entries, totalAllocated, totalCompleted}
-    let unsubPlannerDoc = null;
-
-    function plannerDateString(date) {
-      return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+    // ==================== CP PLAN (IOI) ====================
+    // (ioiPlan array defined earlier with huge data, we reference it)
+    let planState = {};
+    let planOpenDays = new Set();
+    const planStateRef = db.collection("ioiPlan").doc("state");
+    let unsubPlan = null;
+    function planTaskId(day, idx) { return `d${day}-${idx}`; }
+    function estimateDayMinutes(d) {
+      let explicit = 0;
+      d.tasks.forEach(t => {
+        const m = t.match(/\((\d+(?:\.\d+)?)h\)/);
+        if (m) explicit = Math.max(explicit, parseFloat(m[1]) * 60);
+      });
+      if (explicit > 0) return Math.round(explicit + Math.max(0, d.tasks.length - 1) * 15);
+      return d.tasks.length * 45;
     }
-
-    function computeTotalCompletedFromHistory() {
-      const totals = {};
-      plannerCategories.forEach(c => totals[c.id] = 0);
-      plannerHistoryCache.forEach(doc => {
-        if (doc.date >= plannerDateString(selectedPlannerDate)) return; // exclude selected date
-        doc.entries.forEach(entry => {
-          if (entry.completed) totals[entry.categoryId] = (totals[entry.categoryId] || 0) + entry.allocatedMinutes;
+    function findDayByNumber(dayNum) {
+      for (const w of ioiPlan) { for (const d of w.days) { if (d.day === dayNum) return d; } }
+      return null;
+    }
+    function computePlanTotals() {
+      let total = 0, done = 0;
+      ioiPlan.forEach(w => w.days.forEach(d => {
+        d.tasks.forEach((_, i) => {
+          total++;
+          if (planState[planTaskId(d.day, i)]) done++;
+        });
+      }));
+      return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
+    }
+    function computeDayTotals(d) {
+      let total = d.tasks.length, done = 0;
+      d.tasks.forEach((_, i) => { if (planState[planTaskId(d.day, i)]) done++; });
+      return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
+    }
+    function todayIso() {
+      const n = new Date();
+      return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`;
+    }
+    function updatePlanHeader() {
+      const totalDays = ioiPlan.reduce((sum, w) => sum + w.days.length, 0);
+      const firstIso = ioiPlan[0]?.days[0]?.iso;
+      const lastWeek = ioiPlan[ioiPlan.length - 1];
+      const lastIso = lastWeek?.days[lastWeek.days.length - 1]?.iso;
+      const sub = document.getElementById('planHeaderSubtitle');
+      if (sub && firstIso && lastIso) {
+        sub.textContent = `${formatIsoDate(firstIso)} – ${formatIsoDate(lastIso)} · ${totalDays} days · Full C++/algorithms syllabus for IOI 2027`;
+      }
+    }
+    function renderPlan() {
+      const container = document.getElementById('planContainer');
+      if (!container) return;
+      const today = todayIso();
+      if (planOpenDays.size === 0) {
+        ioiPlan.forEach(w => w.days.forEach(d => { if (d.iso === today) planOpenDays.add(d.day); }));
+      }
+      container.innerHTML = ioiPlan.map(w => `
+        <div class="plan-week">
+          <div class="plan-week-title">${w.week}</div>
+          ${w.days.map(d => {
+            const t = computeDayTotals(d);
+            const isToday = d.iso === today;
+            const isOpen = planOpenDays.has(d.day);
+            const allDone = t.total > 0 && t.done === t.total;
+            return `
+              <div class="plan-day ${isToday ? 'today' : ''} ${isOpen ? 'open' : ''} ${allDone ? 'all-done' : ''}" data-day="${d.day}">
+                <div class="plan-day-header" data-toggle="${d.day}">
+                  <div class="plan-day-title">
+                    <input type="checkbox" class="plan-day-toggle-all" data-toggleall="${d.day}" ${allDone ? 'checked' : ''} title="Mark all tasks in this day">
+                    <span class="plan-day-label">Day ${d.day}</span>
+                    <span class="plan-day-date">${d.date} · ~${Math.round((estimateDayMinutes(d) / 60) * 10) / 10}h</span>
+                  </div>
+                  <div class="plan-day-meta">
+                    <span>${t.done}/${t.total}</span>
+                    <div class="plan-day-mini"><div style="width:${t.pct}%"></div></div>
+                    <svg class="plan-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                  </div>
+                </div>
+                <ul class="plan-tasks">
+                  ${d.tasks.map((task, i) => {
+                    const id = planTaskId(d.day, i);
+                    const checked = !!planState[id];
+                    return `<li class="plan-task ${checked ? 'done' : ''}" data-taskid="${id}">
+                        <input type="checkbox" ${checked ? 'checked' : ''}>
+                        <span class="plan-task-text">${escapeHtml(task)}</span>
+                      </li>`;
+                  }).join('')}
+                </ul>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `).join('');
+      container.querySelectorAll('.plan-day-header').forEach(h => {
+        h.addEventListener('click', (e) => {
+          if (e.target.classList.contains('plan-day-toggle-all')) return;
+          const dayNum = Number(h.dataset.toggle);
+          planOpenDays.has(dayNum) ? planOpenDays.delete(dayNum) : planOpenDays.add(dayNum);
+          renderPlan();
         });
       });
-      return totals;
+      container.querySelectorAll('.plan-day-toggle-all').forEach(cb => {
+        cb.addEventListener('click', (e) => e.stopPropagation());
+        cb.addEventListener('change', (e) => {
+          e.stopPropagation();
+          const dayNum = Number(cb.dataset.toggleall);
+          const day = findDayByNumber(dayNum);
+          if (!day) return;
+          const newVal = cb.checked;
+          day.tasks.forEach((_, i) => { planState[planTaskId(dayNum, i)] = newVal; });
+          persistPlanState();
+          renderPlan();
+        });
+      });
+      container.querySelectorAll('.plan-task').forEach(el => {
+        const id = el.dataset.taskid;
+        const box = el.querySelector('input[type="checkbox"]');
+        const toggle = (e) => {
+          e.stopPropagation();
+          const newVal = !planState[id];
+          planState[id] = newVal;
+          box.checked = newVal;
+          el.classList.toggle('done', newVal);
+          persistPlanState();
+          updatePlanProgressUI();
+        };
+        el.addEventListener('click', (e) => { if (e.target.tagName !== 'INPUT') toggle(e); });
+        box.addEventListener('change', () => {
+          planState[id] = box.checked;
+          el.classList.toggle('done', box.checked);
+          persistPlanState();
+          updatePlanProgressUI();
+        });
+      });
+      updatePlanProgressUI(false);
     }
+    function updatePlanProgressUI(rerenderMeta = true) {
+      const { total, done, pct } = computePlanTotals();
+      const fill = document.getElementById('planProgressFill');
+      const pctEl = document.getElementById('planProgressPct');
+      const doneEl = document.getElementById('planProgressDone');
+      const totalEl = document.getElementById('planProgressTotal');
+      if (fill) fill.style.width = pct + '%';
+      if (pctEl) pctEl.textContent = pct + '%';
+      if (doneEl) doneEl.textContent = done;
+      if (totalEl) totalEl.textContent = total;
+      const ring = document.getElementById('planRingFill');
+      const ringTxt = document.getElementById('planPercent');
+      const dc = document.getElementById('planDoneCount');
+      const tc = document.getElementById('planTotalCount');
+      const circumference = 2 * Math.PI * 42;
+      if (ring) ring.style.strokeDashoffset = circumference - (pct / 100) * circumference;
+      if (ringTxt) ringTxt.textContent = pct + '%';
+      if (dc) dc.textContent = done;
+      if (tc) tc.textContent = total;
+      if (rerenderMeta) {
+        ioiPlan.forEach(w => w.days.forEach(d => {
+          const el = document.querySelector(`.plan-day[data-day="${d.day}"]`);
+          if (!el) return;
+          const t = computeDayTotals(d);
+          const meta = el.querySelector('.plan-day-meta span');
+          const mini = el.querySelector('.plan-day-mini > div');
+          const toggleAll = el.querySelector('.plan-day-toggle-all');
+          if (meta) meta.textContent = `${t.done}/${t.total}`;
+          if (mini) mini.style.width = t.pct + '%';
+          const allDone = t.total > 0 && t.done === t.total;
+          if (toggleAll) toggleAll.checked = allDone;
+          el.classList.toggle('all-done', allDone);
+        }));
+      }
+    }
+    let planSaveTimer = null;
+    function persistPlanState() {
+      clearTimeout(planSaveTimer);
+      planSaveTimer = setTimeout(() => {
+        planStateRef.set({ state: planState, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }).catch(err => console.error('Plan save failed', err));
+      }, 300);
+    }
+    document.getElementById('planProgressWidget').addEventListener('click', () => {
+      document.querySelector('.sidebar-btn[data-view="cp"]').click();
+    });
 
-    async function loadPlannerHistory() {
-      try {
-        const snapshot = await dailyPlansRef.orderBy('date', 'asc').get();
-        plannerHistoryCache = [];
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          plannerHistoryCache.push({
-            date: data.date,
-            entries: data.entries || [],
-            totalAllocated: data.totalAllocated || 0,
-            totalCompleted: data.totalCompleted || 0
+    // ==================== HACKING PLAN ====================
+    // (hackingPlan array defined earlier)
+    let hackingState = {};
+    let hackOpenTopics = new Set();
+    const hackingPlanStateRef = db.collection("hackingPlan").doc("state");
+    let unsubHacking = null;
+    let lastHackSession = [];
+
+    function hackTaskId(topicId, idx) { return `h-${topicId}-${idx}`; }
+    function findHackTopic(topicId) {
+      for (const stage of hackingPlan) {
+        for (const topic of stage.topics) { if (topic.id === topicId) return topic; }
+      }
+      return null;
+    }
+    function flattenHackTasks() {
+      const flat = [];
+      hackingPlan.forEach(stage => {
+        stage.topics.forEach(topic => {
+          const perTaskTime = topic.time / topic.tasks.length;
+          topic.tasks.forEach((task, i) => {
+            flat.push({ topicId: topic.id, topicTitle: topic.title, stageTitle: stage.stage, idx: i, text: task, minutes: perTaskTime, id: hackTaskId(topic.id, i) });
           });
         });
-        renderPlannerHistory();
-      } catch (err) {
-        console.error('Failed to load planner history:', err);
-      }
+      });
+      return flat;
     }
-
-    async function generatePlannerPlan() {
-      const dateInput = document.getElementById('plannerDateInput').value;
-      if (!dateInput) return alert('Please select a date.');
-      selectedPlannerDate = new Date(dateInput + 'T00:00:00');
-      const hours = parseFloat(document.getElementById('plannerHoursInput').value) || 0;
-      if (hours <= 0) return alert('Please enter a positive number of hours.');
-      const availableMinutes = Math.round(hours * 60);
-
-      // Fetch history if not loaded or date changed
-      await loadPlannerHistory();
-
-      const totalCompleted = computeTotalCompletedFromHistory();
-
-      // Compute deficits based on targets
-      const deficits = {};
-      plannerCategories.forEach(c => {
-        deficits[c.id] = Math.max(0, c.target - (totalCompleted[c.id] || 0));
-      });
-      const totalDeficit = Object.values(deficits).reduce((sum, v) => sum + v, 0);
-
-      let allocation = {};
-
-      if (totalDeficit === 0) {
-        // All targets met; distribute equally
-        const perCat = Math.floor(availableMinutes / plannerCategories.length);
-        plannerCategories.forEach(c => {
-          allocation[c.id] = Math.min(c.maxPerDay, perCat);
-        });
-        // Distribute remainder
-        let remaining = availableMinutes - plannerCategories.reduce((sum, c) => sum + allocation[c.id], 0);
-        for (let i = 0; i < plannerCategories.length && remaining > 0; i++) {
-          const c = plannerCategories[i];
-          const canAdd = c.maxPerDay - allocation[c.id];
-          const add = Math.min(canAdd, remaining);
-          allocation[c.id] += add;
-          remaining -= add;
-        }
-      } else {
-        // Allocate proportionally to deficits, respecting max
-        let allocatedTotal = 0;
-        plannerCategories.forEach(c => {
-          const proportion = deficits[c.id] / totalDeficit;
-          let amount = Math.round(proportion * availableMinutes);
-          amount = Math.min(amount, c.maxPerDay);
-          allocation[c.id] = amount;
-          allocatedTotal += amount;
-        });
-
-        // Adjust remaining or over-allocated
-        let diff = availableMinutes - allocatedTotal;
-        if (diff > 0) {
-          // Give extra to categories not at max
-          const candidates = plannerCategories.filter(c => allocation[c.id] < c.maxPerDay);
-          let i = 0;
-          while (diff > 0 && candidates.length > 0) {
-            const c = candidates[i % candidates.length];
-            const canAdd = c.maxPerDay - allocation[c.id];
-            if (canAdd > 0) {
-              const add = Math.min(canAdd, Math.ceil(diff / candidates.length));
-              allocation[c.id] += add;
-              diff -= add;
-            }
-            i++;
-            if (i > candidates.length * 10) break; // safety
-          }
-        } else if (diff < 0) {
-          // Need to reduce some
-          const overCats = plannerCategories.filter(c => allocation[c.id] > 10); // keep at least 10 min
-          let i = 0;
-          while (diff < 0 && overCats.length > 0) {
-            const c = overCats[i % overCats.length];
-            const canRemove = allocation[c.id] - 10;
-            if (canRemove > 0) {
-              const remove = Math.min(canRemove, -diff);
-              allocation[c.id] -= remove;
-              diff += remove;
-            }
-            i++;
-            if (i > overCats.length * 10) break;
-          }
-        }
-      }
-
-      // Ensure minimum 10 minutes per category if possible
-      plannerCategories.forEach(c => {
-        if (allocation[c.id] < 10 && availableMinutes >= plannerCategories.length * 10) {
-          allocation[c.id] = 10;
-        }
-      });
-
-      // Round to nearest 5 minutes
-      plannerCategories.forEach(c => {
-        allocation[c.id] = Math.round(allocation[c.id] / 5) * 5;
-        if (allocation[c.id] < 0) allocation[c.id] = 0;
-        if (allocation[c.id] > c.maxPerDay) allocation[c.id] = c.maxPerDay;
-      });
-
-      // Create entries array
-      const entries = plannerCategories.map(c => ({
-        categoryId: c.id,
-        allocatedMinutes: allocation[c.id],
-        completed: false
-      }));
-
-      const totalAllocated = entries.reduce((sum, e) => sum + e.allocatedMinutes, 0);
-      const totalCompleted = 0;
-
-      // Save to Firestore
-      const docRef = dailyPlansRef.doc(plannerDateString(selectedPlannerDate));
-      const existingDoc = await docRef.get();
-      if (existingDoc.exists) {
-        // Preserve completions
-        const oldEntries = existingDoc.data().entries || [];
-        entries.forEach(newEntry => {
-          const old = oldEntries.find(o => o.categoryId === newEntry.categoryId);
-          if (old && old.completed) newEntry.completed = true;
-        });
-      }
-
-      await docRef.set({
-        date: plannerDateString(selectedPlannerDate),
-        entries: entries,
-        totalAllocated: totalAllocated,
-        totalCompleted: totalCompleted,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-
-      renderPlanner();
+    function computeHackTotals() {
+      const flat = flattenHackTasks();
+      const total = flat.length;
+      const done = flat.filter(t => hackingState[t.id]).length;
+      return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
     }
-
-    function renderPlanner() {
-      const container = document.getElementById('plannerPlanContainer');
+    function computeHackTopicTotals(topic) {
+      let total = topic.tasks.length, done = 0;
+      topic.tasks.forEach((_, i) => { if (hackingState[hackTaskId(topic.id, i)]) done++; });
+      return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
+    }
+    function renderHackingPlan() {
+      const container = document.getElementById('hackPlanContainer');
       if (!container) return;
-      const dateStr = plannerDateString(selectedPlannerDate);
-      // Set date input
-      document.getElementById('plannerDateInput').value = dateStr;
-      // Fetch doc for selected date if not already subscribed
-      if (unsubPlannerDoc) unsubPlannerDoc();
-      unsubPlannerDoc = dailyPlansRef.doc(dateStr).onSnapshot(snap => {
-        plannerDocSnapshot = snap;
-        updatePlannerUI();
-      }, err => {
-        console.error('Planner doc subscription error:', err);
-        updatePlannerUI();
+      container.innerHTML = hackingPlan.map(stage => `
+        <div class="plan-week">
+          <div class="plan-week-title">${stage.stage}</div>
+          ${stage.topics.map(topic => {
+            const t = computeHackTopicTotals(topic);
+            const isOpen = hackOpenTopics.has(topic.id);
+            const allDone = t.total > 0 && t.done === t.total;
+            return `
+              <div class="plan-day ${isOpen ? 'open' : ''} ${allDone ? 'all-done' : ''}" data-topic="${topic.id}">
+                <div class="plan-day-header" data-toggle="${topic.id}">
+                  <div class="plan-day-title">
+                    <input type="checkbox" class="plan-day-toggle-all" data-toggleall="${topic.id}" ${allDone ? 'checked' : ''} title="Mark all tasks in this topic">
+                    <span class="plan-day-label">${escapeHtml(topic.title)}</span>
+                    <span class="plan-day-date">~${Math.round((topic.time / 60) * 10) / 10}h</span>
+                  </div>
+                  <div class="plan-day-meta">
+                    <span>${t.done}/${t.total}</span>
+                    <div class="plan-day-mini"><div style="width:${t.pct}%"></div></div>
+                    <svg class="plan-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                  </div>
+                </div>
+                <ul class="plan-tasks">
+                  ${topic.tasks.map((task, i) => {
+                    const id = hackTaskId(topic.id, i);
+                    const checked = !!hackingState[id];
+                    return `<li class="plan-task ${checked ? 'done' : ''}" data-taskid="${id}">
+                        <input type="checkbox" ${checked ? 'checked' : ''}>
+                        <span class="plan-task-text">${escapeHtml(task)}</span>
+                      </li>`;
+                  }).join('')}
+                </ul>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `).join('');
+
+      container.querySelectorAll('.plan-day-header').forEach(h => {
+        h.addEventListener('click', (e) => {
+          if (e.target.classList.contains('plan-day-toggle-all')) return;
+          const id = h.dataset.toggle;
+          hackOpenTopics.has(id) ? hackOpenTopics.delete(id) : hackOpenTopics.add(id);
+          renderHackingPlan();
+        });
       });
+      container.querySelectorAll('.plan-day-toggle-all').forEach(cb => {
+        cb.addEventListener('click', (e) => e.stopPropagation());
+        cb.addEventListener('change', (e) => {
+          e.stopPropagation();
+          const topicId = cb.dataset.toggleall;
+          const topic = findHackTopic(topicId);
+          if (!topic) return;
+          const newVal = cb.checked;
+          topic.tasks.forEach((_, i) => { hackingState[hackTaskId(topicId, i)] = newVal; });
+          persistHackState();
+          renderHackingPlan();
+          renderHackSession();
+        });
+      });
+      container.querySelectorAll('.plan-task').forEach(el => {
+        const id = el.dataset.taskid;
+        const box = el.querySelector('input[type="checkbox"]');
+        const toggle = (e) => {
+          e.stopPropagation();
+          const newVal = !hackingState[id];
+          hackingState[id] = newVal;
+          box.checked = newVal;
+          el.classList.toggle('done', newVal);
+          persistHackState();
+          updateHackProgressUI();
+          renderHackSession();
+        };
+        el.addEventListener('click', (e) => { if (e.target.tagName !== 'INPUT') toggle(e); });
+        box.addEventListener('change', () => {
+          hackingState[id] = box.checked;
+          el.classList.toggle('done', box.checked);
+          persistHackState();
+          updateHackProgressUI();
+          renderHackSession();
+        });
+      });
+      updateHackProgressUI(false);
     }
-
-    function updatePlannerUI() {
-      const container = document.getElementById('plannerPlanContainer');
-      if (!container) return;
-      const doc = plannerDocSnapshot;
-      const totalAllocatedEl = document.getElementById('plannerTotalMin');
-      const totalCompletedEl = document.getElementById('plannerCompletedMin');
-      const progressFill = document.getElementById('plannerProgressFill');
-      const progressPct = document.getElementById('plannerProgressPct');
-      const planList = container;
-
-      if (!doc || !doc.exists || !doc.data() || !doc.data().entries || doc.data().entries.length === 0) {
-        container.innerHTML = `<p style="color: var(--text-secondary); font-size:0.9rem;">No plan yet. Click "Generate Plan" to create today's schedule.</p>`;
-        totalAllocatedEl.textContent = '0';
-        totalCompletedEl.textContent = '0';
-        progressFill.style.width = '0%';
-        progressPct.textContent = '0%';
-        updatePlannerDashboardWidget(0, 0);
+    function updateHackProgressUI(rerenderMeta = true) {
+      const { total, done, pct } = computeHackTotals();
+      const fill = document.getElementById('hackProgressFill');
+      const pctEl = document.getElementById('hackProgressPct');
+      const doneEl = document.getElementById('hackProgressDone');
+      const totalEl = document.getElementById('hackProgressTotal');
+      if (fill) fill.style.width = pct + '%';
+      if (pctEl) pctEl.textContent = pct + '%';
+      if (doneEl) doneEl.textContent = done;
+      if (totalEl) totalEl.textContent = total;
+      if (rerenderMeta) {
+        hackingPlan.forEach(stage => stage.topics.forEach(topic => {
+          const el = document.querySelector(`.plan-day[data-topic="${topic.id}"]`);
+          if (!el) return;
+          const t = computeHackTopicTotals(topic);
+          const meta = el.querySelector('.plan-day-meta span');
+          const mini = el.querySelector('.plan-day-mini > div');
+          const toggleAll = el.querySelector('.plan-day-toggle-all');
+          if (meta) meta.textContent = `${t.done}/${t.total}`;
+          if (mini) mini.style.width = t.pct + '%';
+          const allDone = t.total > 0 && t.done === t.total;
+          if (toggleAll) toggleAll.checked = allDone;
+          el.classList.toggle('all-done', allDone);
+        }));
+      }
+    }
+    let hackSaveTimer = null;
+    function persistHackState() {
+      clearTimeout(hackSaveTimer);
+      hackSaveTimer = setTimeout(() => {
+        hackingPlanStateRef.set({ state: hackingState, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }).catch(err => console.error('Hacking plan save failed', err));
+      }, 300);
+    }
+    function planHackSession() {
+      const hoursInput = document.getElementById('hackHoursInput');
+      const hours = Math.max(0, parseFloat(hoursInput.value) || 0);
+      const budgetMin = hours * 60;
+      const flat = flattenHackTasks().filter(t => !hackingState[t.id]);
+      let cum = 0;
+      const session = [];
+      for (const t of flat) {
+        if (cum >= budgetMin && session.length > 0) break;
+        session.push(t);
+        cum += t.minutes;
+      }
+      lastHackSession = session;
+      renderHackSession();
+    }
+    function renderHackSession() {
+      const list = document.getElementById('hackSessionList');
+      if (!list) return;
+      lastHackSession = lastHackSession.filter(t => t);
+      if (lastHackSession.length === 0) {
+        list.innerHTML = `<li style="color: var(--text-secondary); font-size: 0.82rem; padding: 0.5rem 0;">Pick your hours and hit "Plan My Session" to get today's task list.</li>`;
         return;
       }
-
-      const data = doc.data();
-      const entries = data.entries || [];
-      const totalAllocated = entries.reduce((sum, e) => sum + e.allocatedMinutes, 0);
-      const totalCompleted = entries.filter(e => e.completed).reduce((sum, e) => sum + e.allocatedMinutes, 0);
-      const pct = totalAllocated > 0 ? Math.round((totalCompleted / totalAllocated) * 100) : 0;
-
-      // Update progress header
-      totalAllocatedEl.textContent = totalAllocated;
-      totalCompletedEl.textContent = totalCompleted;
-      progressFill.style.width = pct + '%';
-      progressPct.textContent = pct + '%';
-
-      // Render entries
-      let html = '<ul class="todo-list" style="margin-top:0;">';
-      entries.forEach(entry => {
-        const cat = plannerCategories.find(c => c.id === entry.categoryId);
-        if (!cat) return;
-        const checked = entry.completed ? 'checked' : '';
-        const doneClass = entry.completed ? 'done' : '';
-        html += `
-          <li class="todo-item ${doneClass}" data-category="${entry.categoryId}">
-            <input type="checkbox" class="todo-checkbox planner-checkbox" ${checked}>
-            <span class="todo-text">${escapeHtml(cat.label)} <span style="color:var(--text-secondary); font-size:0.7rem;">— ${entry.allocatedMinutes} min</span></span>
+      list.innerHTML = lastHackSession.map(t => {
+        const checked = !!hackingState[t.id];
+        return `
+          <li class="todo-item ${checked ? 'done' : ''}" data-sessionid="${t.id}">
+            <input type="checkbox" class="todo-checkbox" ${checked ? 'checked' : ''}>
+            <span class="todo-text">${escapeHtml(t.text)} <span style="color:var(--text-secondary); font-size:0.7rem;">— ${escapeHtml(t.topicTitle)}</span></span>
           </li>
         `;
-      });
-      html += '</ul>';
-      container.innerHTML = html;
-
-      // Add event listeners
-      container.querySelectorAll('.planner-checkbox').forEach(cb => {
-        cb.addEventListener('change', (e) => {
-          const categoryId = e.target.closest('li').dataset.category;
-          const checked = e.target.checked;
-          const docRef = dailyPlansRef.doc(plannerDateString(selectedPlannerDate));
-          docRef.get().then(doc => {
-            if (doc.exists) {
-              const entries = doc.data().entries || [];
-              const updatedEntries = entries.map(entry => {
-                if (entry.categoryId === categoryId) {
-                  return { ...entry, completed: checked };
-                }
-                return entry;
-              });
-              const totalCompleted = updatedEntries.filter(e => e.completed).reduce((sum, e) => sum + e.allocatedMinutes, 0);
-              docRef.update({ entries: updatedEntries, totalCompleted: totalCompleted });
-            }
-          });
+      }).join('');
+      list.querySelectorAll('.todo-item').forEach(li => {
+        const id = li.dataset.sessionid;
+        const box = li.querySelector('.todo-checkbox');
+        box.addEventListener('change', () => {
+          hackingState[id] = box.checked;
+          li.classList.toggle('done', box.checked);
+          persistHackState();
+          updateHackProgressUI();
+          renderHackingPlan();
         });
       });
-
-      // Update dashboard widget
-      updatePlannerDashboardWidget(totalCompleted, totalAllocated);
     }
 
-    function updatePlannerDashboardWidget(completedMin, totalMin) {
-      const ringFill = document.getElementById('plannerRingFill');
-      const ringText = document.getElementById('plannerPercent');
-      const doneMinEl = document.getElementById('plannerDoneMin');
-      const totalMinEl = document.getElementById('plannerTotalMinWidget');
-      const circumference = 2 * Math.PI * 42;
-      if (ringFill) {
-        const pct = totalMin > 0 ? (completedMin / totalMin) * 100 : 0;
-        ringFill.style.strokeDashoffset = circumference - (pct / 100) * circumference;
-        ringText.textContent = Math.round(pct) + '%';
-        doneMinEl.textContent = completedMin;
-        totalMinEl.textContent = totalMin;
-      }
+    // ==================== DAILY PLANNER ====================
+    const dailyPlansRef = db.collection("dailyPlans");
+    let unsubDaily = null;
+    let currentDailyDate = new Date();
+    let currentDailyHours = 16;
+    let lastDailyPlan = null;
+
+    // Initialize date input
+    const dailyDateInput = document.getElementById('dailyDateInput');
+    const dailyHoursInput = document.getElementById('dailyHoursInput');
+    const dailyGenerateBtn = document.getElementById('dailyGenerateBtn');
+    const dailyPlanContainer = document.getElementById('dailyPlanContainer');
+    const dailyHistoryContainer = document.getElementById('dailyHistoryContainer');
+
+    function getTodayIso() {
+      return new Date().toISOString().split('T')[0];
     }
 
-    function renderPlannerHistory() {
-      const container = document.getElementById('plannerHistoryContainer');
-      if (!container) return;
-      if (plannerHistoryCache.length === 0) {
-        container.innerHTML = `<p style="color: var(--text-secondary); font-size:0.85rem;">No history yet. Generate your first plan!</p>`;
-        return;
-      }
-      // Sort descending (latest first)
-      const sorted = [...plannerHistoryCache].sort((a,b) => b.date.localeCompare(a.date));
-      let html = '';
-      sorted.forEach(doc => {
-        const totalCompleted = doc.entries.filter(e => e.completed).reduce((sum, e) => sum + e.allocatedMinutes, 0);
-        const totalAllocated = doc.entries.reduce((sum, e) => sum + e.allocatedMinutes, 0);
-        const pct = totalAllocated > 0 ? Math.round((totalCompleted / totalAllocated) * 100) : 0;
-        html += `
-          <div class="history-item" style="background: #050505; border: 1px solid var(--border); padding: 0.6rem 1rem; margin-bottom:0.5rem;">
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
-              <span style="font-size:0.9rem; color:var(--text);">${doc.date}</span>
-              <span style="font-size:0.75rem; color:var(--text-secondary);">${totalCompleted}/${totalAllocated} min · ${pct}%</span>
-            </div>
-          </div>
-        `;
-      });
-      container.innerHTML = html;
+    function setDailyDateToToday() {
+      const todayIso = getTodayIso();
+      dailyDateInput.value = todayIso;
+      currentDailyDate = new Date(todayIso);
     }
 
-    // Setup planner event listeners
-    document.getElementById('plannerGenerateBtn').addEventListener('click', generatePlannerPlan);
-    document.getElementById('plannerDateInput').addEventListener('change', () => {
-      selectedPlannerDate = new Date(document.getElementById('plannerDateInput').value + 'T00:00:00');
-      renderPlanner();
-      loadPlannerHistory();
-    });
+    function getDateIso(date) {
+      return date.toISOString().split('T')[0];
+    }
 
-    // ===== AUTH & DATA LISTENERS =====
-    async function runDailyCleanup() {
+    async function loadDailyPlanner() {
+      setDailyDateToToday();
+      await loadDailyPlanForDate(currentDailyDate);
+      await loadDailyHistory();
+    }
+
+    async function loadDailyPlanForDate(date) {
+      const iso = getDateIso(date);
       try {
-        const today = new Date().toDateString();
-        if (localStorage.getItem('threnox_cleanup_date') !== today) {
-          const snapshot = await db.collection("todos").where("done", "==", true).get();
-          if (!snapshot.empty) {
-            const batch = db.batch();
-            snapshot.forEach(doc => batch.delete(doc.ref));
-            await batch.commit();
-          }
-          localStorage.setItem('threnox_cleanup_date', today);
+        const doc = await dailyPlansRef.doc(iso).get();
+        if (doc.exists) {
+          lastDailyPlan = doc.data();
+          renderDailyPlan(lastDailyPlan);
+        } else {
+          lastDailyPlan = null;
+          dailyPlanContainer.innerHTML = `<p style="color: var(--text-secondary);">No plan for this date yet. Enter hours and generate.</p>`;
         }
-      } catch (e) { console.warn("Cleanup deferred:", e); }
+      } catch (err) {
+        console.error('Error loading daily plan', err);
+        dailyPlanContainer.innerHTML = `<p style="color: var(--danger);">Error loading plan: ${err.message}</p>`;
+      }
     }
 
-    let unsubHistory = null;
-
-    function attachDataListeners() {
-      unsubTodos = todosRef.orderBy("createdAt", "asc").onSnapshot(renderTodos);
-      unsubCalendar = calendarRef.orderBy("createdAt", "asc").onSnapshot(snapshot => {
-        customEvents = [];
-        snapshot.forEach(doc => customEvents.push({ ...doc.data(), docId: doc.id }));
-        renderCalendar();
-        updateEventNoteWidget();
-      });
-      // Planner listeners are set when rendering
-      renderPlanner();
-      loadPlannerHistory();
-    }
-    function detachDataListeners() {
-      if (unsubTodos) unsubTodos();
-      if (unsubCalendar) unsubCalendar();
-      if (unsubPlannerDoc) unsubPlannerDoc();
-      if (unsubHistory) { unsubHistory(); unsubHistory = null; }
-      unsubTodos = unsubCalendar = unsubPlannerDoc = null;
+    async function loadDailyHistory() {
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+      const startIso = getDateIso(sevenDaysAgo);
+      try {
+        const snapshot = await dailyPlansRef.where(firebase.firestore.FieldPath.documentId(), '>=', startIso).get();
+        const docs = [];
+        snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+        docs.sort((a, b) => b.id.localeCompare(a.id)); // newest first
+        renderDailyHistory(docs);
+      } catch (err) {
+        console.error('Error loading daily history', err);
+        dailyHistoryContainer.innerHTML = `<p style="color: var(--danger);">Error loading history: ${err.message}</p>`;
+      }
     }
 
-    function authenticate() {
-      const email = document.getElementById('loginEmail').value.trim();
-      const pass = document.getElementById('loginPass').value;
-      const error = document.getElementById('loginError');
-      const btn = document.getElementById('loginBtn');
-      if (!email || !pass) {
-        error.textContent = 'Enter both email and password.';
-        error.style.display = 'block';
+    function renderDailyPlan(plan) {
+      if (!plan || !plan.activities || plan.activities.length === 0) {
+        dailyPlanContainer.innerHTML = `<p style="color: var(--text-secondary);">No plan for this date yet. Enter hours and generate.</p>`;
         return;
       }
-      btn.disabled = true;
-      auth.signInWithEmailAndPassword(email, pass)
-        .then(() => { error.style.display = 'none'; })
-        .catch(() => {
-          error.textContent = 'Incorrect email or password.';
-          error.style.display = 'block';
-          document.getElementById('loginPass').value = '';
-        })
-        .finally(() => { btn.disabled = false; });
-    }
-    function setupEvents() {
-      const btn = document.getElementById('loginBtn');
-      const passInput = document.getElementById('loginPass');
-      const emailInput = document.getElementById('loginEmail');
-      if (btn) btn.onclick = authenticate;
-      if (passInput) passInput.onkeydown = (e) => { if (e.key === 'Enter') authenticate(); };
-      if (emailInput) emailInput.onkeydown = (e) => { if (e.key === 'Enter') authenticate(); };
-      const logoutBtn = document.getElementById('logoutBtn');
-      if (logoutBtn) logoutBtn.onclick = () => auth.signOut();
+      const list = document.createElement('ul');
+      list.className = 'daily-list';
+      plan.activities.forEach(activity => {
+        const li = document.createElement('li');
+        li.className = 'daily-item';
+        if (activity.done) li.classList.add('done');
+        li.innerHTML = `
+          <input type="checkbox" class="todo-checkbox" ${activity.done ? 'checked' : ''}>
+          <span class="daily-item-text">${escapeHtml(activity.category)}</span>
+          <span class="daily-item-time">${Math.floor(activity.minutes / 60)}h ${activity.minutes % 60}m</span>
+        `;
+        li.querySelector('.todo-checkbox').addEventListener('change', (e) => {
+          activity.done = e.target.checked;
+          li.classList.toggle('done', e.target.checked);
+          saveDailyPlan(plan);
+        });
+        list.appendChild(li);
+      });
+      dailyPlanContainer.innerHTML = '';
+      dailyPlanContainer.appendChild(list);
     }
 
-    auth.onAuthStateChanged(user => {
-      const overlay = document.getElementById('loginOverlay');
-      if (user) {
-        overlay.style.opacity = '0';
-        setTimeout(() => { overlay.style.display = 'none'; }, 300);
-        attachDataListeners();
-        runDailyCleanup();
-        subscribeWatchHistory();
-      } else {
-        overlay.style.display = 'flex';
-        overlay.style.opacity = '1';
-        detachDataListeners();
-        if (unsubHistory) { unsubHistory(); unsubHistory = null; }
-        if (historyContainer) historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">Please log in to see watch history.</p>`;
+    async function saveDailyPlan(plan) {
+      const iso = plan.date;
+      try {
+        await dailyPlansRef.doc(iso).set(plan, { merge: true });
+        // Update history after save
+        loadDailyHistory();
+      } catch (err) {
+        console.error('Error saving daily plan', err);
       }
+    }
+
+    async function generateDailyPlan() {
+      const dateIso = dailyDateInput.value;
+      if (!dateIso) {
+        alert('Please select a date.');
+        return;
+      }
+      const hours = parseFloat(dailyHoursInput.value);
+      if (!hours || hours <= 0) {
+        alert('Please enter a valid number of hours.');
+        return;
+      }
+      const totalMinutes = Math.round(hours * 60);
+      
+      // Get last 7 days completed minutes per category
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+      const startIso = getDateIso(sevenDaysAgo);
+      const snapshot = await dailyPlansRef.where(firebase.firestore.FieldPath.documentId(), '>=', startIso).get();
+      const completedMinByCategory = {};
+      dailyCategories.forEach(cat => completedMinByCategory[cat.id] = 0);
+      snapshot.forEach(doc => {
+        const plan = doc.data();
+        if (plan.activities) {
+          plan.activities.forEach(act => {
+            if (act.done) {
+              completedMinByCategory[act.category] = (completedMinByCategory[act.category] || 0) + act.minutes;
+            }
+          });
+        }
+      });
+      
+      // Compute deficits against weekly targets (scaled to 7 days)
+      const deficits = [];
+      dailyCategories.forEach(cat => {
+        const target7Days = cat.weeklyTargetMin;
+        const completed = completedMinByCategory[cat.id] || 0;
+        const deficit = Math.max(0, target7Days - completed);
+        if (deficit > 0) deficits.push({ ...cat, deficit });
+      });
+      
+      // Allocate total minutes proportionally to deficits
+      const totalDeficit = deficits.reduce((sum, d) => sum + d.deficit, 0);
+      let allocations = [];
+      if (totalDeficit === 0 || deficits.length === 0) {
+        // If no deficits, distribute equally among all categories
+        const perCat = Math.floor(totalMinutes / dailyCategories.length);
+        dailyCategories.forEach(cat => allocations.push({ category: cat.id, minutes: perCat }));
+        // Distribute remainder
+        let rem = totalMinutes - perCat * dailyCategories.length;
+        for (let i = 0; i < rem; i++) {
+          allocations[i % allocations.length].minutes++;
+        }
+      } else {
+        // Allocate proportionally, but cap at deficit
+        let remaining = totalMinutes;
+        let deficitSum = totalDeficit;
+        const tempAlloc = deficits.map(d => ({ category: d.id, minutes: 0, deficit: d.deficit }));
+        while (remaining > 0 && deficitSum > 0) {
+          let allocatedThisRound = 0;
+          for (const item of tempAlloc) {
+            if (item.deficit > 0) {
+              const share = Math.min(item.deficit, Math.round((item.deficit / deficitSum) * remaining));
+              item.minutes += share;
+              item.deficit -= share;
+              allocatedThisRound += share;
+            }
+          }
+          if (allocatedThisRound === 0) break;
+          remaining -= allocatedThisRound;
+          deficitSum = tempAlloc.reduce((s, d) => s + Math.max(0, d.deficit), 0);
+        }
+        // If leftover, distribute equally among all categories
+        if (remaining > 0) {
+          const perCat = Math.floor(remaining / dailyCategories.length);
+          dailyCategories.forEach(cat => {
+            const existing = tempAlloc.find(a => a.category === cat.id);
+            if (existing) existing.minutes += perCat;
+            else tempAlloc.push({ category: cat.id, minutes: perCat, deficit: 0 });
+          });
+          let rem = remaining - perCat * dailyCategories.length;
+          for (let i = 0; i < rem; i++) {
+            tempAlloc[i % tempAlloc.length].minutes++;
+          }
+        }
+        allocations = tempAlloc.map(a => ({ category: a.category, minutes: a.minutes })).filter(a => a.minutes > 0);
+      }
+      
+      // Round to 5 minutes
+      allocations.forEach(a => {
+        a.minutes = Math.round(a.minutes / 5) * 5;
+      });
+      
+      // Create plan object
+      const plan = {
+        date: dateIso,
+        totalMinutes: totalMinutes,
+        activities: allocations.map(a => ({
+          category: a.category,
+          minutes: a.minutes,
+          done: false
+        }))
+      };
+      
+      // Save and render
+      lastDailyPlan = plan;
+      renderDailyPlan(plan);
+      await saveDailyPlan(plan);
+      loadDailyHistory();
+    }
+
+    function renderDailyHistory(docs) {
+      if (!docs || docs.length === 0) {
+        dailyHistoryContainer.innerHTML = `<p style="color: var(--text-secondary);">No history for the last 7 days.</p>`;
+        return;
+      }
+      let html = '';
+      docs.forEach(doc => {
+        const totalMin = doc.totalMinutes || 0;
+        const completedMin = (doc.activities || []).filter(a => a.done).reduce((sum, a) => sum + a.minutes, 0);
+        const pct = totalMin ? Math.round((completedMin / totalMin) * 100) : 0;
+        html += `<div class="history-item" data-date="${doc.id}">
+          <span>${doc.id}</span>
+          <span>${completedMin}/${totalMin} min (${pct}%)</span>
+        </div>`;
+      });
+      dailyHistoryContainer.innerHTML = html;
+      dailyHistoryContainer.querySelectorAll('.history-item').forEach(item => {
+        item.addEventListener('click', () => {
+          dailyDateInput.value = item.dataset.date;
+          currentDailyDate = new Date(item.dataset.date);
+          loadDailyPlanForDate(currentDailyDate);
+        });
+      });
+    }
+
+    // Event listeners for daily planner
+    dailyGenerateBtn.addEventListener('click', generateDailyPlan);
+    dailyDateInput.addEventListener('change', () => {
+      currentDailyDate = new Date(dailyDateInput.value);
+      loadDailyPlanForDate(currentDailyDate);
+    });
+    dailyHoursInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') generateDailyPlan();
     });
 
-    // ===== SCREENSCAPE =====
+    // ==================== SCREENSCAPE ====================
     const ssTitle = document.getElementById('screenscapeTitle');
     const ssId = document.getElementById('screenscapeId');
     const ssType = document.getElementById('screenscapeType');
@@ -1308,6 +1616,9 @@
     const manualSaveBtn = document.getElementById('manualSaveBtn');
     const historyContainer = document.getElementById('watchHistoryContainer');
     const saveStatus = document.getElementById('saveStatus');
+
+    let unsubHistory = null;
+    let latestDocId = null;
 
     function buildScreenscapeURL() {
       let id = ssId.value.trim();
@@ -1513,18 +1824,117 @@
     });
     manualSaveBtn.addEventListener('click', sendProgressRequest);
 
-    // ===== INIT =====
+    // ==================== CLEANUP ====================
+    async function runDailyCleanup() {
+      try {
+        const today = new Date().toDateString();
+        if (localStorage.getItem('threnox_cleanup_date') !== today) {
+          const snapshot = await db.collection("todos").where("done", "==", true).get();
+          if (!snapshot.empty) {
+            const batch = db.batch();
+            snapshot.forEach(doc => batch.delete(doc.ref));
+            await batch.commit();
+          }
+          localStorage.setItem('threnox_cleanup_date', today);
+        }
+      } catch (e) { console.warn("Cleanup deferred:", e); }
+    }
+
+    // ==================== AUTH & DATA LISTENERS ====================
+    function attachDataListeners() {
+      unsubTodos = todosRef.orderBy("createdAt", "asc").onSnapshot(renderTodos);
+      unsubCalendar = calendarRef.orderBy("createdAt", "asc").onSnapshot(snapshot => {
+        customEvents = [];
+        snapshot.forEach(doc => customEvents.push({ ...doc.data(), docId: doc.id }));
+        renderCalendar();
+        updateEventNoteWidget();
+      });
+      unsubPlan = planStateRef.onSnapshot(snap => {
+        const data = snap.exists ? snap.data() : null;
+        planState = (data && data.state) || {};
+        renderPlan();
+      }, err => { console.error('Plan subscribe failed', err); renderPlan(); });
+      unsubHacking = hackingPlanStateRef.onSnapshot(snap => {
+        const data = snap.exists ? snap.data() : null;
+        hackingState = (data && data.state) || {};
+        renderHackingPlan();
+      }, err => { console.error('Hacking plan subscribe failed', err); renderHackingPlan(); });
+    }
+    function detachDataListeners() {
+      if (unsubTodos) unsubTodos();
+      if (unsubCalendar) unsubCalendar();
+      if (unsubPlan) unsubPlan();
+      if (unsubHacking) unsubHacking();
+      unsubTodos = unsubCalendar = unsubPlan = unsubHacking = null;
+    }
+    function authenticate() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const pass = document.getElementById('loginPass').value;
+      const error = document.getElementById('loginError');
+      const btn = document.getElementById('loginBtn');
+      if (!email || !pass) {
+        error.textContent = 'Enter both email and password.';
+        error.style.display = 'block';
+        return;
+      }
+      btn.disabled = true;
+      auth.signInWithEmailAndPassword(email, pass)
+        .then(() => { error.style.display = 'none'; })
+        .catch(() => {
+          error.textContent = 'Incorrect email or password.';
+          error.style.display = 'block';
+          document.getElementById('loginPass').value = '';
+        })
+        .finally(() => { btn.disabled = false; });
+    }
+    function setupEvents() {
+      const btn = document.getElementById('loginBtn');
+      const passInput = document.getElementById('loginPass');
+      const emailInput = document.getElementById('loginEmail');
+      if (btn) btn.onclick = authenticate;
+      if (passInput) passInput.onkeydown = (e) => { if (e.key === 'Enter') authenticate(); };
+      if (emailInput) emailInput.onkeydown = (e) => { if (e.key === 'Enter') authenticate(); };
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) logoutBtn.onclick = () => auth.signOut();
+      const hackBtn = document.getElementById('hackPlanBtn');
+      const hackHours = document.getElementById('hackHoursInput');
+      if (hackBtn) hackBtn.onclick = planHackSession;
+      if (hackHours) hackHours.onkeydown = (e) => { if (e.key === 'Enter') planHackSession(); };
+      const cpBtn = document.getElementById('cpPlanBtn');
+      const cpHours = document.getElementById('cpHoursInput');
+      if (cpBtn) cpBtn.onclick = planCPSession;
+      if (cpHours) cpHours.onkeydown = (e) => { if (e.key === 'Enter') planCPSession(); };
+    }
+
+    auth.onAuthStateChanged(user => {
+      const overlay = document.getElementById('loginOverlay');
+      if (user) {
+        overlay.style.opacity = '0';
+        setTimeout(() => { overlay.style.display = 'none'; }, 300);
+        attachDataListeners();
+        runDailyCleanup();
+        subscribeWatchHistory();
+        loadDailyPlanner(); // initial load
+      } else {
+        overlay.style.display = 'flex';
+        overlay.style.opacity = '1';
+        detachDataListeners();
+        if (unsubHistory) { unsubHistory(); unsubHistory = null; }
+        if (historyContainer) historyContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem 0;">Please log in to see watch history.</p>`;
+      }
+    });
+
+    // ==================== INIT ====================
     function init() {
       const now = new Date();
       currentDay = dayOrder[now.getDay()];
-      selectedPlannerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      document.getElementById('plannerDateInput').value = plannerDateString(selectedPlannerDate);
       renderTimeline();
       updateDateTime();
       setInterval(updateDateTime, 1000);
-      renderCalendar();
-      renderPlanner();
-      loadPlannerHistory();
+      updatePlanHeader();
+      renderPlan();
+      renderDayDetail(selectedCalDate);
+      renderHackingPlan();
     }
     init();
     setupEvents();
