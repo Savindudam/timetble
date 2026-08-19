@@ -623,8 +623,6 @@
     const watchHistoryRef = db.collection("watchHistory");
 
     // ==================== AUTH BOOTSTRAP ====================
-    // Authentication is wired immediately after Firebase initializes so a later
-    // dashboard error can never disable the login button.
     const loginOverlay = document.getElementById("loginOverlay");
     const loginEmail = document.getElementById("loginEmail");
     const loginPass = document.getElementById("loginPass");
@@ -685,8 +683,6 @@
       if (user) {
         loginOverlay.style.opacity = "0";
         setTimeout(() => { loginOverlay.style.display = "none"; }, 300);
-        // These functions are declarations later in the same script and are
-        // available by the time Firebase delivers the auth-state callback.
         try {
           attachDataListeners();
           runDailyCleanup();
@@ -716,6 +712,17 @@
       Sunday: [ ["04:00","04:30","Exercise"], ["04:30","07:00","IOI Deep Work (C++/Algo)"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Blitz"], ["09:30","09:45","Break"], ["09:45","12:00","IOI Theory + Practice"], ["12:00","13:00","Lunch"], ["13:00","14:30","AL Review"], ["14:30","15:00","Break"], ["15:00","17:00","IOI Heavy Block"], ["17:00","18:00","Hobby Time"], ["18:00","19:00","Dinner"], ["19:00","20:00","Gaming Time"], ["20:00","20:45","Recap / Review"], ["20:45","21:15","Wind down"], ["21:15","23:59","SLEEP"] ]
     };
     const dayOrder = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+    // ---- FIX: these were previously declared only in the Calendar section
+    // further down the file, but the CP-plan date-shift block below runs
+    // immediately at script load and needs them BEFORE that point. Declaring
+    // them here (and removing the later duplicate) fixes the ReferenceError
+    // that was previously killing the entire script on load. ----
+    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const fullMonthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const weekdayNames = ["S","M","T","W","T","F","S"];
+    const fullWeekdayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
     let tasks = [];
     let currentDay = "";
 
@@ -751,9 +758,6 @@
     ];
 
     // ==================== CP PLAN DATA ====================
-    // Keep the CP plan self-contained so the page can never fail with
-    // "ioiPlan is not defined" before Firebase authentication starts.
-    // The plan runs from 19 Aug 2026 through 12 Sep 2027.
     const ioiPlan = (() => {
       const start = new Date(2026, 7, 19);
       const end = new Date(2027, 8, 12);
@@ -850,8 +854,6 @@
       return `${d} ${monthNames[m-1]} ${fullWeekdayNames[date.getDay()].slice(0,3)}`;
     }
     // CP plan always starts on 19 Aug 2026.
-    // The original plan dates are shifted by the exact offset needed,
-    // instead of assuming a fixed number of days.
     const CP_START_ISO = '2026-08-19';
     if (Array.isArray(ioiPlan) && ioiPlan.length && ioiPlan[0] && Array.isArray(ioiPlan[0].days) && ioiPlan[0].days.length) {
       const first = ioiPlan[0].days[0].iso;
@@ -869,8 +871,6 @@
     }
 
     // ==================== HACKING / CTF PLAN DATA ====================
-    // Zero-to-competitive-CTF roadmap. Topic-based (no calendar dates) so it
-    // never goes stale — you just work down the stages in order.
     const hackingPlan = [
       {
         stage: "Stage 1 — Foundations",
@@ -1126,10 +1126,6 @@
     });
 
     // ==================== CALENDAR ====================
-    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    const fullMonthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-    const weekdayNames = ["S","M","T","W","T","F","S"];
-    const fullWeekdayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
     const defaultEvents = [
       { month: 10, day: 25, label: "Your Birthday", recurring: true },
       { month: 8,  day: 15, label: "Vishaka's Birthday", recurring: true },
@@ -1761,14 +1757,6 @@
       return Math.max(0, Math.round(n / 5) * 5);
     }
 
-    /*
-      Allocation logic:
-      - Uses the last 7 days of ACTUAL time, not merely planned time.
-      - Each category has a weekly target.
-      - A category that has received less actual time gets a larger share today.
-      - The current date is never used as history while generating its own new plan.
-      - All history remains stored, so yesterday's CP time affects today's CP allocation.
-    */
     function allocateDailyMinutes(totalMinutes, historyDocs, targetDateIso) {
       const priorDocs = historyDocs.filter(p => p.id < targetDateIso);
       const recent = getRecentPlans(priorDocs, (() => {
@@ -1786,7 +1774,6 @@
         const actual = recentActual[cat.id] || 0;
         const deficit = Math.max(0, dailyTarget * 7 - actual);
 
-        // Small base prevents categories from disappearing completely.
         const base = Math.max(30, dailyTarget * 0.35);
         return { id: cat.id, score: deficit + base, actual };
       });
@@ -1800,7 +1787,6 @@
       let allocated = allocations.reduce((s,a) => s+a.minutes, 0);
       let remainder = totalMinutes - allocated;
 
-      // Give remaining 5-minute blocks to the most under-served categories.
       const ranked = [...scores].sort((a,b) => b.score - a.score);
       while (remainder >= 5) {
         const pick = ranked[remainder / 5 % ranked.length | 0];
@@ -1809,7 +1795,6 @@
         remainder -= 5;
       }
 
-      // If the total is below 5 minutes, keep the user's exact available time.
       if (remainder > 0 && allocations.length) {
         allocations[0].minutes += remainder;
       }
@@ -2074,7 +2059,6 @@
         const existingDoc = allPlans.find(p => p.id === dateIso);
         const allocations = allocateDailyMinutes(totalMinutes, allPlans, dateIso);
 
-        // Preserve existing completion/actual data when regenerating the same day.
         const oldByCategory = {};
         (existingDoc?.activities || []).forEach(a => {
           oldByCategory[a.category] = {
@@ -2421,3 +2405,4 @@
   </script>
 </body>
 </html>
+
