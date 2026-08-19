@@ -128,6 +128,13 @@
     .plan-task input[type="checkbox"] { width: 14px; height: 14px; margin-top: 0.15rem; accent-color: var(--accent); flex-shrink: 0; padding: 0; }
     .plan-task.done .plan-task-text { text-decoration: line-through; color: var(--text-secondary); }
     .plan-day-toggle-all { width: 14px; height: 14px; accent-color: var(--accent); flex-shrink: 0; padding: 0; cursor: pointer; }
+    .plan-task.today-session { background: rgba(0, 255, 65, 0.08); border-left: 2px solid var(--accent); }
+    .today-badge { border: 1px solid var(--accent); color: var(--accent); font-size: 0.6rem; padding: 0.05rem 0.4rem; text-transform: uppercase; letter-spacing: 0.5px; margin-left: auto; flex-shrink: 0; white-space: nowrap; }
+    .hack-session-empty-note { color: var(--text-secondary); font-size: 0.78rem; padding: 0.5rem 0; }
+    .plan-day.has-today .plan-day-header { border-left: 2px solid var(--accent); }
+    .plan-task.today-pick { background: rgba(0, 255, 65, 0.07); box-shadow: inset 3px 0 0 var(--accent); }
+    .today-badge { margin-left: auto; flex-shrink: 0; background: var(--accent); color: #000; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.5px; padding: 0.15rem 0.45rem; text-transform: uppercase; white-space: nowrap; }
+    .hack-today-hint { color: var(--text-secondary); font-size: 0.72rem; margin-top: 0.6rem; }
     .fab { position: fixed; bottom: 2rem; right: 2rem; width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--accent); background: #000; color: var(--accent); font-size: 1.3rem; cursor: pointer; display: none; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(0, 255, 65, 0.25); z-index: 50; }
     #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; transition: opacity 0.3s ease; }
     .login-card { width: 400px; padding: 3rem; border: 1px solid var(--accent); box-shadow: 0 0 40px rgba(0, 255, 65, 0.15); text-align: center; background: #000; }
@@ -581,6 +588,25 @@
 
     <!-- Hacking View -->
     <div class="view" id="hackingView">
+      <div class="stats-container" style="margin-bottom:1.5rem;">
+        <div class="planner-title-row">
+          <div>
+            <h2 style="margin:0 0 .35rem;">Today's Hacking Session</h2>
+            <p style="margin:0;color:var(--text-secondary);font-size:.8rem;">Enter how much time you have today. This picks roadmap tasks in order, skipping anything already ticked off, until your time is filled — then highlights them below in the full roadmap.</p>
+          </div>
+        </div>
+        <div class="daily-input-row" style="margin-top:1rem;margin-bottom:0;">
+          <div>
+            <label>Time available today (hours)</label>
+            <input type="number" id="hackSessionHoursInput" min="0.25" step="0.25" value="2">
+          </div>
+          <div style="flex:0 0 auto;">
+            <button class="daily-generate-btn" id="hackSessionGenerateBtn">Plan Today's Session</button>
+          </div>
+        </div>
+        <div id="hackSessionSummary"></div>
+        <div id="hackSessionList"></div>
+      </div>
       <div class="stats-container">
         <div class="plan-header">
           <div class="planner-title-row">
@@ -1076,7 +1102,7 @@
         if (viewName === 'calendar') { renderCalendarGrid(); renderDayDetail(selectedCalDate); }
         if (viewName === 'screenscape') { if (!ssIframe.src) loadScreenscape(); }
         if (viewName === 'cp') { renderPlan(); }
-        if (viewName === 'hacking') { renderHackingPlan(); }
+        if (viewName === 'hacking') { renderHackingPlan(); subscribeHackSession(); }
         if (viewName === 'dailyplanner') { loadDailyPlanner(); }
         if (window.innerWidth <= 768) dom.sidebar.classList.remove('open');
       });
@@ -1498,6 +1524,16 @@
     const hackingPlanStateRef = db.collection("hackingPlan").doc("state");
     let unsubHacking = null;
 
+    // ---- Today's Session (time-budgeted task picker) ----
+    const hackingSessionsRef = db.collection("hackingSessions");
+    let unsubHackSession = null;
+    let hackSessionMeta = null;
+    let hackSessionTaskIds = [];
+    const hackSessionHoursInput = document.getElementById('hackSessionHoursInput');
+    const hackSessionGenerateBtn = document.getElementById('hackSessionGenerateBtn');
+    const hackSessionSummaryEl = document.getElementById('hackSessionSummary');
+    const hackSessionListEl = document.getElementById('hackSessionList');
+
     function hackTaskId(topicId, idx) { return `h-${topicId}-${idx}`; }
     function findHackTopic(topicId) {
       for (const stage of hackingPlan) {
@@ -1528,9 +1564,128 @@
       topic.tasks.forEach((_, i) => { if (hackingState[hackTaskId(topic.id, i)]) done++; });
       return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
     }
+    // Walk the roadmap in order, skip anything already ticked off, and keep
+    // adding tasks until the time budget is filled (always includes at least
+    // one task if the budget is > 0 and unfinished tasks remain).
+    function computeHackSessionTasks(budgetMinutes) {
+      const flat = flattenHackTasks();
+      const notDone = flat.filter(t => !hackingState[t.id]);
+      const selected = [];
+      let acc = 0;
+      for (const t of notDone) {
+        if (acc >= budgetMinutes) break;
+        selected.push(t);
+        acc += t.minutes;
+      }
+      return selected;
+    }
+
+    async function generateHackSession() {
+      const hours = Number(hackSessionHoursInput.value);
+      if (!Number.isFinite(hours) || hours <= 0) {
+        alert('Enter the amount of time you have today.');
+        return;
+      }
+      const budgetMinutes = Math.round(hours * 60);
+      const selected = computeHackSessionTasks(budgetMinutes);
+      if (!selected.length) {
+        alert('Everything in the roadmap is already ticked off — nothing left to plan!');
+        return;
+      }
+      selected.forEach(t => hackOpenTopics.add(t.topicId));
+      const iso = todayIso();
+      hackSessionGenerateBtn.disabled = true;
+      hackSessionGenerateBtn.textContent = 'BUILDING...';
+      try {
+        await hackingSessionsRef.doc(iso).set({
+          date: iso,
+          totalMinutes: budgetMinutes,
+          plannedMinutes: selected.reduce((s, t) => s + t.minutes, 0),
+          taskIds: selected.map(t => t.id),
+          generatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: false });
+      } catch (err) {
+        console.error('Error saving hacking session:', err);
+        alert('Could not save today\'s session: ' + err.message);
+      } finally {
+        hackSessionGenerateBtn.disabled = false;
+        hackSessionGenerateBtn.textContent = "Plan Today's Session";
+      }
+    }
+
+    function renderHackSessionUI() {
+      if (!hackSessionSummaryEl || !hackSessionListEl) return;
+      if (hackSessionMeta && hackSessionHoursInput && document.activeElement !== hackSessionHoursInput) {
+        hackSessionHoursInput.value = (Number(hackSessionMeta.totalMinutes || 0) / 60).toString();
+      }
+      if (!hackSessionTaskIds.length) {
+        hackSessionSummaryEl.innerHTML = '';
+        hackSessionListEl.innerHTML = `<div class="hack-session-empty-note">No session planned yet today. Enter your available hours and press <strong>Plan Today's Session</strong>.</div>`;
+        return;
+      }
+      const flat = flattenHackTasks();
+      const items = hackSessionTaskIds.map(id => flat.find(t => t.id === id)).filter(Boolean);
+      const doneItems = items.filter(t => hackingState[t.id]);
+      const plannedMinutes = items.reduce((s, t) => s + t.minutes, 0);
+      const doneMinutes = doneItems.reduce((s, t) => s + t.minutes, 0);
+      hackSessionSummaryEl.innerHTML = `
+        <div class="daily-summary">
+          <div class="daily-summary-card"><span>Available</span><strong>${minutesLabel(hackSessionMeta?.totalMinutes || 0)}</strong></div>
+          <div class="daily-summary-card"><span>Planned</span><strong>${minutesLabel(plannedMinutes)}</strong></div>
+          <div class="daily-summary-card"><span>Done</span><strong>${minutesLabel(doneMinutes)}</strong></div>
+          <div class="daily-summary-card"><span>Tasks</span><strong>${doneItems.length}/${items.length}</strong></div>
+        </div>`;
+      hackSessionListEl.innerHTML = `<ul class="daily-list">` + items.map(t => {
+        const checked = !!hackingState[t.id];
+        return `<li class="daily-item ${checked ? 'done' : ''}" data-taskid="${t.id}">
+          <input type="checkbox" class="todo-checkbox" ${checked ? 'checked' : ''}>
+          <div class="daily-item-main">
+            <div class="daily-item-category">${escapeHtml(t.text)}</div>
+            <div class="daily-item-meta">${escapeHtml(t.stageTitle)} · ${escapeHtml(t.topicTitle)}</div>
+          </div>
+          <span class="daily-item-time">~${minutesLabel(t.minutes)}</span>
+        </li>`;
+      }).join('') + `</ul>`;
+      hackSessionListEl.querySelectorAll('.daily-item').forEach(li => {
+        const id = li.dataset.taskid;
+        const box = li.querySelector('.todo-checkbox');
+        box.addEventListener('change', () => {
+          hackingState[id] = box.checked;
+          persistHackState();
+          renderHackSessionUI();
+          renderHackingPlan();
+        });
+      });
+    }
+
+    function subscribeHackSession() {
+      const iso = todayIso();
+      if (unsubHackSession) unsubHackSession();
+      unsubHackSession = hackingSessionsRef.doc(iso).onSnapshot(snap => {
+        if (snap.exists) {
+          hackSessionMeta = snap.data();
+          hackSessionTaskIds = hackSessionMeta.taskIds || [];
+        } else {
+          hackSessionMeta = null;
+          hackSessionTaskIds = [];
+        }
+        renderHackSessionUI();
+        renderHackingPlan();
+      }, err => {
+        console.error('Hacking session subscribe failed', err);
+        renderHackSessionUI();
+      });
+    }
+
+    hackSessionGenerateBtn?.addEventListener('click', generateHackSession);
+    hackSessionHoursInput?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') generateHackSession();
+    });
+
     function renderHackingPlan() {
       const container = document.getElementById('hackPlanContainer');
       if (!container) return;
+      const sessionSet = new Set(hackSessionTaskIds);
       container.innerHTML = hackingPlan.map(stage => `
         <div class="plan-week">
           <div class="plan-week-title">${stage.stage}</div>
@@ -1538,8 +1693,9 @@
             const t = computeHackTopicTotals(topic);
             const isOpen = hackOpenTopics.has(topic.id);
             const allDone = t.total > 0 && t.done === t.total;
+            const hasSessionTask = topic.tasks.some((_, i) => sessionSet.has(hackTaskId(topic.id, i)));
             return `
-              <div class="plan-day ${isOpen ? 'open' : ''} ${allDone ? 'all-done' : ''}" data-topic="${topic.id}">
+              <div class="plan-day ${isOpen ? 'open' : ''} ${allDone ? 'all-done' : ''} ${hasSessionTask ? 'today' : ''}" data-topic="${topic.id}">
                 <div class="plan-day-header" data-toggle="${topic.id}">
                   <div class="plan-day-title">
                     <input type="checkbox" class="plan-day-toggle-all" data-toggleall="${topic.id}" ${allDone ? 'checked' : ''} title="Mark all tasks in this topic">
@@ -1556,9 +1712,11 @@
                   ${topic.tasks.map((task, i) => {
                     const id = hackTaskId(topic.id, i);
                     const checked = !!hackingState[id];
-                    return `<li class="plan-task ${checked ? 'done' : ''}" data-taskid="${id}">
+                    const inSession = sessionSet.has(id);
+                    return `<li class="plan-task ${checked ? 'done' : ''} ${inSession ? 'today-session' : ''}" data-taskid="${id}">
                         <input type="checkbox" ${checked ? 'checked' : ''}>
                         <span class="plan-task-text">${escapeHtml(task)}</span>
+                        ${inSession ? '<span class="today-badge">Today</span>' : ''}
                       </li>`;
                   }).join('')}
                 </ul>
@@ -2373,14 +2531,17 @@
         const data = snap.exists ? snap.data() : null;
         hackingState = (data && data.state) || {};
         renderHackingPlan();
+        renderHackSessionUI();
       }, err => { console.error('Hacking plan subscribe failed', err); renderHackingPlan(); });
+      subscribeHackSession();
     }
     function detachDataListeners() {
       if (unsubTodos) unsubTodos();
       if (unsubCalendar) unsubCalendar();
       if (unsubPlan) unsubPlan();
       if (unsubHacking) unsubHacking();
-      unsubTodos = unsubCalendar = unsubPlan = unsubHacking = null;
+      if (unsubHackSession) unsubHackSession();
+      unsubTodos = unsubCalendar = unsubPlan = unsubHacking = unsubHackSession = null;
     }
     // ==================== NON-AUTH EVENT SETUP ====================
     function setupNonAuthEvents() {
@@ -2398,11 +2559,10 @@
       updatePlanHeader();
       try { renderPlan(); } catch (err) { console.error('CP plan render failed', err); }
       renderDayDetail(selectedCalDate);
-      try { renderHackingPlan(); } catch (err) { console.error('Hacking plan render failed', err); }
+      try { renderHackingPlan(); renderHackSessionUI(); } catch (err) { console.error('Hacking plan render failed', err); }
     }
     init();
     setupNonAuthEvents();
   </script>
 </body>
 </html>
-
