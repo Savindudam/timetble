@@ -266,6 +266,72 @@
       #menuToggle { display: block !important; }
     }
     #menuToggle { display: none; background: #000; border: 1px solid var(--accent); color: var(--accent); padding: 0.5rem; cursor: pointer; margin-right: 1rem; }
+
+    /* ===== Advanced additions ===== */
+    .today-plan-widget { grid-column: span 2; }
+    .streak-row { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .streak-item { display: flex; flex-direction: column; align-items: center; gap: .2rem; }
+    .streak-flame { font-size: 1.6rem; color: var(--accent); }
+    .streak-num { font-size: 1.3rem; font-weight: 700; color: var(--accent); }
+    .streak-label { font-size: .65rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .5px; }
+    .coding-profile-row { display: flex; flex-direction: column; gap: .6rem; }
+    .coding-profile-card { display: flex; justify-content: space-between; align-items: center; gap: .75rem; padding: .6rem .8rem; background: #000; border: 1px solid var(--border); }
+    .coding-profile-card .cp-name { font-size: .8rem; color: var(--text); }
+    .coding-profile-card .cp-handle { color: var(--text-secondary); font-size: .65rem; display: block; margin-top: .1rem; }
+    .coding-profile-card .cp-stat { text-align: right; }
+    .coding-profile-card .cp-stat strong { display: block; color: var(--accent); font-size: .95rem; }
+    .coding-profile-card .cp-stat span { color: var(--text-secondary); font-size: .6rem; text-transform: uppercase; }
+    .coding-profile-card a { color: var(--accent); text-decoration: none; font-size: .68rem; border: 1px solid var(--border); padding: .3rem .55rem; white-space: nowrap; }
+    .coding-profile-card a:hover { border-color: var(--accent); }
+    .pomodoro-widget { display: flex; flex-direction: column; gap: .7rem; }
+    .pomodoro-display { font-size: 2.2rem; font-weight: 700; color: var(--accent); text-align: center; letter-spacing: 2px; }
+    .pomodoro-task-select { width: 100%; }
+    .pomodoro-controls { display: flex; gap: .5rem; }
+    .pomodoro-controls button { flex: 1; }
+    .flag-star { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; font-size: .9rem; padding: 0 .2rem; flex-shrink: 0; line-height: 1; }
+    .flag-star.flagged { color: #ffcc66; }
+    .flagged-panel { margin-bottom: 1.5rem; }
+    .flagged-empty { color: var(--text-secondary); font-size: .78rem; padding: .5rem 0; }
+    .weekly-chart { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1.5rem; }
+    .weekly-chart-row { display: grid; grid-template-columns: 140px 1fr 70px; align-items: center; gap: .6rem; font-size: .72rem; }
+    .weekly-chart-row .wc-label { color: var(--text-secondary); }
+    .weekly-chart-track { background: #050505; border: 1px solid var(--border); height: 10px; overflow: hidden; }
+    .weekly-chart-fill { height: 100%; background: linear-gradient(90deg, #003b12, #00ff41); box-shadow: 0 0 8px #00ff41; }
+    .weekly-chart-row .wc-value { color: var(--accent); text-align: right; font-weight: 700; }
+    .paper-form-row { display: flex; gap: .75rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .paper-form-row > div { flex: 1; min-width: 140px; }
+    .paper-form-row label { display: block; color: var(--text-secondary); font-size: .7rem; text-transform: uppercase; margin-bottom: .3rem; }
+    .paper-form-row input, .paper-form-row select { width: 100%; }
+    .paper-subject-group { margin-bottom: 1.25rem; }
+    .paper-subject-title { display: flex; justify-content: space-between; align-items: center; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-size: .75rem; margin-bottom: .6rem; padding-bottom: .4rem; border-bottom: 1px solid var(--border); }
+    .paper-subject-title strong { color: var(--accent); }
+    .paper-row { display: flex; justify-content: space-between; align-items: center; gap: .75rem; padding: .7rem 1rem; background: #050505; border: 1px solid var(--border); margin-bottom: .5rem; }
+    .paper-row .paper-main { flex: 1; min-width: 0; }
+    .paper-row .paper-title { font-size: .85rem; }
+    .paper-row .paper-meta { color: var(--text-secondary); font-size: .68rem; margin-top: .15rem; }
+    .paper-row .paper-score { color: var(--accent); font-weight: 700; font-size: 1rem; min-width: 60px; text-align: right; }
+    .paper-delete { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: .2rem .4rem; }
+    .paper-delete:hover { color: var(--danger); }
+    .flashcard-form-row { display: flex; gap: .75rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+    .flashcard-form-row > div { flex: 1; min-width: 160px; }
+    .flashcard-form-row label { display: block; color: var(--text-secondary); font-size: .7rem; text-transform: uppercase; margin-bottom: .3rem; }
+    .flashcard-form-row input, .flashcard-form-row select, .flashcard-form-row textarea { width: 100%; }
+    .flashcard-stage { max-width: 500px; margin: 0 auto 2rem; text-align: center; }
+    .flashcard-box { min-height: 160px; display: flex; align-items: center; justify-content: center; padding: 1.5rem; cursor: pointer; font-size: 1rem; margin-bottom: 1rem; }
+    .flashcard-box .fc-hint { color: var(--text-secondary); font-size: .65rem; text-transform: uppercase; display: block; margin-top: .75rem; }
+    .flashcard-grade-row { display: flex; gap: .6rem; justify-content: center; }
+    .flashcard-grade-row button { flex: 1; max-width: 140px; }
+    .flashcard-list-title { color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-size: .75rem; margin: 1.5rem 0 .6rem; padding-bottom: .4rem; border-bottom: 1px solid var(--border); }
+    .flashcard-row { display: flex; justify-content: space-between; align-items: center; gap: .75rem; padding: .6rem .9rem; background: #050505; border: 1px solid var(--border); margin-bottom: .4rem; font-size: .8rem; }
+    .flashcard-row .fc-due { color: var(--text-secondary); font-size: .65rem; }
+    .flashcard-delete { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: .2rem .4rem; }
+    .flashcard-delete:hover { color: var(--danger); }
+    .accent-picker { display: flex; gap: .5rem; padding: 0 .2rem .6rem; }
+    .accent-swatch { width: 20px; height: 20px; border: 1px solid var(--border); cursor: pointer; padding: 0; }
+    .accent-swatch.active { box-shadow: 0 0 0 2px #000, 0 0 0 3px var(--accent); }
+    .sidebar-tool-btn { background: transparent; color: #709070; border: 1px solid var(--border); padding: .5rem .7rem; width: 100%; cursor: pointer; font-size: .65rem; text-transform: uppercase; letter-spacing: .5px; margin-bottom: .4rem; transition: .2s; }
+    .sidebar-tool-btn:hover { color: var(--accent); border-color: var(--accent); }
+    @media (max-width: 768px) { .today-plan-widget { grid-column: span 1; } }
   </style>
 </head>
 <body>
