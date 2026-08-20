@@ -129,6 +129,7 @@
     .plan-task.done .plan-task-text { text-decoration: line-through; color: var(--text-secondary); }
     .plan-day-toggle-all { width: 14px; height: 14px; accent-color: var(--accent); flex-shrink: 0; padding: 0; cursor: pointer; }
     .plan-task.today-session { background: rgba(0, 255, 65, 0.08); border-left: 2px solid var(--accent); }
+    .plan-day.has-session .plan-day-header { border-left: 2px solid var(--accent); }
     .today-badge { border: 1px solid var(--accent); color: var(--accent); font-size: 0.6rem; padding: 0.05rem 0.4rem; text-transform: uppercase; letter-spacing: 0.5px; margin-left: auto; flex-shrink: 0; white-space: nowrap; }
     .hack-session-empty-note { color: var(--text-secondary); font-size: 0.78rem; padding: 0.5rem 0; }
     .plan-day.has-today .plan-day-header { border-left: 2px solid var(--accent); }
@@ -288,10 +289,6 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         <span class="icon-only">Dashboard</span>
       </button>
-      <button class="sidebar-btn" data-view="timetable">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        <span class="icon-only">Timetable</span>
-      </button>
       <button class="sidebar-btn" data-view="todo">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         <span class="icon-only">To Do</span>
@@ -333,26 +330,9 @@
         <div class="live-clock" id="liveClock"></div>
       </div>
     </div>
-    <div class="progress-bar-container">
-      <div class="progress-bar-fill" id="progressBarFill"></div>
-    </div>
-
     <!-- Dashboard View -->
     <div class="view active" id="dashboardView">
       <div class="dashboard-grid">
-        <div class="card-widget current-task-widget" id="currentTaskWidget">
-          <div class="progress-ring-container">
-            <svg class="progress-ring" viewBox="0 0 100 100">
-              <circle class="progress-ring-circle" cx="50" cy="50" r="42"/>
-              <circle class="progress-ring-fill" id="progressRingFill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="263.89"/>
-              <text x="50" y="50" text-anchor="middle" dy="7" class="progress-ring-text" id="progressPercent">0%</text>
-            </svg>
-            <div class="current-task-details">
-              <h3 id="currentTaskName">---</h3>
-              <p id="currentTaskTime">--:-- - --:--</p>
-            </div>
-          </div>
-        </div>
         <div class="card-widget note-widget" id="eventNoteWidget" style="display:none;">
           <div class="countdown-title">Note</div>
           <div class="note-widget-text" id="eventNoteText">---</div>
@@ -373,13 +353,6 @@
             <div class="timer-unit"><span class="timer-value" id="ioi-mins">00</span><span class="timer-label">Min</span></div>
           </div>
         </div>
-        <div class="card-widget stats-widget" id="statsWidget">
-          <div class="stat-item"><span class="stat-label">Tasks</span><span class="stat-value" id="statTasks">0</span></div>
-          <div class="stat-item"><span class="stat-label">Completed</span><span class="stat-value" id="statCompleted">0</span></div>
-          <div class="stat-item"><span class="stat-label">Remaining</span><span class="stat-value" id="statRemaining">0</span></div>
-          <div style="margin-top: 0.5rem;"><span class="stat-label">Focus Time</span></div>
-          <div class="focus-time" id="focusTime">0h 0m</div>
-        </div>
         <div class="card-widget current-task-widget" id="planProgressWidget" style="cursor:pointer;">
           <div class="progress-ring-container">
             <svg class="progress-ring" viewBox="0 0 100 100">
@@ -394,11 +367,6 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- TimetableView -->
-    <div class="view" id="timetableView">
-      <div class="timeline" id="timelineContainer"></div>
     </div>
 
     <!-- ToDo View -->
@@ -469,6 +437,25 @@
 
     <!-- CP View -->
     <div class="view" id="cpView">
+      <div class="stats-container" style="margin-bottom:1.5rem;">
+        <div class="planner-title-row">
+          <div>
+            <h2 style="margin:0 0 .35rem;">Today's CP Session</h2>
+            <p style="margin:0;color:var(--text-secondary);font-size:.8rem;">Enter how much time you have today. This picks roadmap tasks in order, skipping anything already ticked off, until your time is filled — then highlights them below in the full plan.</p>
+          </div>
+        </div>
+        <div class="daily-input-row" style="margin-top:1rem;margin-bottom:0;">
+          <div>
+            <label>Time available today (hours)</label>
+            <input type="number" id="cpSessionHoursInput" min="0.25" step="0.25" value="2">
+          </div>
+          <div style="flex:0 0 auto;">
+            <button class="daily-generate-btn" id="cpSessionGenerateBtn">Plan Today's Session</button>
+          </div>
+        </div>
+        <div id="cpSessionSummary"></div>
+        <div id="cpSessionList"></div>
+      </div>
       <div class="stats-container">
         <div class="plan-header">
           <div class="planner-title-row">
@@ -627,8 +614,6 @@
     </div>
   </div>
 
-  <button class="fab" id="resetBtn" title="Go to current task">📍</button>
-
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
@@ -728,44 +713,16 @@
     });
 
     // ==================== STATIC DATA ====================
-    const timetable = {
-      Monday: [ ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
-      Tuesday: [ ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
-      Wednesday: [ ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
-      Thursday: [ ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
-      Friday: [ ["04:00","04:30","Exercise"], ["04:30","06:30","IOI Deep Work (C++/Algo)"], ["06:30","07:00","Short Reset / Hydrate"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Mental Break"], ["09:45","12:15","IOI Practice"], ["12:15","13:15","Lunch & Relaxation"], ["13:15","15:00","AL Revision"], ["15:00","15:30","Power Nap / Break"], ["15:30","17:30","IOI Heavy Block"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
-      Saturday: [ ["04:00","04:30","Exercise"], ["04:30","07:00","IOI Deep Work (C++/Algo)"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Intensive"], ["09:30","09:45","Break"], ["09:45","13:00","IOI Mock Contest"], ["13:00","14:00","Lunch"], ["14:00","15:30","AL Hard Subject"], ["15:30","16:00","Break"], ["16:00","17:30","IOI Practice / Editorial Review"], ["17:30","18:30","Hobby Time"], ["18:30","19:30","Dinner"], ["19:30","20:30","Gaming Time"], ["20:30","21:15","Recap / Review"], ["21:15","21:45","Wind down"], ["21:45","23:59","SLEEP"] ],
-      Sunday: [ ["04:00","04:30","Exercise"], ["04:30","07:00","IOI Deep Work (C++/Algo)"], ["07:00","07:30","Breakfast"], ["07:30","09:30","AL Blitz"], ["09:30","09:45","Break"], ["09:45","12:00","IOI Theory + Practice"], ["12:00","13:00","Lunch"], ["13:00","14:30","AL Review"], ["14:30","15:00","Break"], ["15:00","17:00","IOI Heavy Block"], ["17:00","18:00","Hobby Time"], ["18:00","19:00","Dinner"], ["19:00","20:00","Gaming Time"], ["20:00","20:45","Recap / Review"], ["20:45","21:15","Wind down"], ["21:15","23:59","SLEEP"] ]
-    };
-    const dayOrder = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-
-    // ---- FIX: these were previously declared only in the Calendar section
-    // further down the file, but the CP-plan date-shift block below runs
-    // immediately at script load and needs them BEFORE that point. Declaring
-    // them here (and removing the later duplicate) fixes the ReferenceError
-    // that was previously killing the entire script on load. ----
     const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const fullMonthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     const weekdayNames = ["S","M","T","W","T","F","S"];
     const fullWeekdayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-
-    let tasks = [];
-    let currentDay = "";
 
     // ==================== DOM REFERENCES ====================
     const dom = {
       greeting: document.getElementById('greetingMessage'),
       date: document.getElementById('dateDisplay'),
       clock: document.getElementById('liveClock'),
-      barFill: document.getElementById('progressBarFill'),
-      currentName: document.getElementById('currentTaskName'),
-      currentTime: document.getElementById('currentTaskTime'),
-      ringFill: document.getElementById('progressRingFill'),
-      percent: document.getElementById('progressPercent'),
-      statTasks: document.getElementById('statTasks'),
-      statDone: document.getElementById('statCompleted'),
-      statRem: document.getElementById('statRemaining'),
-      focusTime: document.getElementById('focusTime'),
       sidebar: document.getElementById('sidebar'),
       menuToggle: document.getElementById('menuToggle')
     };
@@ -864,16 +821,6 @@
     })();
 
     // ==================== UTILITY FUNCTIONS ====================
-    function timeToMinutes(str) {
-      const [h,m] = str.split(':').map(Number);
-      return h*60 + m;
-    }
-    function getCurrentTaskIndex() {
-      const now = new Date();
-      const currentMin = now.getHours()*60 + now.getMinutes();
-      const idx = tasks.findIndex(t => currentMin >= t.startMin && currentMin < t.endMin);
-      return idx === -1 ? (tasks.length > 0 ? 0 : -1) : idx;
-    }
     function formatIsoDate(iso) {
       const [y,m,d] = iso.split('-').map(Number);
       const date = new Date(y, m-1, d);
@@ -967,78 +914,7 @@
       }
     ];
 
-    // ==================== TIMETABLE RENDERING ====================
-    function renderTimeline() {
-      const container = document.getElementById('timelineContainer');
-      if (!container) return;
-      container.innerHTML = '';
-      const raw = timetable[currentDay] || [];
-      tasks = raw.map(([start, end, text], idx) => ({
-        id: idx,
-        startMin: timeToMinutes(start),
-        endMin: timeToMinutes(end),
-        timeRange: `${start} – ${end}`,
-        text
-      }));
-      const currentIdx = getCurrentTaskIndex();
-      tasks.forEach((task, idx) => {
-        const item = document.createElement('div');
-        item.className = 'timeline-item';
-        if (idx === currentIdx) item.classList.add('current');
-        else if (idx < currentIdx) item.classList.add('completed');
-        let badgeText = 'Upcoming';
-        if (idx < currentIdx) badgeText = 'Passed';
-        else if (idx === currentIdx) badgeText = 'Now';
-        item.innerHTML = `
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <div style="display:flex; flex-direction:column">
-              <div class="timeline-time">${task.timeRange}</div>
-              <div class="timeline-task">${task.text}</div>
-            </div>
-            <span class="status-badge">${badgeText}</span>
-          </div>
-        `;
-        container.appendChild(item);
-      });
-      setTimeout(() => {
-        const currentEl = document.querySelector('.timeline-item.current');
-        if (currentEl) currentEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 100);
-    }
-
     // ==================== DASHBOARD UPDATES ====================
-    function updateDashboard() {
-      if (tasks.length === 0) return;
-      const now = new Date();
-      const currentMin = now.getHours()*60 + now.getMinutes();
-      const currentIdx = getCurrentTaskIndex();
-      if (currentIdx === -1) return;
-      const currentTask = tasks[currentIdx];
-      dom.currentName.textContent = currentTask.text;
-      dom.currentTime.textContent = currentTask.timeRange;
-      const totalTaskMin = currentTask.endMin - currentTask.startMin;
-      const elapsedMin = Math.max(0, currentMin - currentTask.startMin);
-      const percent = totalTaskMin > 0 ? Math.min(100, Math.round((elapsedMin / totalTaskMin)*100)) : 0;
-      const circumference = 2 * Math.PI * 42;
-      dom.ringFill.style.strokeDashoffset = circumference - (percent / 100) * circumference;
-      dom.percent.textContent = percent + '%';
-      const completed = tasks.filter((_,i) => i < currentIdx).length;
-      const remaining = tasks.length - completed - 1;
-      dom.statTasks.textContent = tasks.length;
-      dom.statDone.textContent = completed;
-      dom.statRem.textContent = remaining;
-      const firstStart = tasks[0].startMin;
-      const lastEnd = tasks[tasks.length-1].endMin;
-      const totalDayMin = lastEnd - firstStart;
-      const hours = Math.floor(totalDayMin / 60);
-      const mins = totalDayMin % 60;
-      dom.focusTime.textContent = `${hours}h ${mins}m`;
-      const elapsedDayMin = Math.max(0, currentMin - firstStart);
-      const dayProgress = totalDayMin > 0 ? Math.min(100, (elapsedDayMin / totalDayMin)*100) : 0;
-      dom.barFill.style.width = dayProgress + '%';
-      updateCountdowns();
-    }
     function updateCountdowns() {
       const now = new Date().getTime();
       const alTarget = new Date("August 14, 2028 00:00:00").getTime();
@@ -1058,7 +934,6 @@
     }
     function updateDateTime() {
       const now = new Date();
-      const dayName = dayOrder[now.getDay()];
       dom.date.textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
       dom.clock.textContent = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
       const hour = now.getHours();
@@ -1066,11 +941,7 @@
       if (hour < 12) greeting = "Good Morning";
       else if (hour < 18) greeting = "Good Afternoon";
       dom.greeting.textContent = `${greeting}, Dreamxhava`;
-      if (dayName !== currentDay) {
-        currentDay = dayName;
-        renderTimeline();
-      }
-      updateDashboard();
+      updateCountdowns();
       updateEventNoteWidget();
     }
 
@@ -1082,7 +953,6 @@
     const sidebarBtns = document.querySelectorAll('.sidebar-btn');
     const views = {
       dashboard: document.getElementById('dashboardView'),
-      timetable: document.getElementById('timetableView'),
       todo: document.getElementById('todoView'),
       dailyplanner: document.getElementById('dailyplannerView'),
       cp: document.getElementById('cpView'),
@@ -1097,11 +967,9 @@
         const viewName = btn.dataset.view;
         Object.values(views).forEach(v => v.classList.remove('active'));
         views[viewName].classList.add('active');
-        document.getElementById('resetBtn').style.display = (viewName === 'timetable') ? 'flex' : 'none';
-        if (viewName === 'timetable') renderTimeline();
         if (viewName === 'calendar') { renderCalendarGrid(); renderDayDetail(selectedCalDate); }
         if (viewName === 'screenscape') { if (!ssIframe.src) loadScreenscape(); }
-        if (viewName === 'cp') { renderPlan(); }
+        if (viewName === 'cp') { renderPlan(); subscribeCPSession(); }
         if (viewName === 'hacking') { renderHackingPlan(); subscribeHackSession(); }
         if (viewName === 'dailyplanner') { loadDailyPlanner(); }
         if (window.innerWidth <= 768) dom.sidebar.classList.remove('open');
@@ -1376,6 +1244,147 @@
         sub.textContent = `${formatIsoDate(firstIso)} – ${formatIsoDate(lastIso)} · ${totalDays} days · Full C++/algorithms syllabus for IOI 2027`;
       }
     }
+    // ---- Today's CP Session (time-budgeted task picker) ----
+    const cpSessionsRef = db.collection("cpSessions");
+    let unsubCPSession = null;
+    let cpSessionMeta = null;
+    let cpSessionTaskIds = [];
+    const cpSessionHoursInput = document.getElementById('cpSessionHoursInput');
+    const cpSessionGenerateBtn = document.getElementById('cpSessionGenerateBtn');
+    const cpSessionSummaryEl = document.getElementById('cpSessionSummary');
+    const cpSessionListEl = document.getElementById('cpSessionList');
+
+    function flattenCPTasks() {
+      const flat = [];
+      ioiPlan.forEach(w => {
+        w.days.forEach(d => {
+          d.tasks.forEach((task, i) => {
+            const m = task.match(/\((\d+)m\)/);
+            const minutes = m ? parseInt(m[1], 10) : 45;
+            flat.push({ id: planTaskId(d.day, i), dayNumber: d.day, dayDate: d.date, weekTitle: w.week, text: task, minutes });
+          });
+        });
+      });
+      return flat;
+    }
+
+    // Walk the plan in order (Day 1 onward), skip anything already ticked
+    // off, and keep adding tasks until the time budget is filled.
+    function computeCPSessionTasks(budgetMinutes) {
+      const flat = flattenCPTasks();
+      const notDone = flat.filter(t => !planState[t.id]);
+      const selected = [];
+      let acc = 0;
+      for (const t of notDone) {
+        if (acc >= budgetMinutes) break;
+        selected.push(t);
+        acc += t.minutes;
+      }
+      return selected;
+    }
+
+    async function generateCPSession() {
+      const hours = Number(cpSessionHoursInput.value);
+      if (!Number.isFinite(hours) || hours <= 0) {
+        alert('Enter the amount of time you have today.');
+        return;
+      }
+      const budgetMinutes = Math.round(hours * 60);
+      const selected = computeCPSessionTasks(budgetMinutes);
+      if (!selected.length) {
+        alert('Everything in the CP plan is already ticked off — nothing left to plan!');
+        return;
+      }
+      selected.forEach(t => planOpenDays.add(t.dayNumber));
+      const iso = todayIso();
+      cpSessionGenerateBtn.disabled = true;
+      cpSessionGenerateBtn.textContent = 'BUILDING...';
+      try {
+        await cpSessionsRef.doc(iso).set({
+          date: iso,
+          totalMinutes: budgetMinutes,
+          plannedMinutes: selected.reduce((s, t) => s + t.minutes, 0),
+          taskIds: selected.map(t => t.id),
+          generatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: false });
+      } catch (err) {
+        console.error('Error saving CP session:', err);
+        alert('Could not save today\'s session: ' + err.message);
+      } finally {
+        cpSessionGenerateBtn.disabled = false;
+        cpSessionGenerateBtn.textContent = "Plan Today's Session";
+      }
+    }
+
+    function renderCPSessionUI() {
+      if (!cpSessionSummaryEl || !cpSessionListEl) return;
+      if (cpSessionMeta && cpSessionHoursInput && document.activeElement !== cpSessionHoursInput) {
+        cpSessionHoursInput.value = (Number(cpSessionMeta.totalMinutes || 0) / 60).toString();
+      }
+      if (!cpSessionTaskIds.length) {
+        cpSessionSummaryEl.innerHTML = '';
+        cpSessionListEl.innerHTML = `<div class="hack-session-empty-note">No session planned yet today. Enter your available hours and press <strong>Plan Today's Session</strong>.</div>`;
+        return;
+      }
+      const flat = flattenCPTasks();
+      const items = cpSessionTaskIds.map(id => flat.find(t => t.id === id)).filter(Boolean);
+      const doneItems = items.filter(t => planState[t.id]);
+      const plannedMinutes = items.reduce((s, t) => s + t.minutes, 0);
+      const doneMinutes = doneItems.reduce((s, t) => s + t.minutes, 0);
+      cpSessionSummaryEl.innerHTML = `
+        <div class="daily-summary">
+          <div class="daily-summary-card"><span>Available</span><strong>${minutesLabel(cpSessionMeta?.totalMinutes || 0)}</strong></div>
+          <div class="daily-summary-card"><span>Planned</span><strong>${minutesLabel(plannedMinutes)}</strong></div>
+          <div class="daily-summary-card"><span>Done</span><strong>${minutesLabel(doneMinutes)}</strong></div>
+          <div class="daily-summary-card"><span>Tasks</span><strong>${doneItems.length}/${items.length}</strong></div>
+        </div>`;
+      cpSessionListEl.innerHTML = `<ul class="daily-list">` + items.map(t => {
+        const checked = !!planState[t.id];
+        return `<li class="daily-item ${checked ? 'done' : ''}" data-taskid="${t.id}">
+          <input type="checkbox" class="todo-checkbox" ${checked ? 'checked' : ''}>
+          <div class="daily-item-main">
+            <div class="daily-item-category">${escapeHtml(t.text)}</div>
+            <div class="daily-item-meta">${escapeHtml(t.weekTitle)} · Day ${t.dayNumber} (${escapeHtml(t.dayDate)})</div>
+          </div>
+          <span class="daily-item-time">~${minutesLabel(t.minutes)}</span>
+        </li>`;
+      }).join('') + `</ul>`;
+      cpSessionListEl.querySelectorAll('.daily-item').forEach(li => {
+        const id = li.dataset.taskid;
+        const box = li.querySelector('.todo-checkbox');
+        box.addEventListener('change', () => {
+          planState[id] = box.checked;
+          persistPlanState();
+          renderCPSessionUI();
+          renderPlan();
+        });
+      });
+    }
+
+    function subscribeCPSession() {
+      const iso = todayIso();
+      if (unsubCPSession) unsubCPSession();
+      unsubCPSession = cpSessionsRef.doc(iso).onSnapshot(snap => {
+        if (snap.exists) {
+          cpSessionMeta = snap.data();
+          cpSessionTaskIds = cpSessionMeta.taskIds || [];
+        } else {
+          cpSessionMeta = null;
+          cpSessionTaskIds = [];
+        }
+        renderCPSessionUI();
+        renderPlan();
+      }, err => {
+        console.error('CP session subscribe failed', err);
+        renderCPSessionUI();
+      });
+    }
+
+    cpSessionGenerateBtn?.addEventListener('click', generateCPSession);
+    cpSessionHoursInput?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') generateCPSession();
+    });
+
     function renderPlan() {
       const container = document.getElementById('planContainer');
       if (!container) return;
@@ -1383,6 +1392,7 @@
       if (planOpenDays.size === 0) {
         ioiPlan.forEach(w => w.days.forEach(d => { if (d.iso === today) planOpenDays.add(d.day); }));
       }
+      const sessionSet = new Set(cpSessionTaskIds);
       container.innerHTML = ioiPlan.map(w => `
         <div class="plan-week">
           <div class="plan-week-title">${w.week}</div>
@@ -1391,8 +1401,9 @@
             const isToday = d.iso === today;
             const isOpen = planOpenDays.has(d.day);
             const allDone = t.total > 0 && t.done === t.total;
+            const hasSessionTask = d.tasks.some((_, i) => sessionSet.has(planTaskId(d.day, i)));
             return `
-              <div class="plan-day ${isToday ? 'today' : ''} ${isOpen ? 'open' : ''} ${allDone ? 'all-done' : ''}" data-day="${d.day}">
+              <div class="plan-day ${isToday ? 'today' : ''} ${isOpen ? 'open' : ''} ${allDone ? 'all-done' : ''} ${hasSessionTask ? 'has-session' : ''}" data-day="${d.day}">
                 <div class="plan-day-header" data-toggle="${d.day}">
                   <div class="plan-day-title">
                     <input type="checkbox" class="plan-day-toggle-all" data-toggleall="${d.day}" ${allDone ? 'checked' : ''} title="Mark all tasks in this day">
@@ -1409,9 +1420,11 @@
                   ${d.tasks.map((task, i) => {
                     const id = planTaskId(d.day, i);
                     const checked = !!planState[id];
-                    return `<li class="plan-task ${checked ? 'done' : ''}" data-taskid="${id}">
+                    const inSession = sessionSet.has(id);
+                    return `<li class="plan-task ${checked ? 'done' : ''} ${inSession ? 'today-session' : ''}" data-taskid="${id}">
                         <input type="checkbox" ${checked ? 'checked' : ''}>
                         <span class="plan-task-text">${escapeHtml(task)}</span>
+                        ${inSession ? '<span class="today-badge">Today</span>' : ''}
                       </li>`;
                   }).join('')}
                 </ul>
@@ -1695,7 +1708,7 @@
             const allDone = t.total > 0 && t.done === t.total;
             const hasSessionTask = topic.tasks.some((_, i) => sessionSet.has(hackTaskId(topic.id, i)));
             return `
-              <div class="plan-day ${isOpen ? 'open' : ''} ${allDone ? 'all-done' : ''} ${hasSessionTask ? 'today' : ''}" data-topic="${topic.id}">
+              <div class="plan-day ${isOpen ? 'open' : ''} ${allDone ? 'all-done' : ''} ${hasSessionTask ? 'has-session' : ''}" data-topic="${topic.id}">
                 <div class="plan-day-header" data-toggle="${topic.id}">
                   <div class="plan-day-title">
                     <input type="checkbox" class="plan-day-toggle-all" data-toggleall="${topic.id}" ${allDone ? 'checked' : ''} title="Mark all tasks in this topic">
@@ -2526,7 +2539,9 @@
         const data = snap.exists ? snap.data() : null;
         planState = (data && data.state) || {};
         renderPlan();
+        renderCPSessionUI();
       }, err => { console.error('Plan subscribe failed', err); renderPlan(); });
+      subscribeCPSession();
       unsubHacking = hackingPlanStateRef.onSnapshot(snap => {
         const data = snap.exists ? snap.data() : null;
         hackingState = (data && data.state) || {};
@@ -2541,7 +2556,8 @@
       if (unsubPlan) unsubPlan();
       if (unsubHacking) unsubHacking();
       if (unsubHackSession) unsubHackSession();
-      unsubTodos = unsubCalendar = unsubPlan = unsubHacking = unsubHackSession = null;
+      if (unsubCPSession) unsubCPSession();
+      unsubTodos = unsubCalendar = unsubPlan = unsubHacking = unsubHackSession = unsubCPSession = null;
     }
     // ==================== NON-AUTH EVENT SETUP ====================
     function setupNonAuthEvents() {
@@ -2551,13 +2567,10 @@
 
     // ==================== INIT ====================
     function init() {
-      const now = new Date();
-      currentDay = dayOrder[now.getDay()];
-      renderTimeline();
       updateDateTime();
       setInterval(updateDateTime, 1000);
       updatePlanHeader();
-      try { renderPlan(); } catch (err) { console.error('CP plan render failed', err); }
+      try { renderPlan(); renderCPSessionUI(); } catch (err) { console.error('CP plan render failed', err); }
       renderDayDetail(selectedCalDate);
       try { renderHackingPlan(); renderHackSessionUI(); } catch (err) { console.error('Hacking plan render failed', err); }
     }
